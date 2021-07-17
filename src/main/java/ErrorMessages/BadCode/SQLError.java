@@ -24,8 +24,9 @@ public class SQLError {
         em.setColor(Color.decode(
                 SettingGetter.ChannelFriendlySet("GuildColour", txt)
         ));
-        em.setTitle("UH OH!, Stinky:");
+        em.setTitle("UH OH! Stinky");
         em.addField("The error:", x.getMessage(), false);
+        em.setFooter("Feel free to show this to the bots owner: " + txt.getJDA().getUserById("456014662199410699").getAsTag());
         txt.sendMessage(em.build()).queue();
 
     }

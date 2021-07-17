@@ -11,14 +11,17 @@ package EventListeners;
 
 import Core.SettingGetter;
 import Core.SettingSetter;
+import Misc.SetColour;
+import Misc.SetPrefix;
 import commands.mod.Clear;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
-import java.util.Arrays;
+import java.awt.*;
 
 public class MessageReceived extends ListenerAdapter {
 
@@ -29,9 +32,9 @@ public class MessageReceived extends ListenerAdapter {
 
             TextChannel channel = e.getTextChannel();
             String content = e.getMessage().getContentRaw();
-            String[] commands = {"clear", "ban"};
             User user = e.getMember().getUser();
             Guild guild = e.getGuild();
+            String guildID = guild.getId();
 
             String botprefix = SettingGetter.ChannelFriendlySet("Prefix", channel);
 
@@ -47,15 +50,26 @@ public class MessageReceived extends ListenerAdapter {
                         Clear.check(channel, request, user, guild);
                         break;
                     case "ban":
+
                         break;
                     case "kick":
+
                         break;
                     case "warn":
+
                         break;
                     case "set":
-                        SettingSetter.check(request, guild, channel);
-
+                        SettingSetter.check(user, request, guild, channel, e.getMessage());
+                        break;
+                    case "setPrefix":
+                        SetPrefix.Set(channel, content, guildID);
+                        break;
+                    case "setColour":
+                        SetColour.Set(channel, content, guildID);
+                        break;
                 }
+            } else if (content.equalsIgnoreCase("help I forgot my prefix")){
+                channel.sendMessage(SettingGetter.ChannelFriendlySet("Prefix", channel)).queue();
             }
         }
     }

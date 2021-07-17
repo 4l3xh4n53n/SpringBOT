@@ -7,7 +7,7 @@
  Do not just download it and call it yours though because that's kinda a bad move and this will not be tolerated.
  **/
 
-package ErrorMessages.BadCode;
+package ErrorMessages.UserError;
 
 import Core.SettingGetter;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -24,7 +24,7 @@ public class WrongCommandUsage {
         EmbedBuilder em = new EmbedBuilder();
         em.setColor(Color.decode(guildColour));
         em.setTitle("That isn't how you use this command");
-        em.addField(exampleCommand, reason, false);
+        em.addField("Example:\n" + exampleCommand,"Reason: " + reason, false);
         txt.sendMessage(em.build()).queue();
     }
 

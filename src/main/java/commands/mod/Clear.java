@@ -13,8 +13,9 @@ import Core.MessageRemover;
 import Core.SettingGetter;
 import ErrorMessages.UserError.NoPerms;
 import ErrorMessages.UserError.RolesNotSet;
-import ErrorMessages.BadCode.WrongCommandUsage;
+import ErrorMessages.UserError.WrongCommandUsage;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.collections4.CollectionUtils;
 
@@ -26,7 +27,7 @@ import java.util.List;
 public class Clear {
 
     public static String example(){
-        String example = "!clear <amount>";
+        String example = "clear <amount>";
         return example;
     }
 
@@ -36,7 +37,7 @@ public class Clear {
     }
 
     public static String set(){
-        String set = "!setroles ClearRoles <role(s)> <-- **Each role MUST be separated with a comma**";
+        String set = "set roles ClearRoles <@role(s)> <-- **Each role MUST be separated with a comma**";
         return set;
     }
 
@@ -61,6 +62,7 @@ public class Clear {
 
             int check = 0;
             int amount = Integer.parseInt(args[1].replaceAll("[^0-9]","")) + 1;
+            Role botrole = guild.getBotRole();
             String[] roles = SettingGetter.ChannelFriendlySet("ClearRoles", txtchan).split(",");
             String req = "";
             List<Role> userroles = guild.getMember(user).getRoles();
@@ -86,8 +88,11 @@ public class Clear {
                     usersRoles.add(userroles.get(i).getId());
                 }
                 if (CollectionUtils.containsAny(Arrays.asList(roles), usersRoles)){
-                    Execute(txtchan, amount);
-
+                    if (botrole.hasPermission(Permission.MESSAGE_MANAGE) || botrole.hasPermission(Permission.ADMINISTRATOR)) {
+                        Execute(txtchan, amount);
+                    } else {
+                        NoPerms.Bot("Manage Messages", txtchan);
+                    }
                 }
 
             } else {

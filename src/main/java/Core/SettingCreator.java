@@ -21,15 +21,23 @@ public class SettingCreator{
     // This creates default settings when the bot joins a new guild or when a feature that uses settings is used.
 
     public static void CreateSettings(Guild g,String guildID, Connection con){
-        //todo you may want to keep on updating this
 
         try {
             PreparedStatement ps = null;
-            String SQL = "INSERT INTO settings(GuildID, Prefix, GuildColour) VALUES(?,?,?)";
+            String SQL = "INSERT INTO settings(" +
+                    "GuildID, " +
+                    "Prefix, " +
+                    "GuildColour, " +
+                    "KickRoles, " +
+                    "BanRoles, " +
+                    "WarnRoles, " +
+                    "ModCommands " +
+                    ")VALUES(?,?,?,?,?,?,?)";
             ps = con.prepareStatement(SQL);
             ps.setString(1, guildID);
             ps.setString(2, "!");
             ps.setString(3, "#000000");
+            ps.setString(7, "1");
             ps.executeUpdate();
             con.close();
             ps.close();
