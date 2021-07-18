@@ -69,10 +69,8 @@ public class SettingCreator{
                 rs.close();
             }
 
-
         } catch (Exception x){
             GuildJoinedError.DMOwner(x, g);
-
         }
     }
 

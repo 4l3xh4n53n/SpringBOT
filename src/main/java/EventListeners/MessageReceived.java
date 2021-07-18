@@ -13,15 +13,14 @@ import Core.SettingGetter;
 import Core.SettingSetter;
 import Misc.SetColour;
 import Misc.SetPrefix;
+import commands.mod.Ban;
 import commands.mod.Clear;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-
-import java.awt.*;
 
 public class MessageReceived extends ListenerAdapter {
 
@@ -32,6 +31,7 @@ public class MessageReceived extends ListenerAdapter {
 
             TextChannel channel = e.getTextChannel();
             String content = e.getMessage().getContentRaw();
+            Message msg = e.getMessage();
             User user = e.getMember().getUser();
             Guild guild = e.getGuild();
             String guildID = guild.getId();
@@ -50,7 +50,7 @@ public class MessageReceived extends ListenerAdapter {
                         Clear.check(channel, request, user, guild);
                         break;
                     case "ban":
-
+                        Ban.check(user, msg, channel, guild, request);
                         break;
                     case "kick":
 
@@ -59,7 +59,7 @@ public class MessageReceived extends ListenerAdapter {
 
                         break;
                     case "set":
-                        SettingSetter.check(user, request, guild, channel, e.getMessage());
+                        SettingSetter.check(user, request, guild, channel, msg);
                         break;
                     case "setPrefix":
                         SetPrefix.Set(channel, content, guildID);

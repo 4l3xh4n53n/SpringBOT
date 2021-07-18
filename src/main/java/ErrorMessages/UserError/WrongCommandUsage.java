@@ -9,6 +9,7 @@
 
 package ErrorMessages.UserError;
 
+import Core.MessageRemover;
 import Core.SettingGetter;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -25,7 +26,9 @@ public class WrongCommandUsage {
         em.setColor(Color.decode(guildColour));
         em.setTitle("That isn't how you use this command");
         em.addField("Example:\n" + exampleCommand,"Reason: " + reason, false);
-        txt.sendMessage(em.build()).queue();
+        txt.sendMessage(em.build()).queue(msg -> {
+            MessageRemover.deleteAfter(msg);
+        });
     }
 
 }

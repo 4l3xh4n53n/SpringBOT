@@ -37,7 +37,7 @@ public class Clear {
     }
 
     public static String set(){
-        String set = "set roles ClearRoles <@role(s)> <-- **Each role MUST be separated with a comma**";
+        String set = "`set roles ClearRoles <@role(s)>`";
         return set;
     }
 
@@ -61,22 +61,30 @@ public class Clear {
         if (args.length == 2){
 
             int check = 0;
-            int amount = Integer.parseInt(args[1].replaceAll("[^0-9]","")) + 1;
+            int amount;
             Role botrole = guild.getBotRole();
             String[] roles = SettingGetter.ChannelFriendlySet("ClearRoles", txtchan).split(",");
             String req = "";
             List<Role> userroles = guild.getMember(user).getRoles();
             List<String> usersRoles = new ArrayList<>();
 
+            // Makes sure specified amount is a number if not defaults to 1 message
+
+            try {
+                amount = Integer.parseInt(args[1].replaceAll("[^0-9]",""));
+                amount = amount + 1;
+            } catch (Exception x){
+                System.out.println("sdlfkjsdflkjjsdfkl");
+                amount = 2;
+            }
+
             // Makes sure there are real roles setup
 
             try {
-
                 for (int i = 0; roles.length > i; i++){
                     guild.getRoleById(roles[i]);
                 }
                 check = 1;
-
             } catch (Exception x){
                 RolesNotSet.ChannelFriendly(txtchan, "ClearRoles", set());
             }
@@ -93,17 +101,17 @@ public class Clear {
                     } else {
                         NoPerms.Bot("Manage Messages", txtchan);
                     }
+                } else {
+                    for (int i = 0; roles.length > i; i++){
+                        Role role = guild.getRoleById(roles[i]);
+                        req = req + "@"+ role.getName() + " ";
+                    }
+                    NoPerms.Send("clear", req, txtchan);
                 }
 
-            } else {
-                for (int i = 0; roles.length > i; i++){
-                    Role role = guild.getRoleById(roles[i]);
-                    req = req + "@"+ role.getName() + " ";
-                }
-                NoPerms.Send("clear", req, txtchan);
             }
         } else {
-            WrongCommandUsage.send(txtchan, Clear.example(), "Wrong amount of args", request);
+            WrongCommandUsage.send(txtchan, example(), "Wrong amount of args", request);
         }
     }
 }
