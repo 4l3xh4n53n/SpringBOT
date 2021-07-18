@@ -15,6 +15,7 @@ import Misc.SetColour;
 import Misc.SetPrefix;
 import commands.mod.Ban;
 import commands.mod.Clear;
+import commands.mod.UnBan;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -51,6 +52,9 @@ public class MessageReceived extends ListenerAdapter {
                         break;
                     case "ban":
                         Ban.check(user, msg, channel, guild, request);
+                        break;
+                    case "unban":
+                        UnBan.check(user,msg,channel,guild,request);
                         break;
                     case "kick":
 

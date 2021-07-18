@@ -49,9 +49,7 @@ public class Clear {
         EmbedBuilder em = new EmbedBuilder();
         em.setColor(Color.decode(SettingGetter.ChannelFriendlySet("GuildColour", txt)));
         em.setTitle("Removed " + (amount -1) + " messages");
-        txt.sendMessage(em.build()).queue(msg -> {
-            MessageRemover.deleteAfter(msg);
-        });
+        txt.sendMessage(em.build()).queue(MessageRemover::deleteAfter);
 
     }
 
