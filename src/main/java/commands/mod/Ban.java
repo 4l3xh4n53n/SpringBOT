@@ -1,6 +1,7 @@
 package commands.mod;
 
 import Core.MessageRemover;
+import Core.ModLogger;
 import Core.SettingGetter;
 import ErrorMessages.UserError.NoPerms;
 import ErrorMessages.UserError.RoleTooHigh;
@@ -14,7 +15,6 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.StreamSupport;
 
 public class Ban {
 
@@ -33,7 +33,12 @@ public class Ban {
         return set;
     }
 
-    public static void Execute(Guild guild, User mentioned, String[] args, String request, TextChannel txt){
+    public static String log(){
+        String log = "`set channel BanLog <channelID>`";
+        return log;
+    }
+
+    public static void Execute(Guild guild, User mentioned, String[] args, String request, TextChannel txt, User user){
         String reason = request.replace(args[0] + " " + args[1], "");
         guild.ban(mentioned, 0, reason).queue();
 
@@ -41,6 +46,8 @@ public class Ban {
         em.setColor(Color.decode(SettingGetter.ChannelFriendlySet("GuildColour", txt)));
         em.setTitle("Banned " + mentioned.getAsTag());
         txt.sendMessage(em.build()).queue(MessageRemover::deleteAfter);
+
+        ModLogger.log(txt, mentioned, "BanLog", reason, log(), "was banned", user);
 
     }
 
@@ -88,13 +95,11 @@ public class Ban {
 
                         try {
                             userRolePos = guild.retrieveMemberById(MentionedUser.getId()).complete().getRoles().get(0).getPosition();
-                            System.out.println("they got roles");
                         } catch (Exception ignored) {
-                            System.out.println("they NOT got roles");
                         }
 
                         if (botRolePos > userRolePos || selfUserRolePos > userRolePos) {
-                            Execute(guild, MentionedUser, args, request, channel);
+                            Execute(guild, MentionedUser, args, request, channel, user);
                         } else {
                             RoleTooHigh.send(channel, "ban");
                         }

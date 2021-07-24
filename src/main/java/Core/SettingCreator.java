@@ -1,11 +1,3 @@
-/**
- Copyright © 2021 4legs
-
- SpringBOT for discord
-
- This is my bot feel free to make your own custom version of it, either to add features, or make it better or whatever you feel like doing with it.
- Do not just download it and call it yours though because that's kinda a bad move.
-**/
 package Core;
 
 import ErrorMessages.BadCode.GuildJoinedError;
@@ -31,13 +23,16 @@ public class SettingCreator{
                     "KickRoles, " +
                     "BanRoles, " +
                     "WarnRoles, " +
-                    "ModCommands " +
-                    ")VALUES(?,?,?,?,?,?,?)";
+                    "ModCommands, " +
+                    "KickLog, " +
+                    "BanLog, " +
+                    "WarnLog " +
+                    ")VALUES(?,?,?,?,?,?,?,?,?,?)";
             ps = con.prepareStatement(SQL);
             ps.setString(1, guildID);
-            ps.setString(2, "!");
-            ps.setString(3, "#000000");
-            ps.setString(7, "1");
+            ps.setString(2, "!"); //prefix
+            ps.setString(3, "#000000"); //defaultcolour
+            ps.setString(7, "1"); //modcommands
             ps.executeUpdate();
             con.close();
             ps.close();

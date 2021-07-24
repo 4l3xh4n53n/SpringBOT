@@ -1,21 +1,10 @@
-/**
- Copyright © 2021 4legs
-
- SpringBOT for discord
-
- This is my bot feel free to make your own custom version of it, either to add features, or make it better or whatever you feel like doing with it.
- Do not just download it and call it yours though because that's kinda a bad move.
- **/
-
 package EventListeners;
 
 import Core.SettingGetter;
 import Core.SettingSetter;
 import Misc.SetColour;
 import Misc.SetPrefix;
-import commands.mod.Ban;
-import commands.mod.Clear;
-import commands.mod.UnBan;
+import commands.mod.*;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -57,10 +46,10 @@ public class MessageReceived extends ListenerAdapter {
                         UnBan.check(user,msg,channel,guild,request);
                         break;
                     case "kick":
-
+                        Kick.check(user, msg, channel, guild, request);
                         break;
                     case "warn":
-
+                        Warn.check(guild, user, channel, msg);
                         break;
                     case "set":
                         SettingSetter.check(user, request, guild, channel, msg);

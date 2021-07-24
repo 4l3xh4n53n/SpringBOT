@@ -1,11 +1,11 @@
 package commands.mod;
 
 import Core.MessageRemover;
+import Core.ModLogger;
 import Core.SettingGetter;
 import ErrorMessages.UserError.NoPerms;
 import ErrorMessages.UserError.RolesNotSet;
 import ErrorMessages.UserError.WrongCommandUsage;
-import gnu.trove.impl.sync.TSynchronizedShortByteMap;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -33,7 +33,12 @@ public class UnBan {
         return set;
     }
 
-    public static void Execute(Guild guild, User mentioned, TextChannel txt, String request){
+    public static String log(){
+        String log = "`set channel BanLog <channelID>`";
+        return log;
+    }
+
+    public static void Execute(Guild guild, User mentioned, TextChannel txt, String request, User user){
         int check = 0;
         try {
             guild.unban(mentioned).complete();
@@ -49,6 +54,9 @@ public class UnBan {
             em.setTitle("Un banned " + mentioned.getAsTag());
             txt.sendMessage(em.build()).queue(MessageRemover::deleteAfter);
         }
+
+        ModLogger.log(txt, mentioned, "BanLog", "", set(), "was unbanned",user);
+
     }
 
     public static void check(User user, Message msg, TextChannel txt, Guild guild, String request){
@@ -75,7 +83,7 @@ public class UnBan {
                 check = 1;
 
             } catch (Exception x) {
-                RolesNotSet.ChannelFriendly(txt, "ClearRoles", set());
+                RolesNotSet.ChannelFriendly(txt, "ClearRoles", log());
             }
             try {
                 mentioned = guild.getJDA().retrieveUserById(args[1]).complete();
@@ -94,7 +102,7 @@ public class UnBan {
                 if (checktwo == 1) {
                     if (CollectionUtils.containsAny(Arrays.asList(roles), usersRoles)) {
                         if (botrole.hasPermission(Permission.BAN_MEMBERS) || botrole.hasPermission(Permission.ADMINISTRATOR)) {
-                            Execute(guild, mentioned, txt, request);
+                            Execute(guild, mentioned, txt, request, user);
                         } else {
                             NoPerms.Bot("Ban Members", txt);
                         }

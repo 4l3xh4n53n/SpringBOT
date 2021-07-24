@@ -1,12 +1,3 @@
-/**
- Copyright © 2021 4legs
-
- SpringBOT for discord
-
- This is my bot feel free to make your own custom version of it, either to add features or make it better or whatever else you feel like doing with it.
- Do not just download it and call it yours though because that's kinda a bad move and this will not be tolerated.
- **/
-
 package Core;
 
 import ErrorMessages.BadCode.SQLError;
@@ -143,13 +134,14 @@ public class SettingSetter {
 
     public static void channels(String request, Guild guild, TextChannel channel, String[] args){
 
-        String[] textMod = {};
+        String[] textMod = {"KickLog", "BanLog", "WarnLog"};
         String[] voiceMod = {};
         String[] catMod = {};
-        String setTo = args[3];
         String guildID = guild.getId();
 
-        if (args.length == 4) {
+        if (args.length == 4 && args[3].matches("[0-9]+")) {
+
+            String setTo = args[3]; //This is here to stop random errors
 
             if (guild.getTextChannelById(args[3]) != null) {
                 if (Arrays.asList(textMod).contains(args[2])){
@@ -167,6 +159,7 @@ public class SettingSetter {
 
             } else if (guild.getCategoryById(args[3]) != null) {
                 if (Arrays.asList(catMod).contains(args[2])){
+                    System.out.println("bean");
                     Set(args, channel, guildID, setTo);
                 } else {
                     WrongCommandUsage.send(channel, example(), "The ID you gave isn't compatible with that module", request);
