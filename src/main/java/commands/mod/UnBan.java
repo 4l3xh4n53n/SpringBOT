@@ -12,8 +12,7 @@ import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 import java.util.List;
 
 public class UnBan {
@@ -38,24 +37,30 @@ public class UnBan {
         return log;
     }
 
-    public static void Execute(Guild guild, User mentioned, TextChannel txt, String request, User user){
+    public static void Execute(Guild guild, User mentioned, TextChannel txt, User user){
         int check = 0;
         try {
             guild.unban(mentioned).complete();
             check = 1;
         } catch (Exception x){
-            WrongCommandUsage.send(txt, example(), "Member isn't banned", request);
+            WrongCommandUsage.send(txt, example(), "Member isn't banned");
         }
 
         if (check == 1) {
 
+            Calendar cal = GregorianCalendar.getInstance();
+            int hour = cal.get(Calendar.HOUR_OF_DAY);
+            int minute = cal.get(Calendar.MINUTE);
+            String time = hour + ":" + minute;
+
             EmbedBuilder em = new EmbedBuilder();
             em.setColor(Color.decode(SettingGetter.ChannelFriendlySet("GuildColour", txt)));
             em.setTitle("Un banned " + mentioned.getAsTag());
+            em.setFooter("ID: " + mentioned.getId() + " | Time: " + time);
             txt.sendMessage(em.build()).queue(MessageRemover::deleteAfter);
         }
 
-        ModLogger.log(txt, mentioned, "BanLog", "", set(), "was unbanned",user);
+        ModLogger.log(txt, mentioned, "BanLog", "", log(), "was unbanned",user);
 
     }
 
@@ -71,54 +76,50 @@ public class UnBan {
         int check = 0;
         int checktwo = 0;
 
+        int rolecheck = RoleChecker.CheckRoles(roles, guild);
+
         if (args.length == 2) {
 
             // Makes sure they have the roles setup
 
-            try {
-
-                for (int i = 0; roles.length > i; i++) {
-                    guild.getRoleById(roles[i]);
+            if (rolecheck == 1) {
+                try {
+                    mentioned = guild.getJDA().retrieveUserById(args[1]).complete();
+                    checktwo = 1;
+                } catch (Exception x) {
+                    // No members were mentioned
                 }
-                check = 1;
 
-            } catch (Exception x) {
-                RolesNotSet.ChannelFriendly(txt, "ClearRoles", log());
-            }
-            try {
-                mentioned = guild.getJDA().retrieveUserById(args[1]).complete();
-                checktwo = 1;
-            } catch (Exception x){
-                // No members were mentioned
-            }
+                // Makes sure everything else is ok
 
-            // Makes sure everything else is ok
+                if (check == 1) {
 
-            if (check == 1) {
-
-                for (int i = 0; userroles.size() > i; i++) {
-                    usersRoles.add(userroles.get(i).getId());
-                }
-                if (checktwo == 1) {
-                    if (CollectionUtils.containsAny(Arrays.asList(roles), usersRoles)) {
-                        if (botrole.hasPermission(Permission.BAN_MEMBERS) || botrole.hasPermission(Permission.ADMINISTRATOR)) {
-                            Execute(guild, mentioned, txt, request, user);
+                    for (int i = 0; userroles.size() > i; i++) {
+                        usersRoles.add(userroles.get(i).getId());
+                    }
+                    if (checktwo == 1) {
+                        if (CollectionUtils.containsAny(Arrays.asList(roles), usersRoles)) {
+                            if (botrole.hasPermission(Permission.BAN_MEMBERS) || botrole.hasPermission(Permission.ADMINISTRATOR)) {
+                                Execute(guild, mentioned, txt, user);
+                            } else {
+                                NoPerms.Bot("Ban Members", txt);
+                            }
                         } else {
-                            NoPerms.Bot("Ban Members", txt);
+                            for (int i = 0; roles.length > i; i++) {
+                                Role role = guild.getRoleById(roles[i]);
+                                req = req + "@" + role.getName() + " ";
+                            }
+                            NoPerms.Send("ban", req, txt);
                         }
                     } else {
-                        for (int i = 0; roles.length > i; i++) {
-                            Role role = guild.getRoleById(roles[i]);
-                            req = req + "@" + role.getName() + " ";
-                        }
-                        NoPerms.Send("ban", req, txt);
+                        WrongCommandUsage.send(txt, example(), "You haven't mentioned any members");
                     }
-                } else {
-                    WrongCommandUsage.send(txt, example(), "You haven't mentioned any members", request);
                 }
+            } else {
+                RolesNotSet.ChannelFriendly(txt,"ban", set());
             }
         } else {
-            WrongCommandUsage.send(txt, example(), "Wrong amount of args", request);
+            WrongCommandUsage.send(txt, example(), "Wrong amount of args");
         }
     }
 }

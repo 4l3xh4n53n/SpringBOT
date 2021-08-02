@@ -51,6 +51,12 @@ public class MessageReceived extends ListenerAdapter {
                     case "warn":
                         Warn.check(guild, user, channel, msg);
                         break;
+                    case "warns":
+                        WarnsAmount.check(guildID, msg, channel, guild, user, content);
+                        break;
+                    case "removewarns":
+                        RemoveWarns.check(guild, user, channel, msg);
+                        break;
                     case "set":
                         SettingSetter.check(user, request, guild, channel, msg);
                         break;
@@ -61,7 +67,7 @@ public class MessageReceived extends ListenerAdapter {
                         SetColour.Set(channel, content, guildID);
                         break;
                 }
-            } else if (content.equalsIgnoreCase("help I forgot my prefix")){
+            } else if (content.equalsIgnoreCase("prefix")){
                 channel.sendMessage(SettingGetter.ChannelFriendlySet("Prefix", channel)).queue();
             }
         }

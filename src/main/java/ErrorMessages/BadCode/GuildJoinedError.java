@@ -7,6 +7,8 @@ import net.dv8tion.jda.api.entities.User;
 
 import java.awt.*;
 
+//todo make it not send the guilds ID only the guilds owner, also make it not buggin
+
 public class GuildJoinedError {
 
     public static void DMOwner(Exception x, Guild g){
@@ -25,7 +27,7 @@ public class GuildJoinedError {
         em.addField("The bots owner has been notified and will fix the issue shortly.",
                 "For any questions feel free to dm my owner: " + fourlegs.getAsTag(),
                 false);
-        em.setFooter("And if your wandering, no this will not send any personal data to the owner, just the guild it joined and the error message.");
+        em.setFooter("And if your wondering, no this will not send any personal data to the owner, just the guild it joined and the error message.");
         guildOwner.openPrivateChannel().queue((channel) -> {
             channel.sendMessage(em.build()).queue();
         });
@@ -34,7 +36,7 @@ public class GuildJoinedError {
 
         EmbedBuilder issue = new EmbedBuilder();
         issue.setTitle("Something very horrible has happened");
-        issue.addField("Guild ID:" + g.getId(), x.getMessage(), false);
+        issue.addField("Guild ID:" + g.getId(), x.getMessage(), false); //todo this is buggin and does send it
         issue.setDescription("The guilds owner: " + guildOwner.getAsTag());
 
         fourlegs.openPrivateChannel().queue((channel) -> {

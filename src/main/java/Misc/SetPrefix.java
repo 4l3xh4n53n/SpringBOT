@@ -18,7 +18,7 @@ public class SetPrefix {
     }
 
     public static String info(){
-        String info = "This command changes your servers prefix (if you forget it the safe word is 'help I forgot my prefix')";
+        String info = "This command changes your servers prefix (if you forget it the safe word is 'prefix')";
         return info;
     }
 
@@ -46,7 +46,7 @@ public class SetPrefix {
                 }
             }
         } else {
-            WrongCommandUsage.send(txt, example(), "Wrong amount of args", content);
+            WrongCommandUsage.send(txt, example(), "Wrong amount of args");
         }
 
 

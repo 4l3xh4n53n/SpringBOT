@@ -5,13 +5,15 @@ import Core.ModLogger;
 import Core.SettingGetter;
 import ErrorMessages.BadCode.SQLError;
 import ErrorMessages.UserError.NoPerms;
+import ErrorMessages.UserError.RolesNotSet;
 import ErrorMessages.UserError.WrongCommandUsage;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.collections4.CollectionUtils;
 
+import java.awt.*;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 import java.util.List;
 
 public class Warn {
@@ -73,10 +75,22 @@ public class Warn {
             rs.close();
             con.close();
 
+            Calendar cal = GregorianCalendar.getInstance();
+            int hour = cal.get(Calendar.HOUR_OF_DAY);
+            int minute = cal.get(Calendar.MINUTE);
+            String time = hour + ":" + minute;
+
+            EmbedBuilder em = new EmbedBuilder();
+            em.setColor(Color.decode(SettingGetter.ChannelFriendlySet("GuildColour", txt)));
+            em.setTitle("Warned " + user.getAsTag());
+            em.setFooter("ID: " + mentioned.getId() + " | Time: " + time);
+
+            txt.sendMessage(em.build()).queue();
+
             ModLogger.log(txt, user, "WarnLog", reason, log(), "was warned", executor);
 
         } catch (Exception x){
-            SQLError.TextChannel(txt, x); // this is buggin
+            SQLError.TextChannel(txt, x);
         }
 
     }
@@ -109,40 +123,47 @@ public class Warn {
         int check = 0;
         Member mentioned = null;
 
+        int rolecheck = RoleChecker.CheckRoles(roles, guild);
+
         if (args.length > 1){
+            if (rolecheck == 1) {
 
-            try {
-                guild.retrieveMemberById(args[1]).complete();
-                check = 1;
-            } catch (Exception ignored){}
-
-            if (check == 1 || msg.getMentionedMembers().size() > 0){
-                if (check == 1){
-                    mentioned = guild.retrieveMemberById(args[1]).complete();
-                } else {
-                    mentioned = msg.getMentionedMembers().get(0);
+                try {
+                    guild.retrieveMemberById(args[1]).complete();
+                    check = 1;
+                } catch (Exception ignored) {
                 }
 
-                for (int i = 0; userroles.size() > i; i++) {
-                    usersRoles.add(userroles.get(i).getId());
-                }
-
-                if (CollectionUtils.containsAny(Arrays.asList(roles), usersRoles)){
-                    Execute(guildID, txt, mentioned, con, msg);
-                } else {
-                    for (int i = 0; roles.length > i; i++) {
-                        Role role = guild.getRoleById(roles[i]);
-                        req = req + "@" + role.getName() + " ";
+                if (check == 1 || msg.getMentionedMembers().size() > 0) {
+                    if (check == 1) {
+                        mentioned = guild.retrieveMemberById(args[1]).complete();
+                    } else {
+                        mentioned = msg.getMentionedMembers().get(0);
                     }
-                    NoPerms.Send("warn", req, txt);
+
+                    for (int i = 0; userroles.size() > i; i++) {
+                        usersRoles.add(userroles.get(i).getId());
+                    }
+
+                    if (CollectionUtils.containsAny(Arrays.asList(roles), usersRoles)) {
+                        Execute(guildID, txt, mentioned, con, msg);
+                    } else {
+                        for (int i = 0; roles.length > i; i++) {
+                            Role role = guild.getRoleById(roles[i]);
+                            req = req + "@" + role.getName() + " ";
+                        }
+                        NoPerms.Send("warn", req, txt);
+                    }
+
+
+                } else {
+                    WrongCommandUsage.send(txt, example(), "You haven't mentioned any members");
                 }
-
-
             } else {
-                WrongCommandUsage.send(txt, example(), "You haven't mentioned any members", "warn");
+                RolesNotSet.ChannelFriendly(txt, "warn", set());
             }
         } else {
-            WrongCommandUsage.send(txt, example(), "Wrong amount of args", "warn");
+            WrongCommandUsage.send(txt, example(), "Wrong amount of args");
         }
 
     }

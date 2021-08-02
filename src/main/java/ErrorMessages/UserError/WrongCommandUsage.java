@@ -9,7 +9,7 @@ import java.awt.*;
 
 public class WrongCommandUsage {
 
-    public static void send(TextChannel txt, String exampleCommand, String reason, String content){
+    public static void send(TextChannel txt, String exampleCommand, String reason){
 
         String guildColour = SettingGetter.ChannelFriendlySet("GuildColour", txt);
 

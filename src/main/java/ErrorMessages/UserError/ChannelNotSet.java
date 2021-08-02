@@ -1,5 +1,6 @@
 package ErrorMessages.UserError;
 
+import Core.MessageRemover;
 import Core.SettingGetter;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -13,7 +14,9 @@ public class ChannelNotSet {
         em.setColor(Color.decode(SettingGetter.ChannelFriendlySet("GuildColour", txt)));
         em.setTitle("Bruh momento!");
         em.addField("You don't have a channel setup for this:", set, false);
-        txt.sendMessage(em.build()).queue();
+        txt.sendMessage(em.build()).queue(msg -> {
+            MessageRemover.deleteAfter(msg);
+        });
     }
 
 }

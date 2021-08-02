@@ -30,7 +30,7 @@ public class SetColour {
                 Color.decode(args[1]);
                 check = 1;
             } catch (Exception x){
-                WrongCommandUsage.send(txt, example(), "Not a valid hex code", content);
+                WrongCommandUsage.send(txt, example(), "Not a valid hex code");
             }
 
             if (check == 1){
@@ -52,7 +52,7 @@ public class SetColour {
                 }
             }
         } else {
-            WrongCommandUsage.send(txt, example(), "Wrong amount of args", content);
+            WrongCommandUsage.send(txt, example(), "Wrong amount of args");
         }
 
     }
