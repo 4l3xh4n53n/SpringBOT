@@ -18,25 +18,10 @@ import java.util.List;
 
 public class Ban {
 
-    public static String example(){
-        String example = "`ban <@user/userID> <REASON> <--` (optional)";
-        return example;
-    }
-
-    public static String info(){
-        String info = "Bans a user";
-        return info;
-    }
-
-    public static String set(){
-        String set = "`set roles BanRoles <@role(S)>`";
-        return set;
-    }
-
-    public static String log(){
-        String log = "`set channel BanLog <channelID>`";
-        return log;
-    }
+    public static String example = "`ban <@user/userID> <REASON> <--` (optional)";
+    public static String info = "Bans a user";
+    public static String set = "`set roles BanRoles <@role(S)>`";
+    public static String log = "`set channel BanLog <channelID>`";
 
     public static void Execute(Guild guild, User mentioned, String[] args, String request, TextChannel txt, User user){
         String reason = request.replace(args[0] + " " + args[1], "");
@@ -53,7 +38,7 @@ public class Ban {
         em.setFooter("ID: " + mentioned.getId() + " | Time: " + time);
         txt.sendMessage(em.build()).queue(MessageRemover::deleteAfter);
 
-        ModLogger.log(txt, mentioned, "BanLog", reason, log(), "was banned", user);
+        ModLogger.log(txt, mentioned, "BanLog", reason, log, "was banned", user);
 
     }
 
@@ -122,13 +107,13 @@ public class Ban {
                         NoPerms.Send("ban", req, channel);
                     }
                 } else {
-                    WrongCommandUsage.send(channel, example(), "You haven't mentioned any members");
+                    WrongCommandUsage.send(channel, example, "You haven't mentioned any members");
                 }
             } else {
-                RolesNotSet.ChannelFriendly(channel,"ban", set());
+                RolesNotSet.ChannelFriendly(channel,"ban", set);
             }
         } else {
-            WrongCommandUsage.send(channel, example(), "Wrong amount of args");
+            WrongCommandUsage.send(channel, example, "Wrong amount of args");
         }
     }
 }

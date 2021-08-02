@@ -2,8 +2,10 @@ package EventListeners;
 
 import Core.SettingGetter;
 import Core.SettingSetter;
+import Misc.Help;
 import Misc.SetColour;
 import Misc.SetPrefix;
+import Misc.Stats;
 import commands.mod.*;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
@@ -36,6 +38,9 @@ public class MessageReceived extends ListenerAdapter {
                 // Decides what the user want's to do
 
                 switch (com) {
+
+                    // MOD COMMANDS
+
                     case "clear":
                         Clear.check(channel, request, user, guild);
                         break;
@@ -57,6 +62,9 @@ public class MessageReceived extends ListenerAdapter {
                     case "removewarns":
                         RemoveWarns.check(guild, user, channel, msg);
                         break;
+
+                    // SETTING COMMANDS AND OTHER STUFF
+
                     case "set":
                         SettingSetter.check(user, request, guild, channel, msg);
                         break;
@@ -66,6 +74,15 @@ public class MessageReceived extends ListenerAdapter {
                     case "setColour":
                         SetColour.Set(channel, content, guildID);
                         break;
+                    case "help":
+                        Help.checkForSubCommands();
+                        break;
+                    case "stats":
+                        Stats.send(guild, channel, user);
+                        break;
+
+                    // GAMES AND POINTS RELATED STUFF
+
                 }
             } else if (content.equalsIgnoreCase("prefix")){
                 channel.sendMessage(SettingGetter.ChannelFriendlySet("Prefix", channel)).queue();

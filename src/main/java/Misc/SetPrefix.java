@@ -41,7 +41,7 @@ public class SetPrefix {
                 stmt.close();
                 ud.close();
             } catch (Exception x){
-                if (!x.getMessage().equals("query does not return ResultSet")) {
+                if (!x.getMessage().equals("query does not return ResultSet")) { // This is here because I used my old method of doing this which used result set.
                     SQLError.TextChannel(txt, x);
                 }
             }

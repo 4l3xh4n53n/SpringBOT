@@ -16,20 +16,9 @@ import java.util.List;
 
 public class Clear {
 
-    public static String example(){
-        String example = "clear <amount>";
-        return example;
-    }
-
-    public static String info(){
-        String info = "This automatically removes a specified amount of messages from the specified channel.";
-        return info;
-    }
-
-    public static String set(){
-        String set = "`set roles ClearRoles <@role(s)>`";
-        return set;
-    }
+    public static String example = "clear <amount>";
+    public static String info = "This automatically removes a specified amount of messages from the specified channel.";
+    public static String set = "`set roles ClearRoles <@role(s)>`";
 
     public static void Execute(TextChannel txt, int amount){
 
@@ -90,10 +79,10 @@ public class Clear {
                 }
 
             } else {
-                RolesNotSet.ChannelFriendly(txtchan,"clear", set());
+                RolesNotSet.ChannelFriendly(txtchan,"clear", set);
             }
         } else {
-            WrongCommandUsage.send(txtchan, example(), "Wrong amount of args");
+            WrongCommandUsage.send(txtchan, example, "Wrong amount of args");
         }
     }
 }

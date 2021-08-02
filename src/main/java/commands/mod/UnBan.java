@@ -17,25 +17,10 @@ import java.util.List;
 
 public class UnBan {
 
-    public static String example(){
-        String example = "`unban <USERID>`";
-        return example;
-    }
-
-    public static String info(){
-        String info = "Un bans a user";
-        return info;
-    }
-
-    public static String set(){
-        String set = "`set roles BanRoles <@role(S)>`";
-        return set;
-    }
-
-    public static String log(){
-        String log = "`set channel BanLog <channelID>`";
-        return log;
-    }
+    public static String example = "`unban <USERID>`";
+    public static String info = "Un bans a user";
+    public static String set = "`set roles BanRoles <@role(S)>`";
+    public static String log = "`set channel BanLog <channelID>`";
 
     public static void Execute(Guild guild, User mentioned, TextChannel txt, User user){
         int check = 0;
@@ -43,7 +28,7 @@ public class UnBan {
             guild.unban(mentioned).complete();
             check = 1;
         } catch (Exception x){
-            WrongCommandUsage.send(txt, example(), "Member isn't banned");
+            WrongCommandUsage.send(txt, example, "Member isn't banned");
         }
 
         if (check == 1) {
@@ -60,7 +45,7 @@ public class UnBan {
             txt.sendMessage(em.build()).queue(MessageRemover::deleteAfter);
         }
 
-        ModLogger.log(txt, mentioned, "BanLog", "", log(), "was unbanned",user);
+        ModLogger.log(txt, mentioned, "BanLog", "", log, "was unbanned",user);
 
     }
 
@@ -112,14 +97,14 @@ public class UnBan {
                             NoPerms.Send("ban", req, txt);
                         }
                     } else {
-                        WrongCommandUsage.send(txt, example(), "You haven't mentioned any members");
+                        WrongCommandUsage.send(txt, example, "You haven't mentioned any members");
                     }
                 }
             } else {
-                RolesNotSet.ChannelFriendly(txt,"ban", set());
+                RolesNotSet.ChannelFriendly(txt,"ban", set);
             }
         } else {
-            WrongCommandUsage.send(txt, example(), "Wrong amount of args");
+            WrongCommandUsage.send(txt, example, "Wrong amount of args");
         }
     }
 }

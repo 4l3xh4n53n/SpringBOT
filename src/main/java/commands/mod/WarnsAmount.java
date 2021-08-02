@@ -20,20 +20,9 @@ import java.util.List;
 
 public class WarnsAmount {
 
-    public static String example(){
-        String example = "`warns <@user>";
-        return example;
-    }
-
-    public static String info(){
-        String info = "Shows you how many warns the specified user has";
-        return info;
-    }
-
-    public static String set(){
-        String set = "`set roles WarnRoles <@role(S)>`";
-        return set;
-    }
+    public static String example = "`warns <@user>";
+    public static String info = "Shows you how many warns the specified user has";
+    public static String set = "`set roles WarnRoles <@role(S)>`";
 
     public static void Execute(String guildID, TextChannel txt, Member mentioned, Connection con){
 
@@ -70,8 +59,6 @@ public class WarnsAmount {
         } catch (Exception x){
             SQLError.TextChannel(txt, x);
         }
-
-
 
     }
 
@@ -131,13 +118,13 @@ public class WarnsAmount {
                     }
 
                 } else {
-                    WrongCommandUsage.send(txt, example(), "You haven't mentioned any members");
+                    WrongCommandUsage.send(txt, example, "You haven't mentioned any members");
                 }
             } else {
-                RolesNotSet.ChannelFriendly(txt, "warns", set());
+                RolesNotSet.ChannelFriendly(txt, "warns", set);
             }
         } else {
-            WrongCommandUsage.send(txt, example(), "Wrong amount of args");
+            WrongCommandUsage.send(txt, example, "Wrong amount of args");
         }
 
     }

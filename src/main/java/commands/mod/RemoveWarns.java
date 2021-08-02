@@ -18,25 +18,10 @@ import java.util.List;
 
 public class RemoveWarns {
 
-    public static String example(){
-        String example = "`removewarns <@user/userID> <amount>`";
-        return example;
-    }
-
-    public static String info(){
-        String info = "Removes a warn from a user";
-        return info;
-    }
-
-    public static String set(){
-        String set = "`set roles WarnRoles <@role(S)>`";
-        return set;
-    }
-
-    public static String log(){
-        String log = "`set channel WarnLog <channelID>`";
-        return log;
-    }
+    public static String example = "`removewarns <@user/userID> <amount>`";
+    public static String info = "Removes a warn from a user";
+    public static String set = "`set roles WarnRoles <@role(S)>`";
+    public static String log = "`set channel WarnLog <channelID>`";
 
     public static void Execute(String guildID, TextChannel txt, Member mentioned, Connection con, Message msg, int amount){
 
@@ -72,7 +57,7 @@ public class RemoveWarns {
                         ud.close();
                     }
                 } else {
-                    WrongCommandUsage.send(txt, example(), "The user has no warns");
+                    WrongCommandUsage.send(txt, example, "The user has no warns");
                 }
             }
             stmt.close();
@@ -91,7 +76,7 @@ public class RemoveWarns {
 
             txt.sendMessage(em.build()).queue();
 
-            ModLogger.log(txt, user, "WarnLog", "", log(), "was unwarned " + amount + " times", executor);
+            ModLogger.log(txt, user, "WarnLog", "", log, "was unwarned " + amount + " times", executor);
 
         } catch (Exception x){
             SQLError.TextChannel(txt, x);
@@ -170,13 +155,13 @@ public class RemoveWarns {
 
 
                 } else {
-                    WrongCommandUsage.send(txt, example(), "You haven't mentioned any members");
+                    WrongCommandUsage.send(txt, example, "You haven't mentioned any members");
                 }
             } else {
-                RolesNotSet.ChannelFriendly(txt, "warn", set());
+                RolesNotSet.ChannelFriendly(txt, "warn", set);
             }
         } else {
-            WrongCommandUsage.send(txt, example(), "Wrong amount of args");
+            WrongCommandUsage.send(txt, example, "Wrong amount of args");
         }
 
     }

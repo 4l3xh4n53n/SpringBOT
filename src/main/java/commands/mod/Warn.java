@@ -18,25 +18,10 @@ import java.util.List;
 
 public class Warn {
 
-    public static String example(){
-        String example = "`warn <@user/userID> <reason>` <-- (optional)";
-        return example;
-    }
-
-    public static String info(){
-        String info = "Warns a user";
-        return info;
-    }
-
-    public static String set(){
-        String set = "`set roles WarnRoles <@role(S)>`";
-        return set;
-    }
-
-    public static String log(){
-        String log = "`set channel WarnLog <channelID>`";
-        return log;
-    }
+    public static String example = "`warn <@user/userID> <reason>` <-- (optional)";
+    public static String info = "Warns a user";
+    public static String set = "`set roles WarnRoles <@role(S)>`";
+    public static String log = "`set channel WarnLog <channelID>`";
 
     public static void Execute(String guildID, TextChannel txt, Member mentioned, Connection con, Message msg){
 
@@ -87,7 +72,7 @@ public class Warn {
 
             txt.sendMessage(em.build()).queue();
 
-            ModLogger.log(txt, user, "WarnLog", reason, log(), "was warned", executor);
+            ModLogger.log(txt, user, "WarnLog", reason, log, "was warned", executor);
 
         } catch (Exception x){
             SQLError.TextChannel(txt, x);
@@ -157,13 +142,13 @@ public class Warn {
 
 
                 } else {
-                    WrongCommandUsage.send(txt, example(), "You haven't mentioned any members");
+                    WrongCommandUsage.send(txt, example, "You haven't mentioned any members");
                 }
             } else {
-                RolesNotSet.ChannelFriendly(txt, "warn", set());
+                RolesNotSet.ChannelFriendly(txt, "warn", set);
             }
         } else {
-            WrongCommandUsage.send(txt, example(), "Wrong amount of args");
+            WrongCommandUsage.send(txt, example, "Wrong amount of args");
         }
 
     }
