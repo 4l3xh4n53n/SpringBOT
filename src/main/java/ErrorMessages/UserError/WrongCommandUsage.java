@@ -17,9 +17,7 @@ public class WrongCommandUsage {
         em.setColor(Color.decode(guildColour));
         em.setTitle("That isn't how you use this command");
         em.addField("Example:\n" + exampleCommand,"Reason: " + reason, false);
-        txt.sendMessage(em.build()).queue(msg -> {
-            MessageRemover.deleteAfter(msg);
-        });
+        txt.sendMessage(em.build()).queue(MessageRemover::deleteAfter);
     }
 
 }

@@ -13,9 +13,7 @@ public class RoleTooHigh {
         EmbedBuilder em = new EmbedBuilder();
         em.setColor(Color.decode(SettingGetter.ChannelFriendlySet("GuildColour", txt)));
         em.setTitle("The member your trying to " + module + " has a role heigher than mine");
-        txt.sendMessage(em.build()).queue(msg -> {
-            MessageRemover.deleteAfter(msg);
-        });
+        txt.sendMessage(em.build()).queue(MessageRemover::deleteAfter);
     }
 
 }

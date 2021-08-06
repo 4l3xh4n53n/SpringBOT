@@ -26,13 +26,15 @@ public class SettingCreator{
                     "ModCommands, " +
                     "KickLog, " +
                     "BanLog, " +
-                    "WarnLog " +
-                    ")VALUES(?,?,?,?,?,?,?,?,?,?)";
+                    "WarnLog, " +
+                    "LogModActions " +
+                    ")VALUES(?,?,?,?,?,?,?,?,?,?,?)";
             ps = con.prepareStatement(SQL);
             ps.setString(1, guildID);
             ps.setString(2, "!"); //prefix
             ps.setString(3, "#000000"); //defaultcolour
             ps.setString(7, "1"); //modcommands
+            ps.setString(11, "1");//moderationlogs
             ps.executeUpdate();
             con.close();
             ps.close();

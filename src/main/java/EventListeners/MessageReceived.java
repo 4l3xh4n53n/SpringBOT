@@ -2,6 +2,10 @@ package EventListeners;
 
 import Core.SettingGetter;
 import Core.SettingSetter;
+import Games.ActivityPoints.Commands.CoinsAmount;
+import Games.ActivityPoints.Core.UserTimeOut;
+import Games.Random.Dice;
+import Games.Random.FlipACoin;
 import Misc.Help;
 import Misc.SetColour;
 import Misc.SetPrefix;
@@ -19,7 +23,7 @@ public class MessageReceived extends ListenerAdapter {
     @Override
     public void onMessageReceived(MessageReceivedEvent e) {
 
-        if (e.isFromGuild() && !e.getAuthor().isBot()) {
+        if (e.isFromGuild() && !e.getAuthor().isBot() && e.getTextChannel().canTalk()) {
 
             TextChannel channel = e.getTextChannel();
             String content = e.getMessage().getContentRaw();
@@ -27,8 +31,11 @@ public class MessageReceived extends ListenerAdapter {
             User user = e.getMember().getUser();
             Guild guild = e.getGuild();
             String guildID = guild.getId();
+            String userID = user.getId();
 
             String botprefix = SettingGetter.ChannelFriendlySet("Prefix", channel);
+
+            UserTimeOut.check(userID, user, guild, channel);
 
             if (content.startsWith(botprefix)) {
 
@@ -75,7 +82,7 @@ public class MessageReceived extends ListenerAdapter {
                         SetColour.Set(channel, content, guildID);
                         break;
                     case "help":
-                        Help.checkForSubCommands();
+                        Help.checkForSubCommands(content, guild, channel);
                         break;
                     case "stats":
                         Stats.send(guild, channel, user);
@@ -83,10 +90,21 @@ public class MessageReceived extends ListenerAdapter {
 
                     // GAMES AND POINTS RELATED STUFF
 
+                    case "roll":
+                        Dice.roll(channel, user);
+                        break;
+                    case "flip":
+                        FlipACoin.check();
+                        break;
+                    case "coins":
+                        CoinsAmount.get(user, guild, channel, msg, content);
+                        break;
+
                 }
             } else if (content.equalsIgnoreCase("prefix")){
                 channel.sendMessage(SettingGetter.ChannelFriendlySet("Prefix", channel)).queue();
             }
+
         }
     }
 }

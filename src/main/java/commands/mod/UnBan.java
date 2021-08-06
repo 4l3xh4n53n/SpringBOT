@@ -63,48 +63,50 @@ public class UnBan {
 
         int rolecheck = RoleChecker.CheckRoles(roles, guild);
 
-        if (args.length == 2) {
+        if (SettingGetter.ChannelFriendlySet("ModCommands", txt).equals("1")) {
+            if (args.length == 2) {
 
-            // Makes sure they have the roles setup
+                // Makes sure they have the roles setup
 
-            if (rolecheck == 1) {
-                try {
-                    mentioned = guild.getJDA().retrieveUserById(args[1]).complete();
-                    checktwo = 1;
-                } catch (Exception x) {
-                    // No members were mentioned
-                }
-
-                // Makes sure everything else is ok
-
-                if (check == 1) {
-
-                    for (int i = 0; userroles.size() > i; i++) {
-                        usersRoles.add(userroles.get(i).getId());
+                if (rolecheck == 1) {
+                    try {
+                        mentioned = guild.getJDA().retrieveUserById(args[1]).complete();
+                        checktwo = 1;
+                    } catch (Exception x) {
+                        // No members were mentioned
                     }
-                    if (checktwo == 1) {
-                        if (CollectionUtils.containsAny(Arrays.asList(roles), usersRoles)) {
-                            if (botrole.hasPermission(Permission.BAN_MEMBERS) || botrole.hasPermission(Permission.ADMINISTRATOR)) {
-                                Execute(guild, mentioned, txt, user);
+
+                    // Makes sure everything else is ok
+
+                    if (check == 1) {
+
+                        for (int i = 0; userroles.size() > i; i++) {
+                            usersRoles.add(userroles.get(i).getId());
+                        }
+                        if (checktwo == 1) {
+                            if (CollectionUtils.containsAny(Arrays.asList(roles), usersRoles)) {
+                                if (botrole.hasPermission(Permission.BAN_MEMBERS) || botrole.hasPermission(Permission.ADMINISTRATOR)) {
+                                    Execute(guild, mentioned, txt, user);
+                                } else {
+                                    NoPerms.Bot("Ban Members", txt);
+                                }
                             } else {
-                                NoPerms.Bot("Ban Members", txt);
+                                for (int i = 0; roles.length > i; i++) {
+                                    Role role = guild.getRoleById(roles[i]);
+                                    req = req + "@" + role.getName() + " ";
+                                }
+                                NoPerms.Send("ban", req, txt);
                             }
                         } else {
-                            for (int i = 0; roles.length > i; i++) {
-                                Role role = guild.getRoleById(roles[i]);
-                                req = req + "@" + role.getName() + " ";
-                            }
-                            NoPerms.Send("ban", req, txt);
+                            WrongCommandUsage.send(txt, example, "You haven't mentioned any members");
                         }
-                    } else {
-                        WrongCommandUsage.send(txt, example, "You haven't mentioned any members");
                     }
+                } else {
+                    RolesNotSet.ChannelFriendly(txt, "ban", set);
                 }
             } else {
-                RolesNotSet.ChannelFriendly(txt,"ban", set);
+                WrongCommandUsage.send(txt, example, "Wrong amount of args");
             }
-        } else {
-            WrongCommandUsage.send(txt, example, "Wrong amount of args");
         }
     }
 }

@@ -33,56 +33,61 @@ public class Clear {
 
     }
 
-    public static void check(TextChannel txtchan, String request, User user, Guild guild){
+    public static void check(TextChannel txtchan, String request, User user, Guild guild) {
 
         String[] args = request.split("\\s+");
 
-        if (args.length == 2) {
-            int amount;
-            Role botrole = guild.getBotRole();
-            String[] roles = SettingGetter.ChannelFriendlySet("ClearRoles", txtchan).split(",");
-            String req = "";
-            List<Role> userroles = guild.getMember(user).getRoles();
-            List<String> usersRoles = new ArrayList<>();
+        if (SettingGetter.ChannelFriendlySet("ModCommands", txtchan).equals("1")) {
+            if (args.length == 2) {
+                int amount;
+                Role botrole = guild.getBotRole();
+                String[] roles = SettingGetter.ChannelFriendlySet("ClearRoles", txtchan).split(",");
+                String req = "";
+                List<Role> userroles = guild.getMember(user).getRoles();
+                List<String> usersRoles = new ArrayList<>();
 
-            // Makes sure specified amount is a number if not defaults to 1 message
+                // Makes sure specified amount is a number if not defaults to 1 message
 
-            try {
-                amount = Integer.parseInt(args[1].replaceAll("[^0-9]", ""));
-                amount = amount + 1;
-            } catch (Exception x) {
-                amount = 2;
-            }
-
-            // Makes sure there are real roles setup
-
-            int rolecheck = RoleChecker.CheckRoles(roles, guild);
-
-            // Makes sure they have the roles
-
-            if (rolecheck == 1) {
-                for (int i = 0; userroles.size() > i; i++) {
-                    usersRoles.add(userroles.get(i).getId());
+                try {
+                    amount = Integer.parseInt(args[1].replaceAll("[^0-9]", ""));
+                    amount = amount + 1;
+                } catch (Exception x) {
+                    amount = 2;
                 }
-                if (CollectionUtils.containsAny(Arrays.asList(roles), usersRoles)) {
-                    if (botrole.hasPermission(Permission.MESSAGE_MANAGE) || botrole.hasPermission(Permission.ADMINISTRATOR)) {
-                        Execute(txtchan, amount);
+
+                // Makes sure there are real roles setup
+
+                int rolecheck = RoleChecker.CheckRoles(roles, guild);
+
+                // Makes sure they have the roles
+
+                if (rolecheck == 1) {
+                    for (int i = 0; userroles.size() > i; i++) {
+                        usersRoles.add(userroles.get(i).getId());
+                    }
+                    if (CollectionUtils.containsAny(Arrays.asList(roles), usersRoles)) {
+                        if (botrole.hasPermission(Permission.MESSAGE_MANAGE) || botrole.hasPermission(Permission.ADMINISTRATOR)) {
+                            if (amount > 99) {
+                                amount = 99;
+                            }
+                            Execute(txtchan, amount);
+                        } else {
+                            NoPerms.Bot("Manage Messages", txtchan);
+                        }
                     } else {
-                        NoPerms.Bot("Manage Messages", txtchan);
+                        for (int i = 0; roles.length > i; i++) {
+                            Role role = guild.getRoleById(roles[i]);
+                            req = req + "@" + role.getName() + " ";
+                        }
+                        NoPerms.Send("clear", req, txtchan);
                     }
-                } else {
-                    for (int i = 0; roles.length > i; i++) {
-                        Role role = guild.getRoleById(roles[i]);
-                        req = req + "@" + role.getName() + " ";
-                    }
-                    NoPerms.Send("clear", req, txtchan);
-                }
 
+                } else {
+                    RolesNotSet.ChannelFriendly(txtchan, "clear", set);
+                }
             } else {
-                RolesNotSet.ChannelFriendly(txtchan,"clear", set);
+                WrongCommandUsage.send(txtchan, example, "Wrong amount of args");
             }
-        } else {
-            WrongCommandUsage.send(txtchan, example, "Wrong amount of args");
         }
     }
 }

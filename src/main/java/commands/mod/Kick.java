@@ -56,66 +56,68 @@ public class Kick {
 
         int rolecheck = RoleChecker.CheckRoles(roles, guild);
 
-        if (args.length > 1) {
-            if (rolecheck == 1) {
+        if (SettingGetter.ChannelFriendlySet("ModCommands", channel).equals("1")) {
+            if (args.length > 1) {
+                if (rolecheck == 1) {
 
-                try {
-                    MentionedUser = msg.getMentionedUsers().get(0);
-                    check = 1;
-                } catch (Exception ignored) {
-                }
-
-                try {
-                    MentionedUser = guild.getJDA().retrieveUserById(args[1]).complete();
-                    check = 1;
-                } catch (Exception ignored) {
-                }
-
-                if (check == 1) {
-
-                    for (int i = 0; userroles.size() > i; i++) {
-                        usersRoles.add(userroles.get(i).getId());
+                    try {
+                        MentionedUser = msg.getMentionedUsers().get(0);
+                        check = 1;
+                    } catch (Exception ignored) {
                     }
 
-                    if (CollectionUtils.containsAny(Arrays.asList(roles), usersRoles)) {
+                    try {
+                        MentionedUser = guild.getJDA().retrieveUserById(args[1]).complete();
+                        check = 1;
+                    } catch (Exception ignored) {
+                    }
 
-                        // Permissions stuffs + hierarchy
+                    if (check == 1) {
 
-                        if (botrole.hasPermission(Permission.KICK_MEMBERS) || botrole.hasPermission(Permission.ADMINISTRATOR)) {
+                        for (int i = 0; userroles.size() > i; i++) {
+                            usersRoles.add(userroles.get(i).getId());
+                        }
 
-                            int botRolePos = botrole.getPosition();
-                            int selfUserRolePos = guild.getSelfMember().getRoles().get(0).getPosition();
-                            int userRolePos = -1;
+                        if (CollectionUtils.containsAny(Arrays.asList(roles), usersRoles)) {
 
-                            try {
-                                userRolePos = guild.retrieveMemberById(MentionedUser.getId()).complete().getRoles().get(0).getPosition();
-                            } catch (Exception ignored) {
-                            }
+                            // Permissions stuffs + hierarchy
 
-                            if (botRolePos > userRolePos || selfUserRolePos > userRolePos) {
-                                Execute(guild, MentionedUser, args, request, channel, user);
+                            if (botrole.hasPermission(Permission.KICK_MEMBERS) || botrole.hasPermission(Permission.ADMINISTRATOR)) {
+
+                                int botRolePos = botrole.getPosition();
+                                int selfUserRolePos = guild.getSelfMember().getRoles().get(0).getPosition();
+                                int userRolePos = -1;
+
+                                try {
+                                    userRolePos = guild.retrieveMemberById(MentionedUser.getId()).complete().getRoles().get(0).getPosition();
+                                } catch (Exception ignored) {
+                                }
+
+                                if (botRolePos > userRolePos || selfUserRolePos > userRolePos) {
+                                    Execute(guild, MentionedUser, args, request, channel, user);
+                                } else {
+                                    RoleTooHigh.send(channel, "kick");
+                                }
+
                             } else {
-                                RoleTooHigh.send(channel, "kick");
+                                NoPerms.Bot("Kick Members", channel);
                             }
-
                         } else {
-                            NoPerms.Bot("Kick Members", channel);
+                            for (int i = 0; roles.length > i; i++) {
+                                Role role = guild.getRoleById(roles[i]);
+                                req = req + "@" + role.getName() + " ";
+                            }
+                            NoPerms.Send("kick", req, channel);
                         }
                     } else {
-                        for (int i = 0; roles.length > i; i++) {
-                            Role role = guild.getRoleById(roles[i]);
-                            req = req + "@" + role.getName() + " ";
-                        }
-                        NoPerms.Send("kick", req, channel);
+                        WrongCommandUsage.send(channel, example, "You haven't mentioned any members");
                     }
                 } else {
-                    WrongCommandUsage.send(channel, example, "You haven't mentioned any members");
+                    RolesNotSet.ChannelFriendly(channel, "kick", set);
                 }
             } else {
-                RolesNotSet.ChannelFriendly(channel,"kick", set);
+                WrongCommandUsage.send(channel, example, "Wrong amount of args");
             }
-        } else {
-            WrongCommandUsage.send(channel, example, "Wrong amount of args");
         }
     }
 

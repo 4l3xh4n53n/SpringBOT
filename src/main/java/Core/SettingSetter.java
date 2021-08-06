@@ -17,12 +17,9 @@ import java.util.concurrent.TimeUnit;
 
 public class SettingSetter {
 
-    public static String example(){
-        String example = "`set module <module> 1/0` <-- (on/off)\n" +
-                "`set roles <module> <@role(s)>` <-- **Each role should be separated by a comma**\n" +
-                "`set channel <module> <channelID>` <-- also works with categories";
-        return example;
-    }
+    public static String example = "`set module <module> 1/0` <-- (on/off)\n" +
+            "`set roles <module> <@role(s)>` \n" +
+            "`set channel <module> <channelID>` <-- also works with categories";
 
     public static void SettingChanged(TextChannel txt){
         EmbedBuilder em = new EmbedBuilder();
@@ -55,7 +52,7 @@ public class SettingSetter {
                 }
 
             } else {
-                WrongCommandUsage.send(channel, example(), "You didn't supply enough args");
+                WrongCommandUsage.send(channel, example, "You didn't supply enough args");
             }
         } else {
             NoPerms.Send("set", "administrator", channel);
@@ -81,11 +78,13 @@ public class SettingSetter {
         }
     }
 
+    public static String modules = "`ModCommands, LogModActions`";
+
     public static void modules(Guild guild, TextChannel channel, String[] args){
         SettingCreator.check(guild);
         String guildID = guild.getId();
 
-        String[] settings = {"ModCommands"};
+        String[] settings = {"ModCommands", "LogModActions"};
         String[] oneOrZero = {"1", "0"};
         String setTo = args[3];
 
@@ -96,15 +95,17 @@ public class SettingSetter {
                     Set(args, channel, guildID, setTo);
 
                 } else {
-                    WrongCommandUsage.send(channel, example(), "To turn something on or off use 1 or 0");
+                    WrongCommandUsage.send(channel, example, "To turn something on or off use 1 or 0");
                 }
             } else {
-                WrongCommandUsage.send(channel, example(), "The module you specified doesn't exist");
+                WrongCommandUsage.send(channel, example, "The module you specified doesn't exist");
             }
         } else {
-            WrongCommandUsage.send(channel, example(), "You didn't supply enough args");
+            WrongCommandUsage.send(channel, example, "You didn't supply enough args");
         }
     }
+
+    public static String roles = "`ClearRoles KickRoles BanRoles WarnRoles`";
 
     public static void roles(Guild guild, TextChannel channel, String[] args, Message msg){
 
@@ -122,15 +123,17 @@ public class SettingSetter {
                     }
                     Set(args, channel, guildID, setTo);
                 } else {
-                    WrongCommandUsage.send(channel, example(), "No roles were mentioned");
+                    WrongCommandUsage.send(channel, example, "No roles were mentioned");
                 }
             } else {
-                WrongCommandUsage.send(channel, example(), "Roles not supported by module or module doesn't exist");
+                WrongCommandUsage.send(channel, example, "Roles not supported by module or module doesn't exist");
             }
         } else {
-            WrongCommandUsage.send(channel, example(), "Wrong amount of args");
+            WrongCommandUsage.send(channel, example, "Wrong amount of args");
         }
     }
+
+    public static String channels = "`KickLog BanLog WarnLog`";
 
     public static void channels(Guild guild, TextChannel channel, String[] args){
 
@@ -147,14 +150,14 @@ public class SettingSetter {
                 if (Arrays.asList(textMod).contains(args[2])){
                     Set(args, channel, guildID, setTo);
                 } else {
-                    WrongCommandUsage.send(channel, example(), "The ID you gave isn't compatible with that module");
+                    WrongCommandUsage.send(channel, example, "The ID you gave isn't compatible with that module");
                 }
 
             } else if (guild.getVoiceChannelById(args[3]) != null) {
                 if (Arrays.asList(voiceMod).contains(args[2])){
                     Set(args, channel, guildID, setTo);
                 } else {
-                    WrongCommandUsage.send(channel, example(), "The ID you gave isn't compatible with that module");
+                    WrongCommandUsage.send(channel, example, "The ID you gave isn't compatible with that module");
                 }
 
             } else if (guild.getCategoryById(args[3]) != null) {
@@ -162,14 +165,14 @@ public class SettingSetter {
                     System.out.println("bean");
                     Set(args, channel, guildID, setTo);
                 } else {
-                    WrongCommandUsage.send(channel, example(), "The ID you gave isn't compatible with that module");
+                    WrongCommandUsage.send(channel, example, "The ID you gave isn't compatible with that module");
                 }
 
             } else {
-                WrongCommandUsage.send(channel, example(), "Your channel / category ID wasn't valid");
+                WrongCommandUsage.send(channel, example, "Your channel / category ID wasn't valid");
             }
         } else {
-            WrongCommandUsage.send(channel, example(), "Wrong amount of args");
+            WrongCommandUsage.send(channel, example, "Wrong amount of args");
         }
     }
 

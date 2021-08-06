@@ -14,9 +14,7 @@ public class ChannelNotSet {
         em.setColor(Color.decode(SettingGetter.ChannelFriendlySet("GuildColour", txt)));
         em.setTitle("Bruh momento!");
         em.addField("You don't have a channel setup for this:", set, false);
-        txt.sendMessage(em.build()).queue(msg -> {
-            MessageRemover.deleteAfter(msg);
-        });
+        txt.sendMessage(em.build()).queue(MessageRemover::deleteAfter);
     }
 
 }

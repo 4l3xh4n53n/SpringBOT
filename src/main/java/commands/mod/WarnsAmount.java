@@ -88,43 +88,45 @@ public class WarnsAmount {
         int check = 0;
         int rolecheck = RoleChecker.CheckRoles(roles, guild);
 
-        if (args.length > 1){
-            if (rolecheck == 1) {
-                try {
-                    guild.retrieveMemberById(args[1]).complete();
-                    check = 1;
-                } catch (Exception ignored) {
-                }
-
-                for (int i = 0; userroles.size() > i; i++) {
-                    usersRoles.add(userroles.get(i).getId());
-                }
-
-                if (check == 1 || msg.getMentionedMembers().size() > 0) {
-                    if (check == 1) {
-                        mentioned = guild.retrieveMemberById(args[1]).complete();
-                    } else {
-                        mentioned = msg.getMentionedMembers().get(0);
+        if (SettingGetter.ChannelFriendlySet("ModCommands", txt).equals("1")) {
+            if (args.length > 1) {
+                if (rolecheck == 1) {
+                    try {
+                        guild.retrieveMemberById(args[1]).complete();
+                        check = 1;
+                    } catch (Exception ignored) {
                     }
 
-                    if (CollectionUtils.containsAny(Arrays.asList(roles), usersRoles)) {
-                        Execute(GuildID, txt, mentioned, con);
-                    } else {
-                        for (int i = 0; roles.length > i; i++) {
-                            Role role = guild.getRoleById(roles[i]);
-                            req = req + "@" + role.getName() + " ";
+                    for (int i = 0; userroles.size() > i; i++) {
+                        usersRoles.add(userroles.get(i).getId());
+                    }
+
+                    if (check == 1 || msg.getMentionedMembers().size() > 0) {
+                        if (check == 1) {
+                            mentioned = guild.retrieveMemberById(args[1]).complete();
+                        } else {
+                            mentioned = msg.getMentionedMembers().get(0);
                         }
-                        NoPerms.Send("warn", req, txt);
-                    }
 
+                        if (CollectionUtils.containsAny(Arrays.asList(roles), usersRoles)) {
+                            Execute(GuildID, txt, mentioned, con);
+                        } else {
+                            for (int i = 0; roles.length > i; i++) {
+                                Role role = guild.getRoleById(roles[i]);
+                                req = req + "@" + role.getName() + " ";
+                            }
+                            NoPerms.Send("warn", req, txt);
+                        }
+
+                    } else {
+                        WrongCommandUsage.send(txt, example, "You haven't mentioned any members");
+                    }
                 } else {
-                    WrongCommandUsage.send(txt, example, "You haven't mentioned any members");
+                    RolesNotSet.ChannelFriendly(txt, "warns", set);
                 }
             } else {
-                RolesNotSet.ChannelFriendly(txt, "warns", set);
+                WrongCommandUsage.send(txt, example, "Wrong amount of args");
             }
-        } else {
-            WrongCommandUsage.send(txt, example, "Wrong amount of args");
         }
 
     }
