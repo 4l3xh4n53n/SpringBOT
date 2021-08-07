@@ -54,10 +54,11 @@ public class PointsHandler {
             ResultSet rs = stmt.executeQuery(SQL);
             if (!rs.next()) {
 
-                String insert = "INSERT INTO '" + guildID + "'(userID,coins) VALUES(?,?)";
+                String insert = "INSERT INTO '" + guildID + "'(userID,coins, CoinMultiplier) VALUES(?,?,?)";
                 PreparedStatement ps = con.prepareStatement(insert);
                 ps.setString(1, userID);
                 ps.setInt(2, 1);
+                ps.setInt(3, 0);
                 ps.executeUpdate();
                 ps.close();
             } else {
