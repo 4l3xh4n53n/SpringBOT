@@ -58,7 +58,8 @@ public class PointsHandler {
                 PreparedStatement ps = con.prepareStatement(insert);
                 ps.setString(1, userID);
                 ps.setInt(2, 1);
-                ps.setInt(3, 0);
+                ps.setInt(3, 1);
+                ps.setInt(4,100);
                 ps.executeUpdate();
                 ps.close();
             } else {
