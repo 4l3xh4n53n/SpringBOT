@@ -72,21 +72,21 @@ public class Clear {
                             }
                             Execute(txtchan, amount);
                         } else {
-                            NoPerms.Bot("Manage Messages", txtchan);
+                            NoPerms.Bot("Manage Messages", txtchan, user);
                         }
                     } else {
                         for (int i = 0; roles.length > i; i++) {
                             Role role = guild.getRoleById(roles[i]);
                             req = req + "@" + role.getName() + " ";
                         }
-                        NoPerms.Send("clear", req, txtchan);
+                        NoPerms.Send("clear", req, txtchan, user);
                     }
 
                 } else {
-                    RolesNotSet.ChannelFriendly(txtchan, "clear", set);
+                    RolesNotSet.ChannelFriendly(txtchan, "clear", set, user);
                 }
             } else {
-                WrongCommandUsage.send(txtchan, example, "Wrong amount of args");
+                WrongCommandUsage.send(txtchan, example, "Wrong amount of args", user);
             }
         }
     }

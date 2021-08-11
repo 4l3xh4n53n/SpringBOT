@@ -1,9 +1,8 @@
 package Games.ActivityPoints.Commands;
 
 import Core.Database;
-import Core.SettingGetter;
+import Core.Embed;
 import ErrorMessages.BadCode.SQLError;
-import ErrorMessages.UserError.WrongCommandUsage;
 import Games.ActivityPoints.Core.PointsHandler;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -12,7 +11,6 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 
-import java.awt.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -29,9 +27,8 @@ public class CoinsAmount {
         String tag = user.getAsTag();
         String pfp = user.getAvatarUrl();
 
-        EmbedBuilder em = new EmbedBuilder();
+        EmbedBuilder em = Embed.em(user, txt);
         em.setAuthor(tag, null, pfp);
-        em.setColor(Color.decode(SettingGetter.ChannelFriendlySet("GuildColour", txt)));
         em.addField("Has this many coins:", String.valueOf(amount), false);
         txt.sendMessage(em.build()).queue();
 
@@ -45,14 +42,16 @@ public class CoinsAmount {
             ResultSet rs = stmt.executeQuery(SQL);
             if (!rs.next()) {
 
-                String insert = "INSERT INTO '" + guildID + "'(userID,coins, CoinMultiplier) VALUES(?,?,?)";
+                String insert = "INSERT INTO '" + guildID + "'(userID, coins, CoinMultiplier, MaxCoins, CoinExtraPercent) VALUES(?,?,?,?,?)";
                 PreparedStatement ps = con.prepareStatement(insert);
                 ps.setString(1, userID);
-                ps.setInt(2, 1);
+                ps.setInt(2, 0);
                 ps.setInt(3, 1);
                 ps.setInt(4, 100);
+                ps.setInt(5, 0);
                 ps.executeUpdate();
                 ps.close();
+                send(txt, user, 0);
 
             } else {
 
@@ -65,7 +64,11 @@ public class CoinsAmount {
             con.close();
 
         } catch (Exception x){
-            SQLError.TextChannel(txt, x);
+            if (String.valueOf(x).equals("org.sqlite.SQLiteException: [SQLITE_CONSTRAINT]  Abort due to constraint violation (UNIQUE constraint failed: 848251288625610752.coins)")){
+                //todo make some embed thing in here yeah innit
+            } else {
+                SQLError.TextChannel(txt, x);
+            }
         }
     }
 
@@ -97,7 +100,11 @@ public class CoinsAmount {
             checkUser(userID, guildID, txt, mentioned);
 
         } else {
-            WrongCommandUsage.send(txt, example, "You didn't mention a user");
+            mentioned = user;
+            userID = user.getId();
+            PointsHandler.checkGuild(guildID, txt);
+            checkUser(userID, guildID, txt, mentioned);
+
         }
     }
 

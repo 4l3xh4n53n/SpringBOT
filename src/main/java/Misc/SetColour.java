@@ -5,6 +5,7 @@ import Core.SettingSetter;
 import ErrorMessages.BadCode.SQLError;
 import ErrorMessages.UserError.WrongCommandUsage;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
 
 import java.awt.*;
 import java.sql.Connection;
@@ -13,12 +14,10 @@ import java.sql.Statement;
 
 public class SetColour {
 
-    public static String example(){
-        String example = "setColour <#hexcode>";
-        return example;
-    }
+    public static String example = "setColour <#hexcode>";
+    public static String info = "Sets the colour that is used on the side of the embed";
 
-    public static void Set(TextChannel txt, String content, String guildID){
+    public static void Set(TextChannel txt, String content, String guildID, User user){
         String[] args = content.split("\\s+");
         int check = 0;
 
@@ -30,7 +29,7 @@ public class SetColour {
                 Color.decode(args[1]);
                 check = 1;
             } catch (Exception x){
-                WrongCommandUsage.send(txt, example(), "Not a valid hex code");
+                WrongCommandUsage.send(txt, example, "Not a valid hex code", user);
             }
 
             if (check == 1){
@@ -52,7 +51,7 @@ public class SetColour {
                 }
             }
         } else {
-            WrongCommandUsage.send(txt, example(), "Wrong amount of args");
+            WrongCommandUsage.send(txt, example, "Wrong amount of args", user);
         }
 
     }

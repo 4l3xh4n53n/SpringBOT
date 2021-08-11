@@ -3,6 +3,7 @@ package EventListeners;
 import Core.SettingGetter;
 import Core.SettingSetter;
 import Games.ActivityPoints.Commands.CoinsAmount;
+import Games.ActivityPoints.Commands.Shop;
 import Games.ActivityPoints.Core.UserTimeOut;
 import Games.Random.Dice;
 import Games.Random.FlipACoin;
@@ -76,13 +77,13 @@ public class MessageReceived extends ListenerAdapter {
                         SettingSetter.check(user, request, guild, channel, msg);
                         break;
                     case "setPrefix":
-                        SetPrefix.Set(channel, content, guildID);
+                        SetPrefix.Set(channel, content, guildID, user);
                         break;
                     case "setColour":
-                        SetColour.Set(channel, content, guildID);
+                        SetColour.Set(channel, content, guildID, user);
                         break;
                     case "help":
-                        Help.checkForSubCommands(content, guild, channel);
+                        Help.checkForSubCommands(content, guild, channel, user);
                         break;
                     case "stats":
                         Stats.send(guild, channel, user);
@@ -98,6 +99,9 @@ public class MessageReceived extends ListenerAdapter {
                         break;
                     case "coins":
                         CoinsAmount.get(user, guild, channel, msg, content);
+                        break;
+                    case "shop":
+                        Shop.check(channel, content, guildID, userID, user);
                         break;
 
                 }

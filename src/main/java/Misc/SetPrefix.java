@@ -5,6 +5,7 @@ import Core.SettingSetter;
 import ErrorMessages.BadCode.SQLError;
 import ErrorMessages.UserError.WrongCommandUsage;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -12,17 +13,10 @@ import java.sql.Statement;
 
 public class SetPrefix {
 
-    public static String example(){
-        String example = "setPrefix <newPrefix>";
-        return example;
-    }
+    public static String example = "setPrefix <newPrefix>";
+    public static String info = "This command changes your servers prefix (if you forget it the safe word is 'prefix')";
 
-    public static String info(){
-        String info = "This command changes your servers prefix (if you forget it the safe word is 'prefix')";
-        return info;
-    }
-
-    public static void Set(TextChannel txt, String content, String guildID){
+    public static void Set(TextChannel txt, String content, String guildID, User user){
         String[] args = content.split("\\s+");
 
         if (args.length == 2){
@@ -46,7 +40,7 @@ public class SetPrefix {
                 }
             }
         } else {
-            WrongCommandUsage.send(txt, example(), "Wrong amount of args");
+            WrongCommandUsage.send(txt, example, "Wrong amount of args", user);
         }
 
 

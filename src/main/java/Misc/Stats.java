@@ -16,7 +16,6 @@ public class Stats {
     public static void send(Guild guild, TextChannel txt, User user){
         Runtime runtime = Runtime.getRuntime();
         JDA jda = guild.getJDA();
-        ShardManager shardManager = jda.getShardManager();
         String guildcount = String.valueOf(jda.getGuilds().size());
         int shardcount = Main.shardcount;
         int shardnumber = jda.getShardInfo().getShardId();

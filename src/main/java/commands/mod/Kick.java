@@ -1,5 +1,6 @@
 package commands.mod;
 
+import Core.Embed;
 import Core.MessageRemover;
 import Core.ModLogger;
 import Core.SettingGetter;
@@ -12,7 +13,6 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.collections4.CollectionUtils;
 
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 
@@ -28,15 +28,8 @@ public class Kick {
         String reason = request.replace(args[0] + " " + args[1], "");
         guild.kick(mentioned.getId(), reason).queue();
 
-        Calendar cal = GregorianCalendar.getInstance();
-        int hour = cal.get(Calendar.HOUR_OF_DAY);
-        int minute = cal.get(Calendar.MINUTE);
-        String time = hour + ":" + minute;
-
-        EmbedBuilder em = new EmbedBuilder();
-        em.setColor(Color.decode(SettingGetter.ChannelFriendlySet("GuildColour", txt)));
+        EmbedBuilder em = Embed.em(user, txt);
         em.setTitle("Kicked " + mentioned.getAsTag());
-        em.setFooter("ID: " + mentioned.getId() + " | Time: " + time);
         txt.sendMessage(em.build()).queue(MessageRemover::deleteAfter);
 
         ModLogger.log(txt, mentioned, "KickLog", reason, log, "was kicked", user);
@@ -96,27 +89,27 @@ public class Kick {
                                 if (botRolePos > userRolePos || selfUserRolePos > userRolePos) {
                                     Execute(guild, MentionedUser, args, request, channel, user);
                                 } else {
-                                    RoleTooHigh.send(channel, "kick");
+                                    RoleTooHigh.send(channel, "kick", user);
                                 }
 
                             } else {
-                                NoPerms.Bot("Kick Members", channel);
+                                NoPerms.Bot("Kick Members", channel, user);
                             }
                         } else {
                             for (int i = 0; roles.length > i; i++) {
                                 Role role = guild.getRoleById(roles[i]);
                                 req = req + "@" + role.getName() + " ";
                             }
-                            NoPerms.Send("kick", req, channel);
+                            NoPerms.Send("kick", req, channel, user);
                         }
                     } else {
-                        WrongCommandUsage.send(channel, example, "You haven't mentioned any members");
+                        WrongCommandUsage.send(channel, example, "You haven't mentioned any members", user);
                     }
                 } else {
-                    RolesNotSet.ChannelFriendly(channel, "kick", set);
+                    RolesNotSet.ChannelFriendly(channel, "kick", set, user);
                 }
             } else {
-                WrongCommandUsage.send(channel, example, "Wrong amount of args");
+                WrongCommandUsage.send(channel, example, "Wrong amount of args", user);
             }
         }
     }

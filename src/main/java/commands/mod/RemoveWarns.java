@@ -1,6 +1,7 @@
 package commands.mod;
 
 import Core.Database;
+import Core.Embed;
 import Core.ModLogger;
 import Core.SettingGetter;
 import ErrorMessages.BadCode.SQLError;
@@ -11,7 +12,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.collections4.CollectionUtils;
 
-import java.awt.*;
 import java.sql.*;
 import java.util.*;
 import java.util.List;
@@ -57,23 +57,15 @@ public class RemoveWarns {
                         ud.close();
                     }
                 } else {
-                    WrongCommandUsage.send(txt, example, "The user has no warns");
+                    WrongCommandUsage.send(txt, example, "The user has no warns", user);
                 }
             }
             stmt.close();
             rs.close();
             con.close();
 
-            Calendar cal = GregorianCalendar.getInstance();
-            int hour = cal.get(Calendar.HOUR_OF_DAY);
-            int minute = cal.get(Calendar.MINUTE);
-            String time = hour + ":" + minute;
-
-            EmbedBuilder em = new EmbedBuilder();
-            em.setColor(Color.decode(SettingGetter.ChannelFriendlySet("GuildColour", txt)));
+            EmbedBuilder em = Embed.em(user, txt);
             em.setTitle("Removed " + amount + " warns from: " + user.getAsTag());
-            em.setFooter("ID: " + mentioned.getId() + " | Time: " + time);
-
             txt.sendMessage(em.build()).queue();
 
             ModLogger.log(txt, user, "WarnLog", "", log, "was unwarned " + amount + " times", executor);
@@ -151,18 +143,18 @@ public class RemoveWarns {
                                 Role role = guild.getRoleById(roles[i]);
                                 req = req + "@" + role.getName() + " ";
                             }
-                            NoPerms.Send("warn", req, txt);
+                            NoPerms.Send("warn", req, txt, user);
                         }
 
 
                     } else {
-                        WrongCommandUsage.send(txt, example, "You haven't mentioned any members");
+                        WrongCommandUsage.send(txt, example, "You haven't mentioned any members", user);
                     }
                 } else {
-                    RolesNotSet.ChannelFriendly(txt, "warn", set);
+                    RolesNotSet.ChannelFriendly(txt, "warn", set, user);
                 }
             } else {
-                WrongCommandUsage.send(txt, example, "Wrong amount of args");
+                WrongCommandUsage.send(txt, example, "Wrong amount of args", user);
             }
         }
 

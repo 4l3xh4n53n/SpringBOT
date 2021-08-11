@@ -1,6 +1,7 @@
 package commands.mod;
 
 import Core.Database;
+import Core.Embed;
 import Core.SettingGetter;
 import ErrorMessages.BadCode.SQLError;
 import ErrorMessages.UserError.NoPerms;
@@ -10,7 +11,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.collections4.CollectionUtils;
 
-import java.awt.*;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
@@ -31,15 +31,8 @@ public class WarnsAmount {
         String pfp = user.getAvatarUrl();
         String userID = user.getId();
 
-        Calendar cal = GregorianCalendar.getInstance();
-        int hour = cal.get(Calendar.HOUR_OF_DAY);
-        int minute = cal.get(Calendar.MINUTE);
-        String time = hour + ":" + minute;
-
-        EmbedBuilder em = new EmbedBuilder();
-        em.setColor(Color.decode(SettingGetter.ChannelFriendlySet("GuildColour", txt)));
+        EmbedBuilder em = Embed.em(user, txt);
         em.setAuthor(tag, null, pfp);
-        em.setFooter("ID: " + mentioned.getId() + " | Time: " + time);
 
         try {
             Statement stmt = con.createStatement();
@@ -115,17 +108,17 @@ public class WarnsAmount {
                                 Role role = guild.getRoleById(roles[i]);
                                 req = req + "@" + role.getName() + " ";
                             }
-                            NoPerms.Send("warn", req, txt);
+                            NoPerms.Send("warn", req, txt, user);
                         }
 
                     } else {
-                        WrongCommandUsage.send(txt, example, "You haven't mentioned any members");
+                        WrongCommandUsage.send(txt, example, "You haven't mentioned any members", user);
                     }
                 } else {
-                    RolesNotSet.ChannelFriendly(txt, "warns", set);
+                    RolesNotSet.ChannelFriendly(txt, "warns", set, user);
                 }
             } else {
-                WrongCommandUsage.send(txt, example, "Wrong amount of args");
+                WrongCommandUsage.send(txt, example, "Wrong amount of args", user);
             }
         }
 

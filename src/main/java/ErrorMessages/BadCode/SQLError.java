@@ -12,9 +12,7 @@ public class SQLError {
         System.out.println(x);
 
         EmbedBuilder em = new EmbedBuilder();
-        em.setColor(Color.decode(
-                SettingGetter.ChannelFriendlySet("GuildColour", txt)
-        ));
+        em.setColor(Color.RED);
         em.setTitle("UH OH! Stinky");
         em.addField("The error:", x.getMessage(), false);
         em.setFooter("Feel free to show this to the bots owner: " + txt.getJDA().getUserById("456014662199410699").getAsTag());

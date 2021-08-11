@@ -3,7 +3,6 @@ package Games.ActivityPoints.Core;
 import Core.Database;
 import ErrorMessages.BadCode.SQLError;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 
@@ -54,19 +53,24 @@ public class PointsHandler {
             ResultSet rs = stmt.executeQuery(SQL);
             if (!rs.next()) {
 
-                String insert = "INSERT INTO '" + guildID + "'(userID,coins, CoinMultiplier) VALUES(?,?,?)";
+                String insert = "INSERT INTO '" + guildID + "'(userID,coins, CoinMultiplier, MaxCoins, CoinExtraPercent) VALUES(?,?,?,?,?)";
                 PreparedStatement ps = con.prepareStatement(insert);
                 ps.setString(1, userID);
                 ps.setInt(2, 1);
                 ps.setInt(3, 1);
                 ps.setInt(4,100);
+                ps.setInt(5, 0);
                 ps.executeUpdate();
                 ps.close();
             } else {
 
                 try {
+
+                    int coinsPerMessage = rs.getInt("CoinMultiplier");
+                    int extraPercentage = rs.getInt("CoinExtraPercent");
+
                     int oldcoins = rs.getInt("coins");
-                    int newcoins = oldcoins + 1;
+                    int newcoins = oldcoins + coinsPerMessage * extraPercentage;
 
                     String update = "UPDATE '" + guildID + "' SET coins = ? WHERE userID ='" + userID + "'";
                     PreparedStatement ud = con.prepareStatement(update);

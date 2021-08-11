@@ -1,12 +1,10 @@
 package Games.Random;
 
-import Core.SettingGetter;
+import Core.Embed;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 
-import java.awt.*;
-import java.io.File;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -18,11 +16,10 @@ public class Dice {
         String tag = user.getAsTag();
         String iconurl = user.getAvatarUrl();
 
-        EmbedBuilder em = new EmbedBuilder();
+        EmbedBuilder em = Embed.em(user, txt);
         em.setImage("https://imgur.com/asrcYJZ.gif");
         em.setAuthor(tag, null, iconurl);
         em.setTitle("Rolled a dice and got: ");
-        em.setColor(Color.decode(SettingGetter.ChannelFriendlySet("GuildColour", txt)));
         txt.sendMessage(em.build()).queue(msg ->{
 
             String link = "";

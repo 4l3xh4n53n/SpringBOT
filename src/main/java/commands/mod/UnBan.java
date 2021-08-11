@@ -1,5 +1,6 @@
 package commands.mod;
 
+import Core.Embed;
 import Core.MessageRemover;
 import Core.ModLogger;
 import Core.SettingGetter;
@@ -11,7 +12,6 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.collections4.CollectionUtils;
 
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 
@@ -28,20 +28,13 @@ public class UnBan {
             guild.unban(mentioned).complete();
             check = 1;
         } catch (Exception x){
-            WrongCommandUsage.send(txt, example, "Member isn't banned");
+            WrongCommandUsage.send(txt, example, "Member isn't banned", user);
         }
 
         if (check == 1) {
 
-            Calendar cal = GregorianCalendar.getInstance();
-            int hour = cal.get(Calendar.HOUR_OF_DAY);
-            int minute = cal.get(Calendar.MINUTE);
-            String time = hour + ":" + minute;
-
-            EmbedBuilder em = new EmbedBuilder();
-            em.setColor(Color.decode(SettingGetter.ChannelFriendlySet("GuildColour", txt)));
+            EmbedBuilder em = Embed.em(user, txt);
             em.setTitle("Un banned " + mentioned.getAsTag());
-            em.setFooter("ID: " + mentioned.getId() + " | Time: " + time);
             txt.sendMessage(em.build()).queue(MessageRemover::deleteAfter);
         }
 
@@ -88,24 +81,24 @@ public class UnBan {
                                 if (botrole.hasPermission(Permission.BAN_MEMBERS) || botrole.hasPermission(Permission.ADMINISTRATOR)) {
                                     Execute(guild, mentioned, txt, user);
                                 } else {
-                                    NoPerms.Bot("Ban Members", txt);
+                                    NoPerms.Bot("Ban Members", txt, user);
                                 }
                             } else {
                                 for (int i = 0; roles.length > i; i++) {
                                     Role role = guild.getRoleById(roles[i]);
                                     req = req + "@" + role.getName() + " ";
                                 }
-                                NoPerms.Send("ban", req, txt);
+                                NoPerms.Send("ban", req, txt, user);
                             }
                         } else {
-                            WrongCommandUsage.send(txt, example, "You haven't mentioned any members");
+                            WrongCommandUsage.send(txt, example, "You haven't mentioned any members", user);
                         }
                     }
                 } else {
-                    RolesNotSet.ChannelFriendly(txt, "ban", set);
+                    RolesNotSet.ChannelFriendly(txt, "ban", set, user);
                 }
             } else {
-                WrongCommandUsage.send(txt, example, "Wrong amount of args");
+                WrongCommandUsage.send(txt, example, "Wrong amount of args", user);
             }
         }
     }
