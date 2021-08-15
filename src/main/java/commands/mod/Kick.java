@@ -18,9 +18,9 @@ import java.util.List;
 
 public class Kick {
 
-    public static String example = "`ban <@user/userID> <REASON> <--` (optional)";
-    public static String info = "Bans a user";
-    public static String set = "`set roles BanRoles <@role(S)>`";
+    public static String example = "`kick <@user/userID> <REASON> <--` (optional)";
+    public static String info = "This command kicks the specified user.";
+    public static String set = "`set roles KickRoles <@role(S)>`";
     public static String log = "`set channel KickLog <channelID>`";
 
 

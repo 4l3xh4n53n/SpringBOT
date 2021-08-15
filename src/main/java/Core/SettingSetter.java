@@ -78,13 +78,13 @@ public class SettingSetter {
         }
     }
 
-    public static String modules = "`ModCommands, LogModActions`";
+    public static String modules = "`ModCommands, LogModActions, Coins, SendCoins`";
 
     public static void modules(Guild guild, TextChannel channel, String[] args, User user){
         SettingCreator.check(guild);
         String guildID = guild.getId();
 
-        String[] settings = {"ModCommands", "LogModActions"};
+        String[] settings = {"ModCommands", "LogModActions", "Coins", "SendCoins"};
         String[] oneOrZero = {"1", "0"};
         String setTo = args[3];
 

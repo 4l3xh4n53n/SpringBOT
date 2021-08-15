@@ -8,12 +8,21 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.sharding.ShardManager;
+import org.apache.maven.model.Model;
+import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 
 import java.awt.*;
+import java.io.FileReader;
 
 public class Stats {
 
     public static void send(Guild guild, TextChannel txt, User user){
+        MavenXpp3Reader reader = new MavenXpp3Reader();
+        String version = null;
+        try {
+            Model model = reader.read(new FileReader("pom.xml"));
+            version = model.getVersion();
+        } catch (Exception ignored){}
         Runtime runtime = Runtime.getRuntime();
         JDA jda = guild.getJDA();
         String guildcount = String.valueOf(jda.getGuilds().size());
@@ -39,6 +48,7 @@ public class Stats {
         em.addField("Shard:", "`" + shardnumber + "/" + (shardcount - 1) + "`", true);
         em.addField("Owner:", "`" + owner + "`", true);
         em.addField("Guild Count:", "`" + guildcount + "`", true);
+        em.setFooter("Spring, Version: " + version);
         txt.sendMessage(em.build()).queue();
 
     }

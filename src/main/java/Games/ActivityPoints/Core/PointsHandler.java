@@ -1,6 +1,7 @@
 package Games.ActivityPoints.Core;
 
 import Core.Database;
+import Core.SettingGetter;
 import ErrorMessages.BadCode.SQLError;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -16,13 +17,12 @@ public class PointsHandler {
 
         try {
             Statement stmt = con.createStatement();
-            String sql = "CREATE TABLE '" + guildID + "' (userID TEXT NOT NULL, coins INTEGER PRIMARY KEY)";
+            String sql = "CREATE TABLE '" + guildID + "' (userID TEXT, coins INTEGER, CoinMultiplier INTEGER , MaxCoins INTEGER, CoinExtraPercent INTEGER, Messages INTEGER)";
             stmt.executeUpdate(sql);
             con.close();
             stmt.close();
 
         } catch (Exception x){
-            System.out.println("bruh " + x);
             SQLError.TextChannel(txt, x);
         }
     }
@@ -53,13 +53,14 @@ public class PointsHandler {
             ResultSet rs = stmt.executeQuery(SQL);
             if (!rs.next()) {
 
-                String insert = "INSERT INTO '" + guildID + "'(userID,coins, CoinMultiplier, MaxCoins, CoinExtraPercent) VALUES(?,?,?,?,?)";
+                String insert = "INSERT INTO '" + guildID + "'(userID,coins, CoinMultiplier, MaxCoins, CoinExtraPercent, Messages) VALUES(?,?,?,?,?,?)";
                 PreparedStatement ps = con.prepareStatement(insert);
                 ps.setString(1, userID);
-                ps.setInt(2, 1);
-                ps.setInt(3, 1);
-                ps.setInt(4,100);
-                ps.setInt(5, 0);
+                ps.setInt(2, 100);
+                ps.setInt(3, 100);
+                ps.setInt(4,1000);
+                ps.setDouble(5, 1.0);
+                ps.setInt(6,1);
                 ps.executeUpdate();
                 ps.close();
             } else {
@@ -70,11 +71,15 @@ public class PointsHandler {
                     int extraPercentage = rs.getInt("CoinExtraPercent");
 
                     int oldcoins = rs.getInt("coins");
-                    int newcoins = oldcoins + coinsPerMessage * extraPercentage;
+                    int newcoins = Math.round(oldcoins + coinsPerMessage * extraPercentage);
 
-                    String update = "UPDATE '" + guildID + "' SET coins = ? WHERE userID ='" + userID + "'";
+                    int oldmessages = rs.getInt("Messages");
+                    int newmessages = oldmessages + 1;
+
+                    String update = "UPDATE '" + guildID + "' SET coins = ?, Messages = ? WHERE userID ='" + userID + "'";
                     PreparedStatement ud = con.prepareStatement(update);
                     ud.setInt(1, newcoins);
+                    ud.setInt(2, newmessages);
                     ud.executeUpdate();
                     ud.close();
 
@@ -91,12 +96,13 @@ public class PointsHandler {
     }
 
     public static void add(User user, Guild guild, TextChannel txt){
-        String guildID = guild.getId();
-        String userID = user.getId();
+        if (SettingGetter.ChannelFriendlySet("Coins", txt).equals("1")) {
+            String guildID = guild.getId();
+            String userID = user.getId();
 
-        checkGuild(guildID, txt);
-        checkUser(userID, guildID, txt);
-
+            checkGuild(guildID, txt);
+            checkUser(userID, guildID, txt);
+        }
     }
 
 }

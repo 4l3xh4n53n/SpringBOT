@@ -11,6 +11,8 @@ import java.util.GregorianCalendar;
 
 public class NewGuildWelcomeMessage {
 
+    //todo Make it list the commands that you can use to turn things on and off
+
     public static void Welcome(Guild g){
 
         Calendar cal = GregorianCalendar.getInstance();

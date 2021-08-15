@@ -3,7 +3,9 @@ package EventListeners;
 import Core.SettingGetter;
 import Core.SettingSetter;
 import Games.ActivityPoints.Commands.CoinsAmount;
+import Games.ActivityPoints.Commands.Send;
 import Games.ActivityPoints.Commands.Shop;
+import Games.ActivityPoints.Commands.UsersStats;
 import Games.ActivityPoints.Core.UserTimeOut;
 import Games.Random.Dice;
 import Games.Random.FlipACoin;
@@ -102,6 +104,12 @@ public class MessageReceived extends ListenerAdapter {
                         break;
                     case "shop":
                         Shop.check(channel, content, guildID, userID, user);
+                        break;
+                    case "user":
+                        UsersStats.Send(user, msg, channel, guildID);
+                        break;
+                    case "send":
+                        Send.Check(user, msg, guildID, channel, content);
                         break;
 
                 }

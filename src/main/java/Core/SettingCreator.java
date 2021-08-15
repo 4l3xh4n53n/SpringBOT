@@ -28,13 +28,17 @@ public class SettingCreator{
                     "BanLog, " +
                     "WarnLog, " +
                     "LogModActions " +
+                    "Coins," +
+                    "SendCoins" +
                     ")VALUES(?,?,?,?,?,?,?,?,?,?,?)";
             ps = con.prepareStatement(SQL);
             ps.setString(1, guildID);
-            ps.setString(2, "!"); //prefix
-            ps.setString(3, "#000000"); //defaultcolour
-            ps.setString(7, "1"); //modcommands
-            ps.setString(11, "1");//moderationlogs
+            ps.setString(2, "!"); //Prefix
+            ps.setString(3, "#000000"); //GuildColour
+            ps.setString(7, "1"); //ModCommands
+            ps.setString(11, "1");//LogModActions
+            ps.setString(12, "1");//Coins
+            ps.setString(13, "1");//SendCoins
             ps.executeUpdate();
             con.close();
             ps.close();

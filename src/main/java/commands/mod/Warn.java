@@ -19,7 +19,7 @@ import java.util.List;
 public class Warn {
 
     public static String example = "`warn <@user/userID> <reason>` <-- (optional)";
-    public static String info = "Warns a user";
+    public static String info = "Warns the specified user.";
     public static String set = "`set roles WarnRoles <@role(S)>`";
     public static String log = "`set channel WarnLog <channelID>`";
 

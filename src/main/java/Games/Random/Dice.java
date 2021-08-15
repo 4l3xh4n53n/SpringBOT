@@ -11,7 +11,6 @@ import java.util.concurrent.TimeUnit;
 public class Dice {
 
     public static void roll(TextChannel txt, User user){
-        //todo send an embed with a gif that then stops I don't know how to edit embed contents afterwards though, oh maybe you just use edit :)
 
         String tag = user.getAsTag();
         String iconurl = user.getAvatarUrl();
@@ -26,7 +25,7 @@ public class Dice {
             Random random = new Random();
             int rng = random.nextInt(7);
 
-            switch (rng){ //todo these images don't want to work innit borger
+            switch (rng){
                 case 1:
                     link = "https://imgur.com/Xvm0FMp.png";
                     break;

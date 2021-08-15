@@ -19,7 +19,7 @@ import java.util.List;
 public class Ban {
 
     public static String example = "`ban <@user/userID> <REASON> <--` (optional)";
-    public static String info = "Bans a user";
+    public static String info = "This command bans the specified user.";
     public static String set = "`set roles BanRoles <@role(S)>`";
     public static String log = "`set channel BanLog <channelID>`";
 

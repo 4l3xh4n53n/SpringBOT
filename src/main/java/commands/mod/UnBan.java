@@ -18,7 +18,7 @@ import java.util.List;
 public class UnBan {
 
     public static String example = "`unban <USERID>`";
-    public static String info = "Un bans a user";
+    public static String info = "Un bans the specified user.";
     public static String set = "`set roles BanRoles <@role(S)>`";
     public static String log = "`set channel BanLog <channelID>`";
 

@@ -2,6 +2,7 @@ package Games.ActivityPoints.Commands;
 
 import Core.Database;
 import Core.Embed;
+import Core.SettingGetter;
 import ErrorMessages.BadCode.SQLError;
 import Games.ActivityPoints.Core.PointsHandler;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -46,9 +47,9 @@ public class CoinsAmount {
                 PreparedStatement ps = con.prepareStatement(insert);
                 ps.setString(1, userID);
                 ps.setInt(2, 0);
-                ps.setInt(3, 1);
-                ps.setInt(4, 100);
-                ps.setInt(5, 0);
+                ps.setInt(3, 100);
+                ps.setInt(4, 1000);
+                ps.setDouble(5, 1.0);
                 ps.executeUpdate();
                 ps.close();
                 send(txt, user, 0);
@@ -64,48 +65,52 @@ public class CoinsAmount {
             con.close();
 
         } catch (Exception x){
-            if (String.valueOf(x).equals("org.sqlite.SQLiteException: [SQLITE_CONSTRAINT]  Abort due to constraint violation (UNIQUE constraint failed: 848251288625610752.coins)")){
-                //todo make some embed thing in here yeah innit
-            } else {
-                SQLError.TextChannel(txt, x);
-            }
+            SQLError.TextChannel(txt, x);
         }
     }
 
     public static void get(User user, Guild guild, TextChannel txt, Message msg, String content){
-        String guildID = guild.getId();
-        String userID = null;
-        String[] args = content.split("\\s+");
-        JDA jda = guild.getJDA();
-        int check = 0;
-        User mentioned = null;
 
-        //Decides whether their mentioned or have used ID
+        if (SettingGetter.ChannelFriendlySet("Coins", txt).equals("1")) {
 
-        try {
-            userID = msg.getMentions().get(0).getId();
-            check = 1;
-        } catch (Exception ignored) {}
+            String guildID = guild.getId();
+            String userID = null;
+            String[] args = content.split("\\s+");
+            JDA jda = guild.getJDA();
+            int check = 0;
+            User mentioned = null;
 
-        try {
-            jda.retrieveUserById(args[1]);
-            userID = args[1];
-            check = 1;
-        } catch (Exception ignored){}
+            //Decides whether their mentioned or have used ID
 
-        if (check == 1){
+            try {
+                userID = msg.getMentions().get(0).getId();
+                check = 1;
+            } catch (Exception ignored) {
+            }
 
-            mentioned = jda.retrieveUserById(userID).complete();
-            PointsHandler.checkGuild(guildID, txt);
-            checkUser(userID, guildID, txt, mentioned);
+            try {
+                jda.retrieveUserById(args[1]);
+                userID = args[1];
+                check = 1;
+            } catch (Exception ignored) {
+            }
 
-        } else {
-            mentioned = user;
-            userID = user.getId();
-            PointsHandler.checkGuild(guildID, txt);
-            checkUser(userID, guildID, txt, mentioned);
+            if (check == 1) {
+
+                mentioned = jda.retrieveUserById(userID).complete();
+                PointsHandler.checkGuild(guildID, txt);
+                checkUser(userID, guildID, txt, mentioned);
+
+            } else {
+                mentioned = user;
+                userID = user.getId();
+                PointsHandler.checkGuild(guildID, txt);
+                checkUser(userID, guildID, txt, mentioned);
+
+            }
 
         }
+
     }
 
 }

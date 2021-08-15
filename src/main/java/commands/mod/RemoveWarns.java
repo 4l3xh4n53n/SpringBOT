@@ -19,7 +19,7 @@ import java.util.List;
 public class RemoveWarns {
 
     public static String example = "`removewarns <@user/userID> <amount>`";
-    public static String info = "Removes a warn from a user";
+    public static String info = "Removes a warn from the specified user.";
     public static String set = "`set roles WarnRoles <@role(S)>`";
     public static String log = "`set channel WarnLog <channelID>`";
 
