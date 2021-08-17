@@ -133,16 +133,16 @@ public class SettingSetter {
         }
     }
 
-    public static String channels = "`KickLog BanLog WarnLog`";
+    public static String channels = "`KickLog, BanLog, WarnLog, GuildWelcomeChannel`";
 
     public static void channels(Guild guild, TextChannel channel, String[] args, User user){
 
-        String[] textMod = {"KickLog", "BanLog", "WarnLog"};
+        String[] textMod = {"KickLog", "BanLog", "WarnLog", "GuildWelcomeChannel"};
         String[] voiceMod = {};
         String[] catMod = {};
         String guildID = guild.getId();
 
-        if (args.length == 4 && args[3].matches("[0-9]+")) {
+        if (args.length == 4 && args[3].matches("[0-9]+")) { //todo maybe don't do these the same
 
             String setTo = args[3]; //This is here to stop random errors
 

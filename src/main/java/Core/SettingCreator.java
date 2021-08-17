@@ -29,16 +29,20 @@ public class SettingCreator{
                     "WarnLog, " +
                     "LogModActions " +
                     "Coins," +
-                    "SendCoins" +
+                    "SendCoins," +
+                    "GuildWelcome," +
+                    "GuildWelcomeMessage," +
+                    "GuildWelcomeIMAGE" +
                     ")VALUES(?,?,?,?,?,?,?,?,?,?,?)";
             ps = con.prepareStatement(SQL);
             ps.setString(1, guildID);
             ps.setString(2, "!"); //Prefix
             ps.setString(3, "#000000"); //GuildColour
             ps.setString(7, "1"); //ModCommands
-            ps.setString(11, "1");//LogModActions
+            ps.setString(11, "0");//LogModActions
             ps.setString(12, "1");//Coins
             ps.setString(13, "1");//SendCoins
+            ps.setString(14, "0");//GuildWelcome
             ps.executeUpdate();
             con.close();
             ps.close();
@@ -46,6 +50,7 @@ public class SettingCreator{
         } catch (Exception x){
             GuildJoinedError.DMOwner(x, g);
         }
+
     }
 
     public static void check(Guild g){ // something in here is broken

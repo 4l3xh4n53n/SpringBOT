@@ -10,14 +10,13 @@ import Games.ActivityPoints.Core.UserTimeOut;
 import Games.Random.Dice;
 import Games.Random.FlipACoin;
 import Misc.Help;
-import Misc.SetColour;
-import Misc.SetPrefix;
+import Misc.Set.SetColour;
+import Misc.Set.SetPrefix;
+import Misc.Set.SetWelcomeImage;
+import Misc.Set.SetWelcomeMessage;
 import Misc.Stats;
 import commands.mod.*;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -31,7 +30,8 @@ public class MessageReceived extends ListenerAdapter {
             TextChannel channel = e.getTextChannel();
             String content = e.getMessage().getContentRaw();
             Message msg = e.getMessage();
-            User user = e.getMember().getUser();
+            Member member = e.getMember();
+            User user = member.getUser();
             Guild guild = e.getGuild();
             String guildID = guild.getId();
             String userID = user.getId();
@@ -79,10 +79,16 @@ public class MessageReceived extends ListenerAdapter {
                         SettingSetter.check(user, request, guild, channel, msg);
                         break;
                     case "setPrefix":
-                        SetPrefix.Set(channel, content, guildID, user);
+                        SetPrefix.Set(channel, content, guildID, user, guild);
                         break;
                     case "setColour":
                         SetColour.Set(channel, content, guildID, user);
+                        break;
+                    case "setWelcomeMessage":
+                        SetWelcomeMessage.Check(member, content, channel, guildID);
+                        break;
+                    case "setWelcomeImage":
+                        SetWelcomeImage.Check(member, content, channel, guildID);
                         break;
                     case "help":
                         Help.checkForSubCommands(content, guild, channel, user);

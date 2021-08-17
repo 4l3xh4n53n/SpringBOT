@@ -1,4 +1,4 @@
-package Misc;
+package Misc.Set;
 
 import Core.Database;
 import Core.SettingSetter;
