@@ -2,9 +2,13 @@ package ErrorMessages.UserError;
 
 import Core.Embed;
 import Core.MessageRemover;
+import Core.SettingGetter;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
+
+import java.awt.*;
 
 public class NoPerms {
 
@@ -20,6 +24,16 @@ public class NoPerms {
         em.setTitle("Sorry but I don't have the correct perms for this.");
         em.addField("Please give my roles this permission to use this command:", "Required Permissions: " + req, false);
         txt.sendMessage(em.build()).queue(MessageRemover::deleteAfter);
+    }
+
+    public static void GuildBot(String req, User owner, Guild guild){
+        owner.openPrivateChannel().queue(txt ->{
+            EmbedBuilder em = new EmbedBuilder();
+            em.setColor(Color.decode(SettingGetter.GuildFriendlySet("GuildColour", guild)));
+            em.setTitle("Sorry but I don't have the correct perms for this.");
+            em.addField("Please give my roles this permission to use this command:", "Required Permissions: " + req, false);
+            txt.sendMessage(em.build()).queue(MessageRemover::deleteAfter);
+        });
     }
 
 }

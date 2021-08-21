@@ -13,7 +13,6 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class SettingSetter {
 
@@ -26,15 +25,13 @@ public class SettingSetter {
         em.setColor(Color.decode(SettingGetter.ChannelFriendlySet("GuildColour", txt)));
         em.setTitle("Your setting has been changed");
 
-        txt.sendMessage(em.build()).queue(msg -> {
-            msg.delete().queueAfter(10, TimeUnit.SECONDS);
-        });
+        txt.sendMessage(em.build()).queue(MessageRemover::deleteAfter);
     }
 
-    public static void check(User user, String request, Guild guild, TextChannel channel, Message msg){
+    public static void check(User user, String request, Guild guild, TextChannel channel, Message msg, Member member){
         String[] args = request.split("\\s+");
 
-        if (guild.getMemberById(user.getId()).getPermissions().contains(Permission.ADMINISTRATOR)) {
+        if (member.getPermissions().contains(Permission.ADMINISTRATOR)) {
             if (args.length > 2) {
 
                 String mod = args[1];
@@ -78,13 +75,13 @@ public class SettingSetter {
         }
     }
 
-    public static String modules = "`ModCommands, LogModActions, Coins, SendCoins`";
+    public static String modules = "`ModCommands, LogModActions, Coins, SendCoins, AutoRole, InviteLogger, PrivateChannel`";
 
     public static void modules(Guild guild, TextChannel channel, String[] args, User user){
         SettingCreator.check(guild);
         String guildID = guild.getId();
 
-        String[] settings = {"ModCommands", "LogModActions", "Coins", "SendCoins"};
+        String[] settings = {"ModCommands", "LogModActions", "Coins", "SendCoins", "AutoRole", "InviteLogger", "PrivateChannel"};
         String[] oneOrZero = {"1", "0"};
         String setTo = args[3];
 
@@ -105,23 +102,23 @@ public class SettingSetter {
         }
     }
 
-    public static String roles = "`ClearRoles KickRoles BanRoles WarnRoles`";
+    public static String roles = "`ClearRoles, KickRoles, BanRoles, WarnRoles, AutoRoleRole, PollRole`";
 
     public static void roles(Guild guild, TextChannel channel, String[] args, Message msg, User user){
 
-        String[] modules = {"ClearRoles", "KickRoles", "BanRoles", "WarnRoles"};
+        String[] modules = {"ClearRoles", "KickRoles", "BanRoles", "WarnRoles", "AutoRoleRole", "PollRole"};
         String guildID = guild.getId();
         List<Role> mentionedRoles = msg.getMentionedRoles();
-        String setTo = "";
+        StringBuilder setTo = new StringBuilder();
 
         if (args.length > 3){
             if (Arrays.asList(modules).contains(args[2])){
                 if (!(mentionedRoles.size() == 0)){
 
-                    for (int i = 0; mentionedRoles.size() > i; i++){
-                        setTo = setTo + mentionedRoles.get(i).getId() + ",";
+                    for (Role mentionedRole : mentionedRoles) {
+                        setTo.append(mentionedRole.getId()).append(",");
                     }
-                    Set(args, channel, guildID, setTo);
+                    Set(args, channel, guildID, setTo.toString());
                 } else {
                     WrongCommandUsage.send(channel, example, "No roles were mentioned", user);
                 }
@@ -133,16 +130,16 @@ public class SettingSetter {
         }
     }
 
-    public static String channels = "`KickLog, BanLog, WarnLog, GuildWelcomeChannel`";
+    public static String channels = "`KickLog, BanLog, WarnLog, GuildWelcomeChannel, InviteLog`";
 
     public static void channels(Guild guild, TextChannel channel, String[] args, User user){
 
-        String[] textMod = {"KickLog", "BanLog", "WarnLog", "GuildWelcomeChannel"};
-        String[] voiceMod = {};
-        String[] catMod = {};
+        String[] textMod = {"KickLog", "BanLog", "WarnLog", "GuildWelcomeChannel", "InviteLog"};
+        String[] voiceMod = {"PrivateChannelCreator"};
+        String[] catMod = {"PrivateChannelCategory"};
         String guildID = guild.getId();
 
-        if (args.length == 4 && args[3].matches("[0-9]+")) { //todo maybe don't do these the same
+        if (args.length == 4 && args[3].matches("[0-9]+")) {
 
             String setTo = args[3]; //This is here to stop random errors
 
@@ -162,7 +159,6 @@ public class SettingSetter {
 
             } else if (guild.getCategoryById(args[3]) != null) {
                 if (Arrays.asList(catMod).contains(args[2])){
-                    System.out.println("bean");
                     Set(args, channel, guildID, setTo);
                 } else {
                     WrongCommandUsage.send(channel, example, "The ID you gave isn't compatible with that module", user);

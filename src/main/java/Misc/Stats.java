@@ -24,7 +24,7 @@ public class Stats {
             version = model.getVersion();
         } catch (Exception ignored){}
         Runtime runtime = Runtime.getRuntime();
-        JDA jda = guild.getJDA();
+        JDA jda = Main.jda;
         String guildcount = String.valueOf(jda.getGuilds().size());
         int shardcount = Main.shardcount;
         int shardnumber = jda.getShardInfo().getShardId();

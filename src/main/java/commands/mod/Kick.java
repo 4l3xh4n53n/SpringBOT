@@ -1,14 +1,12 @@
 package commands.mod;
 
-import Core.Embed;
-import Core.MessageRemover;
-import Core.ModLogger;
-import Core.SettingGetter;
+import Core.*;
 import ErrorMessages.UserError.NoPerms;
 import ErrorMessages.UserError.RoleTooHigh;
 import ErrorMessages.UserError.RolesNotSet;
 import ErrorMessages.UserError.WrongCommandUsage;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.collections4.CollectionUtils;
@@ -38,9 +36,11 @@ public class Kick {
 
     public static void check(User user, Message msg, TextChannel channel, Guild guild, String request) {
 
+        JDA jda = Main.jda;
         String[] args = request.split("\\s+");
         User MentionedUser = null;
-        Role botrole = guild.getBotRole();
+        Role botrole = guild.getSelfMember().getRoles().get(0);
+        Member botMember = guild.getSelfMember();
         String[] roles = SettingGetter.ChannelFriendlySet("KickRoles", channel).split(",");
         List<Role> userroles = guild.getMemberById(user.getId()).getRoles();
         List<String> usersRoles = new ArrayList<>();
@@ -60,7 +60,7 @@ public class Kick {
                     }
 
                     try {
-                        MentionedUser = guild.getJDA().retrieveUserById(args[1]).complete();
+                        MentionedUser = jda.retrieveUserById(args[1]).complete();
                         check = 1;
                     } catch (Exception ignored) {
                     }
@@ -75,7 +75,7 @@ public class Kick {
 
                             // Permissions stuffs + hierarchy
 
-                            if (botrole.hasPermission(Permission.KICK_MEMBERS) || botrole.hasPermission(Permission.ADMINISTRATOR)) {
+                            if (botMember.hasPermission(Permission.KICK_MEMBERS) || botMember.hasPermission(Permission.ADMINISTRATOR)) {
 
                                 int botRolePos = botrole.getPosition();
                                 int selfUserRolePos = guild.getSelfMember().getRoles().get(0).getPosition();

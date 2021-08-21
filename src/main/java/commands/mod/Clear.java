@@ -40,7 +40,7 @@ public class Clear {
         if (SettingGetter.ChannelFriendlySet("ModCommands", txtchan).equals("1")) {
             if (args.length == 2) {
                 int amount;
-                Role botrole = guild.getBotRole();
+                Member botMember = guild.getSelfMember();
                 String[] roles = SettingGetter.ChannelFriendlySet("ClearRoles", txtchan).split(",");
                 String req = "";
                 List<Role> userroles = guild.getMember(user).getRoles();
@@ -66,7 +66,7 @@ public class Clear {
                         usersRoles.add(userroles.get(i).getId());
                     }
                     if (CollectionUtils.containsAny(Arrays.asList(roles), usersRoles)) {
-                        if (botrole.hasPermission(Permission.MESSAGE_MANAGE) || botrole.hasPermission(Permission.ADMINISTRATOR)) {
+                        if (botMember.hasPermission(Permission.MESSAGE_MANAGE) || botMember.hasPermission(Permission.ADMINISTRATOR)) {
                             if (amount > 99) {
                                 amount = 99;
                             }

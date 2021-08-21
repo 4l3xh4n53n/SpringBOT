@@ -1,13 +1,11 @@
 package commands.mod;
 
-import Core.Embed;
-import Core.MessageRemover;
-import Core.ModLogger;
-import Core.SettingGetter;
+import Core.*;
 import ErrorMessages.UserError.NoPerms;
 import ErrorMessages.UserError.RolesNotSet;
 import ErrorMessages.UserError.WrongCommandUsage;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.collections4.CollectionUtils;
@@ -44,8 +42,9 @@ public class UnBan {
 
     public static void check(User user, Message msg, TextChannel txt, Guild guild, String request){
 
+        JDA jda = Main.jda;
         String[] args = request.split("\\s+");
-        Role botrole = guild.getBotRole();
+        Member botMember = guild.getSelfMember();
         User mentioned = null;
         String[] roles = SettingGetter.ChannelFriendlySet("BanRoles", txt).split(",");
         List<Role> userroles = guild.getMemberById(user.getId()).getRoles();
@@ -63,7 +62,7 @@ public class UnBan {
 
                 if (rolecheck == 1) {
                     try {
-                        mentioned = guild.getJDA().retrieveUserById(args[1]).complete();
+                        mentioned = jda.retrieveUserById(args[1]).complete();
                         checktwo = 1;
                     } catch (Exception x) {
                         // No members were mentioned
@@ -78,7 +77,7 @@ public class UnBan {
                         }
                         if (checktwo == 1) {
                             if (CollectionUtils.containsAny(Arrays.asList(roles), usersRoles)) {
-                                if (botrole.hasPermission(Permission.BAN_MEMBERS) || botrole.hasPermission(Permission.ADMINISTRATOR)) {
+                                if (botMember.hasPermission(Permission.BAN_MEMBERS) || botMember.hasPermission(Permission.ADMINISTRATOR)) {
                                     Execute(guild, mentioned, txt, user);
                                 } else {
                                     NoPerms.Bot("Ban Members", txt, user);

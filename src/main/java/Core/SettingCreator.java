@@ -15,7 +15,7 @@ public class SettingCreator{
     public static void CreateSettings(Guild g,String guildID, Connection con){
 
         try {
-            PreparedStatement ps = null;
+            PreparedStatement ps;
             String SQL = "INSERT INTO settings(" +
                     "GuildID, " +
                     "Prefix, " +
@@ -32,7 +32,13 @@ public class SettingCreator{
                     "SendCoins," +
                     "GuildWelcome," +
                     "GuildWelcomeMessage," +
-                    "GuildWelcomeIMAGE" +
+                    "GuildWelcomeIMAGE," +
+                    "AutoRole," +
+                    "AutoRoleRole," +
+                    "Poll," +
+                    "PollRole," +
+                    "InviteLogging," +
+                    "InviteLog" +
                     ")VALUES(?,?,?,?,?,?,?,?,?,?,?)";
             ps = con.prepareStatement(SQL);
             ps.setString(1, guildID);
@@ -43,8 +49,10 @@ public class SettingCreator{
             ps.setString(12, "1");//Coins
             ps.setString(13, "1");//SendCoins
             ps.setString(14, "0");//GuildWelcome
+            ps.setString(17, "0");//AutoRole
+            ps.setString(19, "0");//Poll
+            ps.setString(21, "0");
             ps.executeUpdate();
-            con.close();
             ps.close();
 
         } catch (Exception x){
@@ -53,7 +61,7 @@ public class SettingCreator{
 
     }
 
-    public static void check(Guild g){ // something in here is broken
+    public static void check(Guild g){
 
         String guildID = g.getId();
 
@@ -63,17 +71,14 @@ public class SettingCreator{
             String SQL = "SELECT * FROM Settings WHERE GuildID='" + guildID + "'";
             ResultSet rs = stmt.executeQuery(SQL);
 
-            if (rs.next()) {
+            if (!rs.next()) {
 
-                con.close();
-                stmt.close();
-                rs.close();
+                CreateSettings(g, guildID, con);
 
-            } else {
-                CreateSettings(g ,guildID, con);
-                stmt.close();
-                rs.close();
             }
+            con.close();
+            stmt.close();
+            rs.close();
 
         } catch (Exception x){
             GuildJoinedError.DMOwner(x, g);

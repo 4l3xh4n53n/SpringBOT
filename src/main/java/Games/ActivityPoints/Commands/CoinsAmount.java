@@ -2,6 +2,7 @@ package Games.ActivityPoints.Commands;
 
 import Core.Database;
 import Core.Embed;
+import Core.Main;
 import Core.SettingGetter;
 import ErrorMessages.BadCode.SQLError;
 import Games.ActivityPoints.Core.PointsHandler;
@@ -76,7 +77,7 @@ public class CoinsAmount {
             String guildID = guild.getId();
             String userID = null;
             String[] args = content.split("\\s+");
-            JDA jda = guild.getJDA();
+            JDA jda = Main.jda;
             int check = 0;
             User mentioned = null;
 

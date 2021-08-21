@@ -1,4 +1,4 @@
-package commands.community;
+package Auto;
 
 public class ReactionRoles {
 

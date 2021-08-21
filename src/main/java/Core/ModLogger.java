@@ -6,10 +6,6 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 
-import java.awt.*;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-
 public class ModLogger {
 
     public static void log(TextChannel txt, User mentioned, String channel, String reason, String set, String module, User moderator){
@@ -19,17 +15,14 @@ public class ModLogger {
             TextChannel log = null;
             Guild guild = txt.getGuild();
             String executor = moderator.getAsTag();
-            int check = 0;
 
             try {
                 log = guild.getTextChannelById(SettingGetter.ChannelFriendlySet(channel, txt));
-                log.getName(); // here to make sure that the try fails if there is no channel
-                check = 1;
             } catch (Exception x) {
                 ChannelNotSet.Send(txt, set, moderator);
             }
 
-            if (check == 1) {
+            if (log != null) {
 
                 String tag = mentioned.getAsTag();
                 String pfp = mentioned.getAvatarUrl();

@@ -1,5 +1,6 @@
 package EventListeners;
 
+import Auto.Poll;
 import Core.SettingGetter;
 import Core.SettingSetter;
 import Games.ActivityPoints.Commands.CoinsAmount;
@@ -19,6 +20,8 @@ import commands.mod.*;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+
+import java.util.Locale;
 
 public class MessageReceived extends ListenerAdapter {
 
@@ -43,7 +46,7 @@ public class MessageReceived extends ListenerAdapter {
             if (content.startsWith(botprefix)) {
 
                 String request = content.replace(botprefix, "");
-                String com = request.split("\\s+")[0];
+                String com = request.split("\\s+")[0].toLowerCase(Locale.ROOT);
 
                 // Decides what the user want's to do
 
@@ -76,18 +79,18 @@ public class MessageReceived extends ListenerAdapter {
                     // SETTING COMMANDS AND OTHER STUFF
 
                     case "set":
-                        SettingSetter.check(user, request, guild, channel, msg);
+                        SettingSetter.check(user, request, guild, channel, msg, member);
                         break;
-                    case "setPrefix":
+                    case "setprefix":
                         SetPrefix.Set(channel, content, guildID, user, guild);
                         break;
-                    case "setColour":
+                    case "setcolour":
                         SetColour.Set(channel, content, guildID, user);
                         break;
-                    case "setWelcomeMessage":
+                    case "setwelcomemessage":
                         SetWelcomeMessage.Check(member, content, channel, guildID);
                         break;
-                    case "setWelcomeImage":
+                    case "setwelcomeimage":
                         SetWelcomeImage.Check(member, content, channel, guildID);
                         break;
                     case "help":
@@ -117,6 +120,14 @@ public class MessageReceived extends ListenerAdapter {
                     case "send":
                         Send.Check(user, msg, guildID, channel, content);
                         break;
+
+
+                        // Automation
+
+                    case "poll":
+                        Poll.Check(channel, guild, member, content);
+                        break;
+
 
                 }
             } else if (content.equalsIgnoreCase("prefix")){

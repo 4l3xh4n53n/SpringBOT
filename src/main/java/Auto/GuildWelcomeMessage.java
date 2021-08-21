@@ -19,7 +19,6 @@ public class GuildWelcomeMessage {
     public static void Check(Guild guild, User joined){
         if (SettingGetter.GuildFriendlySet("GuildWelcome", guild).equals("1")){
 
-            int check = 0;
             User guildOwner = guild.retrieveOwner().complete().getUser();
             TextChannel welcome = null;
             String tag = joined.getAsTag();
@@ -29,13 +28,11 @@ public class GuildWelcomeMessage {
 
             try {
                 welcome = guild.getTextChannelById(SettingGetter.GuildFriendlySet("GuildWelcomeChannel", guild));
-                welcome.getName(); // here to make sure that the try fails if there is no channel
-                check = 1;
             } catch (Exception x) {
-                ChannelNotSet.GuildFriendly("GuildWelcomeMessage", guildOwner);
+                ChannelNotSet.GuildFriendly("GuildWelcomeMessage", guildOwner, guild);
             }
 
-            if (check == 1){
+            if (welcome != null){
 
                 EmbedBuilder em  = Embed.em(joined, welcome);
                 em.setColor(Color.decode(SettingGetter.GuildFriendlySet("GuildColour", guild)));
