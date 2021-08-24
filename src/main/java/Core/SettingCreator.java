@@ -38,7 +38,10 @@ public class SettingCreator{
                     "Poll," +
                     "PollRole," +
                     "InviteLogging," +
-                    "InviteLog" +
+                    "InviteLog," +
+                    "PrivateChannel," +
+                    "PrivateChannelCreator," +
+                    "PrivateChannelCategory" +
                     ")VALUES(?,?,?,?,?,?,?,?,?,?,?)";
             ps = con.prepareStatement(SQL);
             ps.setString(1, guildID);
@@ -51,7 +54,8 @@ public class SettingCreator{
             ps.setString(14, "0");//GuildWelcome
             ps.setString(17, "0");//AutoRole
             ps.setString(19, "0");//Poll
-            ps.setString(21, "0");
+            ps.setString(21, "0");//InviteLogging
+            ps.setString(23, "0");//PrivateChannel
             ps.executeUpdate();
             ps.close();
 
