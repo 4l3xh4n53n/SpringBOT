@@ -17,8 +17,9 @@ import java.util.Objects;
 
 public class InviteLogger {
 
-    public static String info = "This command tally's the amount of invites a user has and which one a user joined through.";
-    public static String set = "`set channel InviteLog <channelID>`";
+    private static final String info = "This command tally's the amount of invites a user has and which one a user joined through.";
+    private static final String set = "`set channel InviteLog <channelID>`";
+    private static final String toggle = "`set module InviteLogger 1/0`";
 
     public static void checkGuild(String guildID, Guild guild){
 
@@ -26,17 +27,21 @@ public class InviteLogger {
             Connection con = Database.invites();
             DatabaseMetaData dbm = con.getMetaData();
             ResultSet tables = dbm.getTables(null, null, guildID, null);
+
             if (!tables.next()) {
+
                 Statement stmt = con.createStatement();
                 String sql = "CREATE TABLE '" + guildID + "' (inviteURL TEXT, inviterID TEXT, uses INTEGER)";
                 stmt.executeUpdate(sql);
                 stmt.close();
+
             }
+
             tables.close();
             con.close();
 
         } catch (Exception x){
-            SQLError.GuildFriendly(guild, x);
+            SQLError.GuildFriendly(guild, x, toggle);
         }
 
     }
@@ -49,9 +54,12 @@ public class InviteLogger {
 
             Connection con = Database.invites();
             Statement stmt = con.createStatement();
+
             for (Invite invite : invites) {
+
                 String get = "SELECT uses FROM '" + guildID + "' WHERE inviteURL = '" + invite.getUrl() + "'";
                 ResultSet rs = stmt.executeQuery(get);
+
                 if (!rs.next()){
 
                     AddInviteToDatabase(invite.getUrl(),
@@ -60,38 +68,43 @@ public class InviteLogger {
                             guildID);
 
                 }
+
                 rs.close();
+
             }
 
         } catch (Exception x){
-            SQLError.GuildFriendly(guild, x);
+            SQLError.GuildFriendly(guild, x, toggle);
         }
 
     }
 
     public static void Send(Guild guild, User joined){
+
         if (SettingGetter.GuildFriendlySet("InviteLogging", guild).equals("1")) {
 
             String guildID = guild.getId();
             User guildOwner = guild.retrieveOwner().complete().getUser();
             TextChannel log = null;
 
-
             checkGuild(guildID, guild);
             Invite invite = GetUsedInvite(guildID, guild);
-            update(guild, guildID); // note to self, update goes last because otherwise it would set update everything meaning GetUsedInvite won't work.
+            update(guild, guildID);
 
             String user = Objects.requireNonNull(invite.getInviter()).getAsTag();
             String uses = String.valueOf(invite.getUses());
             String url = invite.getUrl();
 
             try {
+
                 log = guild.getTextChannelById(SettingGetter.GuildFriendlySet("InviteLog", guild));
+
             } catch (Exception x){
-                ChannelNotSet.GuildFriendly(set, guildOwner, guild);
+                ChannelNotSet.GuildFriendly(set, guildOwner, guild, toggle);
             }
 
             if (log != null){
+
                 String tag = joined.getAsTag();
                 String avatar = joined.getAvatarUrl();
 
@@ -101,6 +114,7 @@ public class InviteLogger {
                 em.addField("Using url: ", url, true);
                 em.addField("", "Url uses: " + uses, false);
                 log.sendMessage(em.build()).queue();
+
             }
 
         }
@@ -108,15 +122,19 @@ public class InviteLogger {
     }
 
     public static void IncreaseInvite(Connection con, Invite usedInvite, Guild guild, String guildID){
+
         try {
+
             String update = "UPDATE '" + guildID + "' SET uses = ? WHERE inviteURL ='" + usedInvite.getUrl() + "'";
             PreparedStatement ud = con.prepareStatement(update);
             ud.setInt(1, usedInvite.getUses());
             ud.executeUpdate();
             ud.close();
+
         } catch (Exception x){
-            SQLError.GuildFriendly(guild, x);
+            SQLError.GuildFriendly(guild, x, toggle);
         }
+
     }
 
     public static Invite GetUsedInvite(String guildID, Guild guild){
@@ -129,14 +147,19 @@ public class InviteLogger {
         Statement stmt = null;
 
         try {
+
             stmt = con.createStatement();
+
         } catch (Exception x){
-            SQLError.GuildFriendly(guild, x);
+            SQLError.GuildFriendly(guild, x, toggle);
         }
 
         for (Invite invite : invites){
+
             String get = "SELECT uses FROM '" + guildID + "' WHERE inviteURL = '" + invite.getUrl() + "'";
+
             try {
+
                 assert stmt != null;
                 ResultSet rs = stmt.executeQuery(get);
                 if (!rs.isClosed()) {
@@ -146,7 +169,7 @@ public class InviteLogger {
                 stmt.close();
 
             } catch (Exception x){
-                SQLError.GuildFriendly(guild, x);
+                SQLError.GuildFriendly(guild, x, toggle);
             }
 
             if (uses < invite.getUses()){
@@ -159,7 +182,7 @@ public class InviteLogger {
         try{
             con.close();
         } catch (Exception x){
-            SQLError.GuildFriendly(guild, x);
+            SQLError.GuildFriendly(guild, x, toggle);
         }
 
         return usedInvite;
@@ -169,6 +192,7 @@ public class InviteLogger {
         checkGuild(guildID, guild);
 
         try{
+
             Connection con = Database.invites();
             String sql = "INSERT INTO '" + guildID + "' (inviteURL, inviterID, uses) VALUES (?,?,?)";
             PreparedStatement ps = con.prepareStatement(sql);
@@ -178,8 +202,9 @@ public class InviteLogger {
             ps.executeUpdate();
             con.close();
             ps.close();
+
         } catch (Exception x){
-            SQLError.GuildFriendly(guild, x);
+            SQLError.GuildFriendly(guild, x, toggle);
         }
     }
 
@@ -194,9 +219,20 @@ public class InviteLogger {
             con.close();
             ps.close();
         } catch (Exception x){
-            SQLError.GuildFriendly(guild, x);
+            SQLError.GuildFriendly(guild, x, toggle);
         }
 
     }
 
+    public static String getInfo() {
+        return info;
+    }
+
+    public static String getSet() {
+        return set;
+    }
+
+    public static String getToggle() {
+        return toggle;
+    }
 }

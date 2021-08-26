@@ -15,10 +15,11 @@ import java.util.List;
 
 public class UnBan {
 
-    public static String example = "`unban <USERID>`";
-    public static String info = "Un bans the specified user.";
-    public static String set = "`set roles BanRoles <@role(S)>`";
-    public static String log = "`set channel BanLog <channelID>`";
+    private static final String example = "`unban <USERID>`";
+    private static final String info = "Un bans the specified user.";
+    private static final String set = "`set roles BanRoles <@role(S)>`";
+    private static final String log = "`set channel BanLog <channelID>`";
+    private static final String toggle = "`set module ModCommands 1/0`";
 
     public static void Execute(Guild guild, User mentioned, TextChannel txt, User user){
         int check = 0;
@@ -40,25 +41,22 @@ public class UnBan {
 
     }
 
-    public static void check(User user, Message msg, TextChannel txt, Guild guild, String request){
+    public static void check(User user, TextChannel txt, Guild guild, String request){
 
-        JDA jda = Main.jda;
+        JDA jda = Main.getCurrentShard(guild);
         String[] args = request.split("\\s+");
         Member botMember = guild.getSelfMember();
         User mentioned = null;
         String[] roles = SettingGetter.ChannelFriendlySet("BanRoles", txt).split(",");
         List<Role> userroles = guild.getMemberById(user.getId()).getRoles();
         List<String> usersRoles = new ArrayList<>();
-        String req = "";
-        int check = 0;
+        StringBuilder req = new StringBuilder();
         int checktwo = 0;
 
         int rolecheck = RoleChecker.CheckRoles(roles, guild);
 
         if (SettingGetter.ChannelFriendlySet("ModCommands", txt).equals("1")) {
             if (args.length == 2) {
-
-                // Makes sure they have the roles setup
 
                 if (rolecheck == 1) {
                     try {
@@ -68,37 +66,54 @@ public class UnBan {
                         // No members were mentioned
                     }
 
-                    // Makes sure everything else is ok
+                    for (Role userrole : userroles) {
+                        usersRoles.add(userrole.getId());
+                    }
 
-                    if (check == 1) {
-
-                        for (int i = 0; userroles.size() > i; i++) {
-                            usersRoles.add(userroles.get(i).getId());
-                        }
-                        if (checktwo == 1) {
-                            if (CollectionUtils.containsAny(Arrays.asList(roles), usersRoles)) {
-                                if (botMember.hasPermission(Permission.BAN_MEMBERS) || botMember.hasPermission(Permission.ADMINISTRATOR)) {
-                                    Execute(guild, mentioned, txt, user);
-                                } else {
-                                    NoPerms.Bot("Ban Members", txt, user);
-                                }
+                    if (checktwo == 1) {
+                        if (CollectionUtils.containsAny(Arrays.asList(roles), usersRoles)) {
+                            if (botMember.hasPermission(Permission.BAN_MEMBERS) || botMember.hasPermission(Permission.ADMINISTRATOR)) {
+                                Execute(guild, mentioned, txt, user);
                             } else {
-                                for (int i = 0; roles.length > i; i++) {
-                                    Role role = guild.getRoleById(roles[i]);
-                                    req = req + "@" + role.getName() + " ";
-                                }
-                                NoPerms.Send("ban", req, txt, user);
+                                NoPerms.Bot("Ban Members", txt, user);
                             }
                         } else {
-                            WrongCommandUsage.send(txt, example, "You haven't mentioned any members", user);
+                            for (String s : roles) {
+                                Role role = guild.getRoleById(s);
+                                req.append("@").append(role.getName()).append(" ");
+                            }
+                            NoPerms.Send("ban", req.toString(), txt, user);
                         }
+                    } else {
+                        WrongCommandUsage.send(txt, example, "You haven't mentioned any members", user);
                     }
+
                 } else {
-                    RolesNotSet.ChannelFriendly(txt, "ban", set, user);
+                    RolesNotSet.ChannelFriendly(txt, "ban", set, user, toggle);
                 }
             } else {
                 WrongCommandUsage.send(txt, example, "Wrong amount of args", user);
             }
         }
+    }
+
+    public static String getExample() {
+        return example;
+    }
+
+    public static String getInfo() {
+        return info;
+    }
+
+    public static String getSet() {
+        return set;
+    }
+
+    public static String getLog() {
+        return log;
+    }
+
+    public static String getToggle() {
+        return toggle;
     }
 }

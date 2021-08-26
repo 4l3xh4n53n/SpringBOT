@@ -18,10 +18,11 @@ import java.util.List;
 
 public class Warn {
 
-    public static String example = "`warn <@user/userID> <reason>` <-- (optional)";
-    public static String info = "Warns the specified user.";
-    public static String set = "`set roles WarnRoles <@role(S)>`";
-    public static String log = "`set channel WarnLog <channelID>`";
+    private static final String example = "`warn <@user/userID> <reason>` <-- (optional)";
+    private static final String info = "Warns the specified user.";
+    private static final String set = "`set roles WarnRoles <@role(S)>`";
+    private static final String log = "`set channel WarnLog <channelID>`";
+    private static final String toggle = "`set module ModCommands 1/0`";
 
     public static void Execute(String guildID, TextChannel txt, Member mentioned, Connection con, Message msg){
 
@@ -67,7 +68,7 @@ public class Warn {
             ModLogger.log(txt, user, "WarnLog", reason, log, "was warned", executor);
 
         } catch (Exception x){
-            SQLError.TextChannel(txt, x);
+            SQLError.TextChannel(txt, x, toggle);
         }
 
     }
@@ -86,7 +87,7 @@ public class Warn {
             checkCommand(guild, guildID, user, txt, msg, con);
 
         } catch (Exception x){
-            SQLError.TextChannel(txt, x);
+            SQLError.TextChannel(txt, x, toggle);
         }
     }
 
@@ -96,9 +97,9 @@ public class Warn {
         String[] roles = SettingGetter.ChannelFriendlySet("WarnRoles", txt).split(",");
         List<Role> userroles = guild.getMember(user).getRoles();
         List<String> usersRoles = new ArrayList<>();
-        String req = "";
+        StringBuilder req = new StringBuilder();
         int check = 0;
-        Member mentioned = null;
+        Member mentioned;
 
         int rolecheck = RoleChecker.CheckRoles(roles, guild);
 
@@ -119,18 +120,18 @@ public class Warn {
                             mentioned = msg.getMentionedMembers().get(0);
                         }
 
-                        for (int i = 0; userroles.size() > i; i++) {
-                            usersRoles.add(userroles.get(i).getId());
+                        for (Role userrole : userroles) {
+                            usersRoles.add(userrole.getId());
                         }
 
                         if (CollectionUtils.containsAny(Arrays.asList(roles), usersRoles)) {
                             Execute(guildID, txt, mentioned, con, msg);
                         } else {
-                            for (int i = 0; roles.length > i; i++) {
-                                Role role = guild.getRoleById(roles[i]);
-                                req = req + "@" + role.getName() + " ";
+                            for (String s : roles) {
+                                Role role = guild.getRoleById(s);
+                                req.append("@").append(role.getName()).append(" ");
                             }
-                            NoPerms.Send("warn", req, txt, user);
+                            NoPerms.Send("warn", req.toString(), txt, user);
                         }
 
 
@@ -138,7 +139,7 @@ public class Warn {
                         WrongCommandUsage.send(txt, example, "You haven't mentioned any members", user);
                     }
                 } else {
-                    RolesNotSet.ChannelFriendly(txt, "warn", set, user);
+                    RolesNotSet.ChannelFriendly(txt, "warn", set, user, toggle);
                 }
             } else {
                 WrongCommandUsage.send(txt, example, "Wrong amount of args", user);
@@ -163,8 +164,27 @@ public class Warn {
             }
 
         } catch (Exception x){
-            SQLError.TextChannel(txt, x);
+            SQLError.TextChannel(txt, x, toggle);
         }
     }
 
+    public static String getExample() {
+        return example;
+    }
+
+    public static String getInfo() {
+        return info;
+    }
+
+    public static String getSet() {
+        return set;
+    }
+
+    public static String getLog() {
+        return log;
+    }
+
+    public static String getToggle() {
+        return toggle;
+    }
 }

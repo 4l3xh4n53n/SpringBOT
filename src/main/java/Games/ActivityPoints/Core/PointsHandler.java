@@ -3,6 +3,7 @@ package Games.ActivityPoints.Core;
 import Core.Database;
 import Core.SettingGetter;
 import ErrorMessages.BadCode.SQLError;
+import Games.ActivityPoints.Commands.Shop;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
@@ -13,8 +14,6 @@ public class PointsHandler {
 
     public static void Create(String guildID, TextChannel txt, Connection con){
 
-        //apparently this just refuses to make one even if its already in there and this really wasn't needed
-
         try {
             Statement stmt = con.createStatement();
             String sql = "CREATE TABLE '" + guildID + "' (userID TEXT, coins INTEGER, CoinMultiplier INTEGER , MaxCoins INTEGER, CoinExtraPercent INTEGER, Messages INTEGER)";
@@ -23,7 +22,7 @@ public class PointsHandler {
             stmt.close();
 
         } catch (Exception x){
-            SQLError.TextChannel(txt, x);
+            SQLError.TextChannel(txt, x, Shop.getToggle());
         }
     }
 
@@ -40,7 +39,7 @@ public class PointsHandler {
             con.close();
 
         } catch (Exception x){
-            SQLError.TextChannel(txt, x);
+            SQLError.TextChannel(txt, x, Shop.getToggle());
         }
 
     }
@@ -84,14 +83,14 @@ public class PointsHandler {
                     ud.close();
 
                 } catch (Exception x){
-                    SQLError.TextChannel(txt, x);
+                    SQLError.TextChannel(txt, x, Shop.getToggle());
                 }
 
             }
             stmt.close();
             con.close();
         } catch (Exception x){
-            SQLError.TextChannel(txt, x);
+            SQLError.TextChannel(txt, x, Shop.getToggle());
         }
     }
 

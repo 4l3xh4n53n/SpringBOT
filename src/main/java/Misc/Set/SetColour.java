@@ -14,8 +14,8 @@ import java.sql.Statement;
 
 public class SetColour {
 
-    public static String example = "setColour <#hexcode>";
-    public static String info = "Sets the colour that is used on the side of the embed";
+    private static final String example = "setColour <#hexcode>";
+    private static final String info = "Sets the colour that is used on the side of the embed";
 
     public static void Set(TextChannel txt, String content, String guildID, User user){
         String[] args = content.split("\\s+");
@@ -46,7 +46,7 @@ public class SetColour {
                     ud.close();
                 } catch (Exception x){
                     if (!x.getMessage().equals("query does not return ResultSet")) {
-                        SQLError.TextChannel(txt, x);
+                        SQLError.TextChannel(txt, x, "Just don't run this command.");
                     }
                 }
             }
@@ -54,5 +54,13 @@ public class SetColour {
             WrongCommandUsage.send(txt, example, "Wrong amount of args", user);
         }
 
+    }
+
+    public static String getExample() {
+        return example;
+    }
+
+    public static String getInfo() {
+        return info;
     }
 }

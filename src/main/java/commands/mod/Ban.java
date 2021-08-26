@@ -16,10 +16,11 @@ import java.util.List;
 
 public class Ban {
 
-    public static String example = "`ban <@user/userID> <REASON> <--` (optional)";
-    public static String info = "This command bans the specified user.";
-    public static String set = "`set roles BanRoles <@role(S)>`";
-    public static String log = "`set channel BanLog <channelID>`";
+    private static final String example = "`ban <@user/userID> <REASON> <--` (optional)";
+    private static final String info = "This command bans the specified user.";
+    private static final String set = "`set roles BanRoles <@role(S)>`";
+    private static final String log = "`set channel BanLog <channelID>`";
+    private static final String toggle = "`set module ModCommands 1/0`";
 
     public static void Execute(Guild guild, User mentioned, String[] args, String request, TextChannel txt, User user){
         String reason = request.replace(args[0] + " " + args[1], "");
@@ -35,7 +36,7 @@ public class Ban {
 
     public static void check(User user, Message msg, TextChannel channel, Guild guild, String request) {
 
-        JDA jda = Main.jda;
+        JDA jda = Main.getCurrentShard(guild);
         String[] args = request.split("\\s+");
         User MentionedUser = null;
         Role botrole = guild.getSelfMember().getRoles().get(0);
@@ -104,11 +105,31 @@ public class Ban {
                         WrongCommandUsage.send(channel, example, "You haven't mentioned any members", user);
                     }
                 } else {
-                    RolesNotSet.ChannelFriendly(channel, "ban", set, user);
+                    RolesNotSet.ChannelFriendly(channel, "ban", set, user, toggle);
                 }
             } else {
                 WrongCommandUsage.send(channel, example, "Wrong amount of args", user);
             }
         }
+    }
+
+    public static String getExample() {
+        return example;
+    }
+
+    public static String getInfo() {
+        return info;
+    }
+
+    public static String getSet() {
+        return set;
+    }
+
+    public static String getLog() {
+        return log;
+    }
+
+    public static String getToggle() {
+        return toggle;
     }
 }

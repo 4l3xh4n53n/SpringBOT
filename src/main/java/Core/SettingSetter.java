@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
+import javax.swing.*;
 import java.awt.*;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -70,18 +71,17 @@ public class SettingSetter {
             ud.close();
         } catch (Exception x) {
             if (!x.getMessage().equals("query does not return ResultSet")) {
-                SQLError.TextChannel(channel, x);
+                SQLError.TextChannel(channel, x, "Can't turn this off sorry.");
             }
         }
     }
 
-    public static String modules = "`ModCommands, LogModActions, Coins, SendCoins, AutoRole, InviteLogger, PrivateChannel`";
+    public static String modules = "`ModCommands, LogModActions, Coins, SendCoins, AutoRole, InviteLogger, PrivateChannel, ServerStats, GameCommands, Poll`";
 
     public static void modules(Guild guild, TextChannel channel, String[] args, User user){
-        SettingCreator.check(guild);
         String guildID = guild.getId();
 
-        String[] settings = {"ModCommands", "LogModActions", "Coins", "SendCoins", "AutoRole", "InviteLogger", "PrivateChannel"};
+        String[] settings = {"ModCommands", "LogModActions", "Coins", "SendCoins", "AutoRole", "InviteLogger", "PrivateChannel", "ServerStats", "GameCommands", "Poll"};
         String[] oneOrZero = {"1", "0"};
         String setTo = args[3];
 
@@ -130,12 +130,12 @@ public class SettingSetter {
         }
     }
 
-    public static String channels = "`KickLog, BanLog, WarnLog, GuildWelcomeChannel, InviteLog`";
+    public static String channels = "`KickLog, BanLog, WarnLog, GuildWelcomeChannel, InviteLog. PrivateChannelCreator, PrivateChannelCategory, StatsChannel`";
 
     public static void channels(Guild guild, TextChannel channel, String[] args, User user){
 
         String[] textMod = {"KickLog", "BanLog", "WarnLog", "GuildWelcomeChannel", "InviteLog"};
-        String[] voiceMod = {"PrivateChannelCreator"};
+        String[] voiceMod = {"PrivateChannelCreator", "StatsChannel"};
         String[] catMod = {"PrivateChannelCategory"};
         String guildID = guild.getId();
 

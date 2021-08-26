@@ -19,7 +19,8 @@ public class SettingCreator{
             String SQL = "INSERT INTO settings(" +
                     "GuildID, " +
                     "Prefix, " +
-                    "GuildColour, " +
+                    "GuildColour," +
+                    "ClearRoles, " +
                     "KickRoles, " +
                     "BanRoles, " +
                     "WarnRoles, " +
@@ -27,7 +28,7 @@ public class SettingCreator{
                     "KickLog, " +
                     "BanLog, " +
                     "WarnLog, " +
-                    "LogModActions " +
+                    "LogModActions, " +
                     "Coins," +
                     "SendCoins," +
                     "GuildWelcome," +
@@ -41,21 +42,45 @@ public class SettingCreator{
                     "InviteLog," +
                     "PrivateChannel," +
                     "PrivateChannelCreator," +
-                    "PrivateChannelCategory" +
-                    ")VALUES(?,?,?,?,?,?,?,?,?,?,?)";
+                    "PrivateChannelCategory," +
+                    "ServerStats," +
+                    "StatsChannel," +
+                    "ChatFilter," +
+                    "Filter," +
+                    "ReactionRoleRoles" +
+                    ")VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             ps = con.prepareStatement(SQL);
             ps.setString(1, guildID);
             ps.setString(2, "!"); //Prefix
             ps.setString(3, "#000000"); //GuildColour
-            ps.setString(7, "1"); //ModCommands
-            ps.setString(11, "0");//LogModActions
-            ps.setString(12, "1");//Coins
-            ps.setString(13, "1");//SendCoins
-            ps.setString(14, "0");//GuildWelcome
-            ps.setString(17, "0");//AutoRole
-            ps.setString(19, "0");//Poll
-            ps.setString(21, "0");//InviteLogging
-            ps.setString(23, "0");//PrivateChannel
+            ps.setString(4, "");//ClearRoles
+            ps.setString(5, ""); //KickRoles
+            ps.setString(6, "");//BanRoles
+            ps.setString(7,"");//WarnRoles
+            ps.setString(8, "1"); //ModCommands
+            ps.setString(9,  "");//KickLog
+            ps.setString(10, "");//BanLog
+            ps.setString(11, "");//WarnLog
+            ps.setString(12, "0");//LogModActions
+            ps.setString(13, "1");//Coins
+            ps.setString(14, "1");//SendCoins
+            ps.setString(15, "0");//GuildWelcome
+            ps.setString(16, "");//GuildWelcomeMessage
+            ps.setString(17, "");//GuildWelcomeImage
+            ps.setString(18, "0");//AutoRole
+            ps.setString(19, "");//AutoRoleRole
+            ps.setString(20, "0");//Poll
+            ps.setString(21, "");//PollRole
+            ps.setString(22, "0");//InviteLogging
+            ps.setString(23, "");//InviteLog
+            ps.setString(24, "0");//PrivateChannel
+            ps.setString(25, "");//PrivateChannelCreator
+            ps.setString(26, "");//PrivateChannelCategory
+            ps.setString(27, "0");//ServerStats
+            ps.setString(28, "");//StatsChannel
+            ps.setString(29, "0");//ChatFilter
+            ps.setString(30, "");//Filter
+            ps.setString(31, "");//ReactionRoleRoles
             ps.executeUpdate();
             ps.close();
 

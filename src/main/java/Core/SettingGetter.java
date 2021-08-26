@@ -5,6 +5,7 @@ import ErrorMessages.BadCode.SQLError;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 
+import javax.swing.*;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -28,7 +29,7 @@ public class SettingGetter {
             stmt.close();
 
         } catch(Exception x) {
-            SQLError.TextChannel(e, x);
+            SQLError.TextChannel(e, x, "Can't turn this off sorry.");
         }
 
         return set;

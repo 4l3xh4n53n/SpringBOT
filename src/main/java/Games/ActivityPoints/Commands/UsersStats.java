@@ -17,8 +17,9 @@ import java.util.List;
 
 public class UsersStats {
 
-    public static String example = "`user <@user>` <-- just user will do yourself.";
-    public static String info = "Shows a users stats.";
+    private static final String example = "`user <@user>` <-- just user will do yourself.";
+    private static final String info = "Shows a users stats.";
+    private static final String toggle = "`set module SendCoins 1/0`";
 
     public static void CheckUser(String userID, String guildID, TextChannel txt){
 
@@ -47,7 +48,7 @@ public class UsersStats {
             con.close();
 
         } catch (Exception x){
-            SQLError.TextChannel(txt, x);
+            SQLError.TextChannel(txt, x, toggle);
         }
 
     }
@@ -55,7 +56,7 @@ public class UsersStats {
     public static void Send(User user, Message message, TextChannel txt, String guildID){
         if (SettingGetter.ChannelFriendlySet("Coins", txt).equals("1")) {
             List<User> mentioned = message.getMentionedUsers();
-            User get = null;
+            User get;
             if (mentioned.size() > 0) {
                 get = mentioned.get(0);
             } else {
@@ -88,7 +89,7 @@ public class UsersStats {
                 rs.close();
 
             } catch (Exception x) {
-                SQLError.TextChannel(txt, x);
+                SQLError.TextChannel(txt, x, toggle);
             }
 
             EmbedBuilder em = Embed.em(user, txt);
@@ -105,4 +106,15 @@ public class UsersStats {
 
     }
 
+    public static String getExample() {
+        return example;
+    }
+
+    public static String getInfo() {
+        return info;
+    }
+
+    public static String getToggle() {
+        return toggle;
+    }
 }

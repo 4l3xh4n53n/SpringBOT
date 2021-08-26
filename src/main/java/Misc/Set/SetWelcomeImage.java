@@ -4,7 +4,6 @@ import Core.Database;
 import Core.SettingSetter;
 import ErrorMessages.BadCode.SQLError;
 import ErrorMessages.UserError.NoPerms;
-import ErrorMessages.UserError.WrongCommandUsage;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -15,7 +14,7 @@ import java.sql.PreparedStatement;
 
 public class SetWelcomeImage {
 
-    public static String example = "`setWelcomeImage <link>` <-- (not adding a link removes the image)";
+    private static final String example = "`setWelcomeImage <link>` <-- (not adding a link removes the image)";
 
     public static void Check(Member member, String content, TextChannel txt, String guildID){
 
@@ -35,7 +34,7 @@ public class SetWelcomeImage {
                 ud.executeUpdate();
                 ud.close();
             } catch (Exception x) {
-                SQLError.TextChannel(txt, x);
+                SQLError.TextChannel(txt, x, "Just don't run this command.");
             }
 
         } else {
@@ -43,4 +42,7 @@ public class SetWelcomeImage {
         }
     }
 
+    public static String getExample() {
+        return example;
+    }
 }

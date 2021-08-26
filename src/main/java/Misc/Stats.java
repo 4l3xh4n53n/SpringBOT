@@ -6,8 +6,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.sharding.ShardManager;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 
@@ -16,7 +14,7 @@ import java.io.FileReader;
 
 public class Stats {
 
-    public static void send(Guild guild, TextChannel txt, User user){
+    public static void send(Guild guild, TextChannel txt){
         MavenXpp3Reader reader = new MavenXpp3Reader();
         String version = null;
         try {
@@ -24,9 +22,9 @@ public class Stats {
             version = model.getVersion();
         } catch (Exception ignored){}
         Runtime runtime = Runtime.getRuntime();
-        JDA jda = Main.jda;
+        JDA jda = Main.getCurrentShard(guild);
         String guildcount = String.valueOf(jda.getGuilds().size());
-        int shardcount = Main.shardcount;
+        int shardcount = Main.getShardsCount();
         int shardnumber = jda.getShardInfo().getShardId();
         long gatewayping = jda.getGatewayPing();
         long restping = jda.getRestPing().complete();

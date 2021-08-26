@@ -3,7 +3,6 @@ package EventListeners;
 import Auto.AutoRole;
 import Auto.GuildWelcomeMessage;
 import Auto.InviteLogger;
-import Auto.ServerStatistics;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
@@ -21,7 +20,6 @@ public class NewMember extends ListenerAdapter {
         GuildWelcomeMessage.Check(guild, user);
         AutoRole.give(guild, member);
         InviteLogger.Send(guild, user);
-        //ServerStatistics.update();
     }
 
 }

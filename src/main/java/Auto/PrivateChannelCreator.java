@@ -9,11 +9,13 @@ import net.dv8tion.jda.api.entities.*;
 import java.sql.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class PrivateChannelCreator {
 
-    public static String info = "When you join a certain voice channel you get put into your own";
-    public static String set = "`set channel PrivateChannelCreator <VoiceChannelID>` + `set channel PrivateChannelCategory <CategoryID>`";
+    private static final String info = "When you join a certain voice channel you get put into your own";
+    private static final String set = "`set channel PrivateChannelCreator <VoiceChannelID>` + `set channel PrivateChannelCategory <CategoryID>`";
+    private static final String toggle = "`set module PrivateChannel 1/0`";
 
     public static void CheckDB(String guildID, Guild guild){
 
@@ -31,7 +33,7 @@ public class PrivateChannelCreator {
             con.close();
 
         } catch (Exception x){
-            SQLError.GuildFriendly(guild, x);
+            SQLError.GuildFriendly(guild, x, toggle);
         }
 
     }
@@ -49,7 +51,7 @@ public class PrivateChannelCreator {
             ps.close();
 
         } catch (Exception x){
-            SQLError.GuildFriendly(guild, x);
+            SQLError.GuildFriendly(guild, x, toggle);
         }
 
     }
@@ -64,7 +66,7 @@ public class PrivateChannelCreator {
             con.close();
             ps.close();
         } catch (Exception x){
-            SQLError.GuildFriendly(guild, x);
+            SQLError.GuildFriendly(guild, x, toggle);
         }
 
     }
@@ -92,7 +94,7 @@ public class PrivateChannelCreator {
 
         } catch (Exception x){
 
-            SQLError.GuildFriendly(guild, x);
+            SQLError.GuildFriendly(guild, x, toggle);
 
         }
 
@@ -114,7 +116,7 @@ public class PrivateChannelCreator {
             stmt.close();
             rs.close();
         } catch (Exception x){
-            SQLError.GuildFriendly(guild, x);
+            SQLError.GuildFriendly(guild, x, toggle);
         }
         return users;
     }
@@ -128,16 +130,20 @@ public class PrivateChannelCreator {
         if (CheckDatabase(channelID, guild, guildID)) {
             if (members == 0) {
 
-                ExecutorService threadpool = Executors.newCachedThreadPool(); // todo I think I had an issue with it creating tables make sure ok innit borger
+                ExecutorService threadpool = Executors.newCachedThreadPool();
                 threadpool.submit(() -> {
                     try {
-                        Thread.sleep(60000);
+                        Thread.sleep(10000); // 60000
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                     if (Get(guild, guildID, channelID) == 0) {
-                        channel.delete().queue();
-                        RemoveFromDB(guildID, guild, channelID);
+                        AtomicBoolean queued = new AtomicBoolean(true);
+                        channel.delete().queue(null, error -> queued.set(false));
+                        if (!queued.get()) {
+                            RemoveFromDB(guildID, guild, channelID);
+                        }
+
                     }
                 });
 
@@ -162,7 +168,7 @@ public class PrivateChannelCreator {
                 ud.close();
                 con.close();
             } catch (Exception x){
-                SQLError.GuildFriendly(guild, x);
+                SQLError.GuildFriendly(guild, x, toggle);
             }
         }
     }
@@ -182,7 +188,7 @@ public class PrivateChannelCreator {
                 ud.close();
                 con.close();
             } catch (Exception x){
-                SQLError.GuildFriendly(guild, x);
+                SQLError.GuildFriendly(guild, x, toggle);
             }
         }
     }
@@ -214,9 +220,20 @@ public class PrivateChannelCreator {
             }
 
         } else {
-            ChannelNotSet.GuildFriendly(set, guildOwner, guild);
+            ChannelNotSet.GuildFriendly(set, guildOwner, guild, toggle);
         }
 
     }
 
+    public static String getInfo() {
+        return info;
+    }
+
+    public static String getSet() {
+        return set;
+    }
+
+    public static String getToggle() {
+        return toggle;
+    }
 }

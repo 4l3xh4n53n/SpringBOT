@@ -20,9 +20,10 @@ import java.sql.Statement;
 
 public class CoinsAmount {
 
-    public static String example = "`coins <@user/userID> `";
-    public static String info = "Gets the coins that a user has";
-    public static String set = "`set roles CheckCoins <@role(S)>`";
+    private static final String example = "`coins <@user/userID> `";
+    private static final String info = "Gets the coins that a user has";
+    private static final String set = "`set roles CheckCoins <@role(S)>`";
+    private static final String toggle = "`set module Coins 1/0`";
 
     public static void send(TextChannel txt, User user, int amount){
 
@@ -66,7 +67,7 @@ public class CoinsAmount {
             con.close();
 
         } catch (Exception x){
-            SQLError.TextChannel(txt, x);
+            SQLError.TextChannel(txt, x, toggle);
         }
     }
 
@@ -77,9 +78,9 @@ public class CoinsAmount {
             String guildID = guild.getId();
             String userID = null;
             String[] args = content.split("\\s+");
-            JDA jda = Main.jda;
+            JDA jda = Main.getCurrentShard(guild);
             int check = 0;
-            User mentioned = null;
+            User mentioned;
 
             //Decides whether their mentioned or have used ID
 
@@ -114,4 +115,19 @@ public class CoinsAmount {
 
     }
 
+    public static String getExample() {
+        return example;
+    }
+
+    public static String getInfo() {
+        return info;
+    }
+
+    public static String getSet() {
+        return set;
+    }
+
+    public static String getToggle() {
+        return toggle;
+    }
 }

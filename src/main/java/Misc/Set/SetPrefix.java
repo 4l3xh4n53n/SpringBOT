@@ -15,8 +15,8 @@ import java.sql.Statement;
 
 public class SetPrefix {
 
-    public static String example = "`setPrefix <newPrefix>`";
-    public static String info = "This command changes your servers prefix (if you forget it the safe word is 'prefix')";
+    private static final String example = "`setPrefix <newPrefix>`";
+    private static final String info = "This command changes your servers prefix (if you forget it the safe word is 'prefix')";
 
     public static void Set(TextChannel txt, String content, String guildID, User user, Guild guild){
         String[] args = content.split("\\s+");
@@ -39,7 +39,7 @@ public class SetPrefix {
                     ud.close();
                 } catch (Exception x) {
                     if (!x.getMessage().equals("query does not return ResultSet")) { // This is here because I used my old method of doing this which used result set.
-                        SQLError.TextChannel(txt, x);
+                        SQLError.TextChannel(txt, x, "Just don't run this command.");
                     }
                 }
             } else {
@@ -50,4 +50,11 @@ public class SetPrefix {
 
     }
 
+    public static String getExample() {
+        return example;
+    }
+
+    public static String getInfo() {
+        return info;
+    }
 }

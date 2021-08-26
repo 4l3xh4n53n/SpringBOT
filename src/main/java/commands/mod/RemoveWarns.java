@@ -18,16 +18,14 @@ import java.util.List;
 
 public class RemoveWarns {
 
-    public static String example = "`removewarns <@user/userID> <amount>`";
-    public static String info = "Removes a warn from the specified user.";
-    public static String set = "`set roles WarnRoles <@role(S)>`";
-    public static String log = "`set channel WarnLog <channelID>`";
+    private static final String example = "`removewarns <@user/userID> <amount>`";
+    private static final String info = "Removes a warn from the specified user.";
+    private static final String set = "`set roles WarnRoles <@role(S)>`";
+    private static final String log = "`set channel WarnLog <channelID>`";
+    private static final String toggle = "`set module ModCommands 1/0`";
 
     public static void Execute(String guildID, TextChannel txt, Member mentioned, Connection con, Message msg, int amount){
 
-        String contentraw = msg.getContentRaw();
-        String[] args = contentraw.split("\\s+");
-        String reason = contentraw.replace(args[0] + " " + args[1], "");
         String userID = mentioned.getId();
         User user = mentioned.getUser();
         User executor = msg.getMember().getUser();
@@ -71,7 +69,7 @@ public class RemoveWarns {
             ModLogger.log(txt, user, "WarnLog", "", log, "was unwarned " + amount + " times", executor);
 
         } catch (Exception x){
-            SQLError.TextChannel(txt, x);
+            SQLError.TextChannel(txt, x, toggle);
         }
 
     }
@@ -90,7 +88,7 @@ public class RemoveWarns {
             checkCommand(guild, guildID, user, txt, msg, con);
 
         } catch (Exception x){
-            SQLError.TextChannel(txt, x);
+            SQLError.TextChannel(txt, x, toggle);
         }
     }
 
@@ -100,11 +98,10 @@ public class RemoveWarns {
         String[] roles = SettingGetter.ChannelFriendlySet("WarnRoles", txt).split(",");
         java.util.List<Role> userroles = guild.getMember(user).getRoles();
         List<String> usersRoles = new ArrayList<>();
-        String req = "";
+        StringBuilder req = new StringBuilder();
         int check = 0;
-        Member mentioned = null;
-        int amount = 0;
-        int test = 0;
+        Member mentioned;
+        int amount;
 
         int rolecheck = RoleChecker.CheckRoles(roles, guild);
 
@@ -125,13 +122,12 @@ public class RemoveWarns {
                             mentioned = msg.getMentionedMembers().get(0);
                         }
 
-                        for (int i = 0; userroles.size() > i; i++) {
-                            usersRoles.add(userroles.get(i).getId());
+                        for (Role userrole : userroles) {
+                            usersRoles.add(userrole.getId());
                         }
 
                         try {
                             amount = Integer.parseInt(args[2].replaceAll("[^0-9]", ""));
-                            test = amount + 1;
                         } catch (Exception x) {
                             amount = 1;
                         }
@@ -139,11 +135,11 @@ public class RemoveWarns {
                         if (CollectionUtils.containsAny(Arrays.asList(roles), usersRoles)) {
                             Execute(guildID, txt, mentioned, con, msg, amount);
                         } else {
-                            for (int i = 0; roles.length > i; i++) {
-                                Role role = guild.getRoleById(roles[i]);
-                                req = req + "@" + role.getName() + " ";
+                            for (String s : roles) {
+                                Role role = guild.getRoleById(s);
+                                req.append("@").append(role.getName()).append(" ");
                             }
-                            NoPerms.Send("warn", req, txt, user);
+                            NoPerms.Send("warn", req.toString(), txt, user);
                         }
 
 
@@ -151,7 +147,7 @@ public class RemoveWarns {
                         WrongCommandUsage.send(txt, example, "You haven't mentioned any members", user);
                     }
                 } else {
-                    RolesNotSet.ChannelFriendly(txt, "warn", set, user);
+                    RolesNotSet.ChannelFriendly(txt, "warn", set, user, toggle);
                 }
             } else {
                 WrongCommandUsage.send(txt, example, "Wrong amount of args", user);
@@ -176,8 +172,27 @@ public class RemoveWarns {
             }
 
         } catch (Exception x){
-            SQLError.TextChannel(txt, x);
+            SQLError.TextChannel(txt, x, toggle);
         }
     }
 
+    public static String getExample() {
+        return example;
+    }
+
+    public static String getInfo() {
+        return info;
+    }
+
+    public static String getSet() {
+        return set;
+    }
+
+    public static String getLog() {
+        return log;
+    }
+
+    public static String getToggle() {
+        return toggle;
+    }
 }

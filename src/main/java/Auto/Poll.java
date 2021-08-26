@@ -15,9 +15,10 @@ import java.util.List;
 
 public class Poll {
 
-    public static String info = "This command can make you polls that look very nice.";
-    public static String set = "`set roles PollRole <@role(s)>`";
-    public static String example = "poll <Topic> OPTION <option1> <emote1> OPTION <option2> <emote2> etc";
+    private static final String info = "This command can make you polls that look very nice.";
+    private static final String set = "`set roles PollRole <@role(s)>`";
+    private static final String example = "poll <Topic> OPTION <option1> <emote1> OPTION <option2> <emote2> etc";
+    private static final String toggle = "`set module Poll 1/0`";
 
     public static void Check(TextChannel txt, Guild guild, Member member, String content){
 
@@ -39,7 +40,7 @@ public class Poll {
                 roleID = SettingGetter.ChannelFriendlySet("PollRole", txt).split("\\s+");
                 check = 1;
             } catch (Exception ignored){
-                RolesNotSet.ChannelFriendly(txt, "PollRole", set, user);
+                RolesNotSet.ChannelFriendly(txt, "PollRole", set, user, toggle);
             }
 
             if (check == 1) {
@@ -98,4 +99,19 @@ public class Poll {
 
     }
 
+    public static String getInfo() {
+        return info;
+    }
+
+    public static String getSet() {
+        return set;
+    }
+
+    public static String getExample() {
+        return example;
+    }
+
+    public static String getToggle() {
+        return toggle;
+    }
 }

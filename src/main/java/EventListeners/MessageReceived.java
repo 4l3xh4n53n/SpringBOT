@@ -1,5 +1,6 @@
 package EventListeners;
 
+import Auto.ChatSensor;
 import Auto.Poll;
 import Core.SettingGetter;
 import Core.SettingSetter;
@@ -10,6 +11,7 @@ import Games.ActivityPoints.Commands.UsersStats;
 import Games.ActivityPoints.Core.UserTimeOut;
 import Games.Random.Dice;
 import Games.Random.FlipACoin;
+import Misc.CurrentSettings;
 import Misc.Help;
 import Misc.Set.SetColour;
 import Misc.Set.SetPrefix;
@@ -34,6 +36,7 @@ public class MessageReceived extends ListenerAdapter {
             String content = e.getMessage().getContentRaw();
             Message msg = e.getMessage();
             Member member = e.getMember();
+            assert member != null;
             User user = member.getUser();
             Guild guild = e.getGuild();
             String guildID = guild.getId();
@@ -42,6 +45,7 @@ public class MessageReceived extends ListenerAdapter {
             String botprefix = SettingGetter.ChannelFriendlySet("Prefix", channel);
 
             UserTimeOut.check(userID, user, guild, channel);
+            ChatSensor.check(content, channel, msg);
 
             if (content.startsWith(botprefix)) {
 
@@ -61,7 +65,7 @@ public class MessageReceived extends ListenerAdapter {
                         Ban.check(user, msg, channel, guild, request);
                         break;
                     case "unban":
-                        UnBan.check(user,msg,channel,guild,request);
+                        UnBan.check(user,channel,guild,request);
                         break;
                     case "kick":
                         Kick.check(user, msg, channel, guild, request);
@@ -93,11 +97,23 @@ public class MessageReceived extends ListenerAdapter {
                     case "setwelcomeimage":
                         SetWelcomeImage.Check(member, content, channel, guildID);
                         break;
+                    case "setfilter":
+                        ChatSensor.SetFilter(channel, request, guildID);
+                        break;
+                    case "addfilter":
+                        ChatSensor.AppendFilter(channel, request, guildID);
+                        break;
+                    case "removefilter":
+                        ChatSensor.RemoveFilter(channel, request, guildID);
+                        break;
                     case "help":
-                        Help.checkForSubCommands(content, guild, channel, user);
+                        Help.checkForSubCommands(content, channel, user);
                         break;
                     case "stats":
-                        Stats.send(guild, channel, user);
+                        Stats.send(guild, channel);
+                        break;
+                    case "currentsettings":
+                        CurrentSettings.send(guildID, channel, user);
                         break;
 
                     // GAMES AND POINTS RELATED STUFF
@@ -106,7 +122,7 @@ public class MessageReceived extends ListenerAdapter {
                         Dice.roll(channel, user);
                         break;
                     case "flip":
-                        FlipACoin.check();
+                        FlipACoin.flip(user, channel);
                         break;
                     case "coins":
                         CoinsAmount.get(user, guild, channel, msg, content);

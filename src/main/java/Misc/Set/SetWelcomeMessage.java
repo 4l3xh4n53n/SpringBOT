@@ -15,7 +15,7 @@ import java.sql.PreparedStatement;
 
 public class SetWelcomeMessage {
 
-    public static String example = "`setWelcomeMessage <Message>`";
+    private static final String example = "`setWelcomeMessage <Message>`";
 
     public static void Check(Member member, String content, TextChannel txt, String guildID){
 
@@ -35,7 +35,7 @@ public class SetWelcomeMessage {
                     ud.executeUpdate();
                     ud.close();
                 } catch (Exception x){
-                    SQLError.TextChannel(txt, x);
+                    SQLError.TextChannel(txt, x, "Just don't run this command.");
                 }
 
             } else {
@@ -47,4 +47,7 @@ public class SetWelcomeMessage {
 
     }
 
+    public static String getExample() {
+        return example;
+    }
 }

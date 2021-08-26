@@ -14,8 +14,9 @@ import java.util.List;
 
 public class AutoRole {
 
-    public static String info = "This command automatically gives people roles on arrival.";
-    public static String set = "`set roles AutoRoleRole <@role(s)>`";
+    private static final String info = "This command automatically gives people roles on arrival.";
+    private static final String set = "`set roles AutoRoleRole <@role(s)>`";
+    private static final String toggle = "`set module AutoRole 1/0`";
 
     public static void give(Guild guild, Member member) {
 
@@ -24,10 +25,12 @@ public class AutoRole {
             User guildOwner = guild.retrieveOwner().complete().getUser();
             Member botMember = guild.getSelfMember();
             String[] roleID = null;
+
             try {
+
                 roleID = SettingGetter.GuildFriendlySet("AutoRoleRole", guild).split(",");
-            } catch (Exception ignored) {
-            }
+
+            } catch (Exception ignored) {}
 
             List<Role> roles = new java.util.ArrayList<>(Collections.emptyList());
 
@@ -35,28 +38,45 @@ public class AutoRole {
                 for (String s : roleID) {
 
                     Role role = guild.getRoleById(s);
+
                     if (role != null) {
+
                         roles.add(role);
+
                     }
                 }
 
                 if (botMember.hasPermission(Permission.MANAGE_ROLES)) {
                     if (roles.size() > 0) {
                         for (Role role : roles) {
+
                             guild.addRoleToMember(member, role).complete();
+
                         }
                     } else {
-                        RolesNotSet.GuildFriendly(guildOwner, "AutoRoleRole", set, guild);
+                        RolesNotSet.GuildFriendly(guildOwner, "AutoRoleRole", set, guild, toggle);
                     }
                 } else {
                     NoPerms.GuildBot("MANAGE_ROLES", guildOwner, guild);
                 }
             } else {
-                RolesNotSet.GuildFriendly(guildOwner, "AutoRole", set, guild);
+                RolesNotSet.GuildFriendly(guildOwner, "AutoRole", set, guild, toggle);
             }
 
         }
 
+    }
+
+    public static String getInfo() {
+        return info;
+    }
+
+    public static String getSet() {
+        return set;
+    }
+
+    public static String getToggle() {
+        return toggle;
     }
 
 }

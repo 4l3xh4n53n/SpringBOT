@@ -1,19 +1,25 @@
 package commands.mod;
 
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Role;
+
+import java.util.ArrayList;
 
 public class RoleChecker {
 
     public static int CheckRoles(String[] roles, Guild guild){
         int check = 0;
-        try {
-            for (int i = 0; roles.length > i; i++){
-                guild.getRoleById(roles[i]);
-            }
-            check = 1;
-        } catch (Exception ignored){
+        ArrayList<Role> Roles = new ArrayList<>();
 
+        for (String role : roles) {
+            try {
+                 Roles.add(guild.getRoleById(role));
+            } catch (Exception ignored){}
         }
+        if (roles.length > 0) {
+            check = 1;
+        }
+
         return check;
     }
 

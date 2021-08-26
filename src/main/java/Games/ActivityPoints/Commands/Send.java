@@ -5,7 +5,6 @@ import Core.Embed;
 import Core.SettingGetter;
 import ErrorMessages.BadCode.SQLError;
 import ErrorMessages.UserError.WrongCommandUsage;
-import Games.ActivityPoints.Core.PointsHandler;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -20,8 +19,9 @@ import java.util.List;
 
 public class Send {
 
-    public static String example = "`send <@user> <amount>`";
-    public static String info = "Send users coins.";
+    private static final String example = "`send <@user> <amount>`";
+    private static final String info = "Send users coins.";
+    private static final String toggle = "`set module SendCoins 1/0`";
 
     public static int CheckUser(String userID, String guildID, TextChannel txt){
         int coins = 0;
@@ -52,7 +52,7 @@ public class Send {
             con.close();
 
         } catch (Exception x){
-            SQLError.TextChannel(txt, x);
+            SQLError.TextChannel(txt, x, toggle);
         }
 
         return coins;
@@ -107,7 +107,7 @@ public class Send {
                                 txt.sendMessage(em.build()).queue();
 
                             } catch (Exception x) {
-                                SQLError.TextChannel(txt, x);
+                                SQLError.TextChannel(txt, x, toggle);
                             }
 
                         } else {
@@ -126,4 +126,15 @@ public class Send {
         }
     }
 
+    public static String getExample() {
+        return example;
+    }
+
+    public static String getInfo() {
+        return info;
+    }
+
+    public static String getToggle() {
+        return toggle;
+    }
 }

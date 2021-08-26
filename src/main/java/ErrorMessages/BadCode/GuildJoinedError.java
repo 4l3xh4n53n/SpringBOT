@@ -10,13 +10,13 @@ import java.awt.*;
 
 public class GuildJoinedError {
 
-    public static void DMOwner(Exception x, Guild g){
+    public static void DMOwner(Exception x, Guild guild){
 
 
 
-        JDA jda = Main.jda;
+        JDA jda = Main.getCurrentShard(guild);
         User fourLegs = jda.getUserById("456014662199410699");
-        User guildOwner = g.retrieveOwner().complete().getUser();
+        User guildOwner = guild.retrieveOwner().complete().getUser();
 
         // This sends the guild's owner a dm saying that something wrong has happened
 

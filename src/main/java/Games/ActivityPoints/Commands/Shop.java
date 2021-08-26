@@ -17,8 +17,9 @@ import java.sql.Statement;
 
 public class Shop {
 
-    public static String example = "`shop / shop <item>` <-- just shop will show you what you can buy.";
-    public static String info = "Allows you ot buy upgrades to get more coins";
+    private static final String example = "`shop / shop <item>` <-- just shop will show you what you can buy.";
+    private static final String info = "Allows you ot buy upgrades to get more coins";
+    private static final String toggle = "`set module Coins 1/0`";
 
     public static void NotEnoughMoney(TextChannel txt, int bal, int price, User user){
         EmbedBuilder em = Embed.em(user, txt);
@@ -50,7 +51,7 @@ public class Shop {
             }
 
         } catch (Exception x){
-            SQLError.TextChannel(txt, x);
+            SQLError.TextChannel(txt, x, toggle);
         }
 
     }
@@ -80,7 +81,7 @@ public class Shop {
             }
 
         } catch (Exception x){
-            SQLError.TextChannel(txt, x);
+            SQLError.TextChannel(txt, x, toggle);
         }
 
     }
@@ -110,7 +111,7 @@ public class Shop {
             }
 
         } catch (Exception x){
-            SQLError.TextChannel(txt, x);
+            SQLError.TextChannel(txt, x, toggle);
         }
 
     }
@@ -151,4 +152,15 @@ public class Shop {
 
     }
 
+    public static String getExample() {
+        return example;
+    }
+
+    public static String getInfo() {
+        return info;
+    }
+
+    public static String getToggle() {
+        return toggle;
+    }
 }

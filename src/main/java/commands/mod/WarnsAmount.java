@@ -20,9 +20,10 @@ import java.util.List;
 
 public class WarnsAmount {
 
-    public static String example = "`warns <@user>";
-    public static String info = "Shows you how many warns the specified user has";
-    public static String set = "`set roles WarnRoles <@role(S)>`";
+    private static final String example = "`warns <@user>";
+    private static final String info = "Shows you how many warns the specified user has";
+    private static final String set = "`set roles WarnRoles <@role(S)>`";
+    private static final String toggle = "`set module ModCommands 1/0`";
 
     public static void Execute(String guildID, TextChannel txt, Member mentioned, Connection con){
 
@@ -50,7 +51,7 @@ public class WarnsAmount {
 
             txt.sendMessage(em.build()).queue();
         } catch (Exception x){
-            SQLError.TextChannel(txt, x);
+            SQLError.TextChannel(txt, x, toggle);
         }
 
     }
@@ -65,7 +66,7 @@ public class WarnsAmount {
             checkCommand(guildID, msg, txt, guild, user, contentRaw, con);
 
         } catch (Exception x){
-            SQLError.TextChannel(txt, x);
+            SQLError.TextChannel(txt, x, toggle);
         }
     }
 
@@ -76,7 +77,7 @@ public class WarnsAmount {
         List<String> usersRoles = new ArrayList<>();
         String[] args = contentRaw.split("\\s+");
         Member mentioned;
-        String req = "";
+        StringBuilder req = new StringBuilder();
 
         int check = 0;
         int rolecheck = RoleChecker.CheckRoles(roles, guild);
@@ -90,8 +91,8 @@ public class WarnsAmount {
                     } catch (Exception ignored) {
                     }
 
-                    for (int i = 0; userroles.size() > i; i++) {
-                        usersRoles.add(userroles.get(i).getId());
+                    for (Role userrole : userroles) {
+                        usersRoles.add(userrole.getId());
                     }
 
                     if (check == 1 || msg.getMentionedMembers().size() > 0) {
@@ -104,18 +105,18 @@ public class WarnsAmount {
                         if (CollectionUtils.containsAny(Arrays.asList(roles), usersRoles)) {
                             Execute(GuildID, txt, mentioned, con);
                         } else {
-                            for (int i = 0; roles.length > i; i++) {
-                                Role role = guild.getRoleById(roles[i]);
-                                req = req + "@" + role.getName() + " ";
+                            for (String s : roles) {
+                                Role role = guild.getRoleById(s);
+                                req.append("@").append(role.getName()).append(" ");
                             }
-                            NoPerms.Send("warn", req, txt, user);
+                            NoPerms.Send("warn", req.toString(), txt, user);
                         }
 
                     } else {
                         WrongCommandUsage.send(txt, example, "You haven't mentioned any members", user);
                     }
                 } else {
-                    RolesNotSet.ChannelFriendly(txt, "warns", set, user);
+                    RolesNotSet.ChannelFriendly(txt, "warns", set, user, toggle);
                 }
             } else {
                 WrongCommandUsage.send(txt, example, "Wrong amount of args", user);
@@ -138,8 +139,23 @@ public class WarnsAmount {
                 Create(con, guildID, txt, msg, guild, user, contentRaw);
             }
         } catch (Exception x){
-            SQLError.TextChannel(txt, x);
+            SQLError.TextChannel(txt, x, toggle);
         }
     }
 
+    public static String getExample() {
+        return example;
+    }
+
+    public static String getInfo() {
+        return info;
+    }
+
+    public static String getSet() {
+        return set;
+    }
+
+    public static String getToggle() {
+        return toggle;
+    }
 }
