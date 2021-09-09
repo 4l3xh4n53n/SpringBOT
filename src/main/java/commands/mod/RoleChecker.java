@@ -8,15 +8,23 @@ import java.util.ArrayList;
 public class RoleChecker {
 
     public static int CheckRoles(String[] roles, Guild guild){
+
         int check = 0;
         ArrayList<Role> Roles = new ArrayList<>();
 
-        for (String role : roles) {
+        for (String s : roles) {
+
+            Role role = null;
             try {
-                 Roles.add(guild.getRoleById(role));
+                role = guild.getRoleById(s.replace(",", ""));
             } catch (Exception ignored){}
+            if (role != null) {
+                Roles.add(role);
+            }
+
         }
-        if (roles.length > 0) {
+
+        if (Roles.size() > 0){
             check = 1;
         }
 

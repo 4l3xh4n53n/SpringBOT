@@ -22,79 +22,78 @@ public class Poll {
 
     public static void Check(TextChannel txt, Guild guild, Member member, String content){
 
-        if (SettingGetter.ChannelFriendlySet("Poll", txt).equals("1")){
+        String[] roleID = null;
+        String[] args = content.split("OPTION");
+        String topic = args[0].toLowerCase().replace(SettingGetter.ChannelFriendlySet("Prefix", txt) + "poll", "");
+        String[] options = content.replace(topic + "OPTION", "").split("OPTION");
+        StringBuilder optionsF = new StringBuilder();
+        List<Role> roles = new java.util.ArrayList<>(Collections.emptyList());
+        List<Role> usersRoles = member.getRoles();
+        StringBuilder req = new StringBuilder();
+        User user = member.getUser();
 
-            String[] roleID = null;
-            String[] args = content.split("OPTION");
-            String topic = args[0];
-            String[] options = content.replace(topic + "OPTION", "").split("OPTION");
-            StringBuilder optionsF = new StringBuilder();
-            List<Role> roles = new java.util.ArrayList<>(Collections.emptyList());
-            List<Role> usersRoles = member.getRoles();
-            StringBuilder req = new StringBuilder();
-            User user  = member.getUser();
+        int check = 0;
 
-            int check  = 0;
+        try {
+            roleID = SettingGetter.ChannelFriendlySet("PollRole", txt).split("\\s+");
+            check = 1;
+        } catch (Exception ignored) {
+            RolesNotSet.ChannelFriendly(txt, "PollRole", set, user, toggle);
+        }
 
-            try {
-                roleID = SettingGetter.ChannelFriendlySet("PollRole", txt).split("\\s+");
-                check = 1;
-            } catch (Exception ignored){
-                RolesNotSet.ChannelFriendly(txt, "PollRole", set, user, toggle);
+        if (check == 1) {
+            for (String s : roleID) {
+
+                Role role = null;
+                try {
+                    role = guild.getRoleById(s.replace(",", ""));
+                } catch (Exception ignored) {
+                }
+                if (role != null) {
+                    roles.add(role);
+                }
+
             }
+        }
 
-            if (check == 1) {
-                for (String s : roleID) {
+        if (roles.size() > 0) {
+            if (CollectionUtils.containsAny(roles, usersRoles)) {
 
-                    Role role = null;
-                    try {
-                        role = guild.getRoleById(s.replace(",", ""));
-                    } catch (Exception ignored){}
-                    if (role != null) {
-                        roles.add(role);
+                if (args.length > 2) {
+
+                    for (String option : options) {
+                        optionsF.append("\n").append(option);
                     }
 
-                }
-            }
+                    EmbedBuilder em = Embed.em(user, txt);
+                    em.addField(topic, optionsF.toString(), false);
+                    txt.sendMessageEmbeds(em.build()).queue(msg -> {
+                        for (String option : options) {
 
-            if (roles.size() > 0){
-                if (CollectionUtils.containsAny(roles, usersRoles)){
+                            String[] optionArg = option.split("\\s+");
 
-                    if (args.length > 2) {
+                            String emoji = optionArg[optionArg.length - 1];
 
-                        for (String option : options){
-                            optionsF.append("\n").append(option);
+                            msg.addReaction(emoji).queue(null, error -> {
+                                MessageRemover.deleteAfter(msg);
+                                WrongCommandUsage.send(txt, example, "**" + emoji + "** is not a valid emoji", user);
+                            });
+
+
                         }
+                    });
 
-                        EmbedBuilder em = Embed.em(user, txt);
-                        em.addField(topic, optionsF.toString(), false);
-                        txt.sendMessage(em.build()).queue(msg -> {
-                            for (String option : options) {
-
-                                String[] optionArg = option.split("\\s+");
-
-                                String emoji = optionArg[optionArg.length - 1];
-
-                                msg.addReaction(emoji).queue(null, error ->{
-                                    MessageRemover.deleteAfter(msg);
-                                    WrongCommandUsage.send(txt, example, "**" + emoji + "** is not a valid emoji", user);
-                                });
-
-
-                            }
-                        });
-
-                    } else {
-                        WrongCommandUsage.send(txt, example, "You didn't give enough options", user);
-                    }
                 } else {
-                    for (Role role : roles) {
-                        req.append("@").append(role.getName()).append(" ");
-                    }
-                    NoPerms.Send("poll", req.toString(), txt, user);
+                    WrongCommandUsage.send(txt, example, "You didn't give enough options", user);
                 }
+            } else {
+                for (Role role : roles) {
+                    req.append("@").append(role.getName()).append(" ");
+                }
+                NoPerms.Send("poll", req.toString(), txt, user);
             }
-
+        } else {
+            RolesNotSet.ChannelFriendly(txt, "PollRoll", set, user, toggle);
         }
 
     }

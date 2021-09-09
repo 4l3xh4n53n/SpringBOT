@@ -59,25 +59,25 @@ public class MessageReceived extends ListenerAdapter {
                     // MOD COMMANDS
 
                     case "clear":
-                        Clear.check(channel, request, user, guild);
+                        Clear.check(channel, request, user, guild, member);
                         break;
                     case "ban":
-                        Ban.check(user, msg, channel, guild, request);
+                        Ban.check(user, msg, channel, guild, request, member);
                         break;
                     case "unban":
-                        UnBan.check(user,channel,guild,request);
+                        UnBan.check(user,channel,guild,request, member);
                         break;
                     case "kick":
-                        Kick.check(user, msg, channel, guild, request);
+                        Kick.check(user, msg, channel, guild, request, member);
                         break;
                     case "warn":
-                        Warn.check(guild, user, channel, msg);
+                        Warn.check(guild, user, channel, msg, member);
                         break;
                     case "warns":
-                        WarnsAmount.check(guildID, msg, channel, guild, user, content);
+                        WarnsAmount.check(guildID, msg, channel, guild, user, content, member);
                         break;
                     case "removewarns":
-                        RemoveWarns.check(guild, user, channel, msg);
+                        RemoveWarns.check(guild, user, channel, msg, member);
                         break;
 
                     // SETTING COMMANDS AND OTHER STUFF
@@ -86,10 +86,10 @@ public class MessageReceived extends ListenerAdapter {
                         SettingSetter.check(user, request, guild, channel, msg, member);
                         break;
                     case "setprefix":
-                        SetPrefix.Set(channel, content, guildID, user, guild);
+                        SetPrefix.Set(channel, content, guildID, user, member);
                         break;
                     case "setcolour":
-                        SetColour.Set(channel, content, guildID, user);
+                        SetColour.Set(channel, content, guildID, user, member);
                         break;
                     case "setwelcomemessage":
                         SetWelcomeMessage.Check(member, content, channel, guildID);
@@ -98,13 +98,13 @@ public class MessageReceived extends ListenerAdapter {
                         SetWelcomeImage.Check(member, content, channel, guildID);
                         break;
                     case "setfilter":
-                        ChatSensor.SetFilter(channel, request, guildID);
+                        ChatSensor.SetFilter(channel, request, guildID, member);
                         break;
                     case "addfilter":
-                        ChatSensor.AppendFilter(channel, request, guildID);
+                        ChatSensor.AppendFilter(channel, request, guildID, member);
                         break;
                     case "removefilter":
-                        ChatSensor.RemoveFilter(channel, request, guildID);
+                        ChatSensor.RemoveFilter(channel, request, guildID, member);
                         break;
                     case "help":
                         Help.checkForSubCommands(content, channel, user);

@@ -23,7 +23,7 @@ public class FlipACoin {
             em.setAuthor(tag, null, iconurl);
             em.setTitle("Flipped a coin and got: ");
             em.setImage("https://imgur.com/3F5J6IA.gif");
-            txt.sendMessage(em.build()).queue(msg -> {
+            txt.sendMessageEmbeds(em.build()).queue(msg -> {
 
                 String link = "";
                 Random random = new Random();
@@ -44,7 +44,7 @@ public class FlipACoin {
 
                 em.setImage(link);
                 em.setDescription("You got: " + hot);
-                msg.editMessage(em.build()).clearFiles().queueAfter(3, TimeUnit.SECONDS);
+                msg.editMessageEmbeds(em.build()).clearFiles().queueAfter(3, TimeUnit.SECONDS);
             });
         }
     }

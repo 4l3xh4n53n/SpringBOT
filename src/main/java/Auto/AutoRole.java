@@ -49,9 +49,9 @@ public class AutoRole {
                 if (botMember.hasPermission(Permission.MANAGE_ROLES)) {
                     if (roles.size() > 0) {
                         for (Role role : roles) {
-
-                            guild.addRoleToMember(member, role).complete();
-
+                            if (botMember.getRoles().get(0).getPosition() > role.getPosition()) {
+                                guild.addRoleToMember(member, role).complete();
+                            }
                         }
                     } else {
                         RolesNotSet.GuildFriendly(guildOwner, "AutoRoleRole", set, guild, toggle);

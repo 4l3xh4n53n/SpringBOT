@@ -13,7 +13,7 @@ public class WrongCommandUsage {
         EmbedBuilder em = Embed.em(user, txt);
         em.setTitle("That isn't how you use this command");
         em.addField("Example:\n" + exampleCommand,"Reason: " + reason, false);
-        txt.sendMessage(em.build()).queue(MessageRemover::deleteAfter);
+        txt.sendMessageEmbeds(em.build()).queue(MessageRemover::deleteAfter);
     }
 
 }

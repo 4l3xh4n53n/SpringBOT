@@ -57,7 +57,7 @@ public class PointsHandler {
                 ps.setString(1, userID);
                 ps.setInt(2, 100);
                 ps.setInt(3, 100);
-                ps.setInt(4,1000);
+                ps.setInt(4,10000);
                 ps.setDouble(5, 1.0);
                 ps.setInt(6,1);
                 ps.executeUpdate();
@@ -72,6 +72,10 @@ public class PointsHandler {
                     int oldcoins = rs.getInt("coins");
                     int newcoins = Math.round(oldcoins + coinsPerMessage * extraPercentage);
 
+                    if (newcoins > rs.getInt("MaxCoins")) {
+                        newcoins = rs.getInt("MaxCoins");
+                    }
+
                     int oldmessages = rs.getInt("Messages");
                     int newmessages = oldmessages + 1;
 
@@ -81,6 +85,7 @@ public class PointsHandler {
                     ud.setInt(2, newmessages);
                     ud.executeUpdate();
                     ud.close();
+
 
                 } catch (Exception x){
                     SQLError.TextChannel(txt, x, Shop.getToggle());

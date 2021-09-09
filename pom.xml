@@ -6,7 +6,7 @@
 
     <groupId>org.fourLegs.Spring</groupId>
     <artifactId>Spring</artifactId>
-    <version>0.5 - HuckleBerry</version>
+    <version>1.0.0 - HuckleBerry</version>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
@@ -30,7 +30,7 @@
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
-            <version>4.2.1_262</version>
+            <version>4.3.0_324</version>
         </dependency>
     </dependencies>
 

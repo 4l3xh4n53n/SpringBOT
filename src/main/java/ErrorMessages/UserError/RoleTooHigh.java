@@ -11,7 +11,7 @@ public class RoleTooHigh {
     public static void send(TextChannel txt, String module, User user){
         EmbedBuilder em = Embed.em(user, txt);
         em.setTitle("The member your trying to " + module + " has a role higher than mine");
-        txt.sendMessage(em.build()).queue(MessageRemover::deleteAfter);
+        txt.sendMessageEmbeds(em.build()).queue(MessageRemover::deleteAfter);
     }
 
 }

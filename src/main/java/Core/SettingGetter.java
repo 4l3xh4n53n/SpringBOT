@@ -5,7 +5,6 @@ import ErrorMessages.BadCode.SQLError;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 
-import javax.swing.*;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;

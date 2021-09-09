@@ -34,9 +34,9 @@ public class SettingCreator{
                     "GuildWelcome," +
                     "GuildWelcomeMessage," +
                     "GuildWelcomeIMAGE," +
+                    "GuildWelcomeChannel," +
                     "AutoRole," +
                     "AutoRoleRole," +
-                    "Poll," +
                     "PollRole," +
                     "InviteLogging," +
                     "InviteLog," +
@@ -47,7 +47,7 @@ public class SettingCreator{
                     "StatsChannel," +
                     "ChatFilter," +
                     "Filter," +
-                    "ReactionRoleRoles" +
+                    "GameCommands" +
                     ")VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             ps = con.prepareStatement(SQL);
             ps.setString(1, guildID);
@@ -67,9 +67,9 @@ public class SettingCreator{
             ps.setString(15, "0");//GuildWelcome
             ps.setString(16, "");//GuildWelcomeMessage
             ps.setString(17, "");//GuildWelcomeImage
-            ps.setString(18, "0");//AutoRole
-            ps.setString(19, "");//AutoRoleRole
-            ps.setString(20, "0");//Poll
+            ps.setString(18, "");//GuildWelcomeChannel
+            ps.setString(19, "0");//AutoRole
+            ps.setString(20, "");//AutoRoleRole
             ps.setString(21, "");//PollRole
             ps.setString(22, "0");//InviteLogging
             ps.setString(23, "");//InviteLog
@@ -80,7 +80,7 @@ public class SettingCreator{
             ps.setString(28, "");//StatsChannel
             ps.setString(29, "0");//ChatFilter
             ps.setString(30, "");//Filter
-            ps.setString(31, "");//ReactionRoleRoles
+            ps.setString(31, "0");//GameCommands
             ps.executeUpdate();
             ps.close();
 

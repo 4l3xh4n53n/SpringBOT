@@ -13,7 +13,6 @@ import net.dv8tion.jda.api.entities.User;
 
 import java.sql.*;
 import java.util.List;
-import java.util.Objects;
 
 public class InviteLogger {
 
@@ -59,11 +58,17 @@ public class InviteLogger {
 
                 String get = "SELECT uses FROM '" + guildID + "' WHERE inviteURL = '" + invite.getUrl() + "'";
                 ResultSet rs = stmt.executeQuery(get);
+                String id;
 
                 if (!rs.next()){
+                    if (invite.getInviter() == null){
+                        id = "0";
+                    } else {
+                        id = invite.getInviter().getId();
+                    }
 
                     AddInviteToDatabase(invite.getUrl(),
-                            Objects.requireNonNull(invite.getInviter()).getId(),
+                            id,
                             guild,
                             guildID);
 
@@ -91,34 +96,49 @@ public class InviteLogger {
             Invite invite = GetUsedInvite(guildID, guild);
             update(guild, guildID);
 
-            String user = Objects.requireNonNull(invite.getInviter()).getAsTag();
-            String uses = String.valueOf(invite.getUses());
-            String url = invite.getUrl();
+            String user = null;
 
-            try {
+            if (invite != null) {
 
-                log = guild.getTextChannelById(SettingGetter.GuildFriendlySet("InviteLog", guild));
+                User inviter = invite.getInviter();
 
-            } catch (Exception x){
-                ChannelNotSet.GuildFriendly(set, guildOwner, guild, toggle);
+                if (inviter != null){
+                    user = inviter.getAsTag();
+                }
+
+                String uses = String.valueOf(invite.getUses());
+                String url = invite.getUrl();
+
+                try {
+
+                    log = guild.getTextChannelById(SettingGetter.GuildFriendlySet("InviteLog", guild));
+
+                } catch (Exception x) {
+                    ChannelNotSet.GuildFriendly(set, guildOwner, guild, toggle);
+                }
+
+                if (log != null) {
+
+                    if (user != null) {
+
+                        String tag = joined.getAsTag();
+                        String avatar = joined.getAvatarUrl();
+
+                        EmbedBuilder em = Embed.em(joined, log);
+                        em.setAuthor(tag, null, avatar);
+                        em.addField("Invited by: ", user, true);
+                        em.addField("Using url: ", url, true);
+                        em.addField("", "Url uses: " + uses, false);
+                        log.sendMessageEmbeds(em.build()).queue();
+
+                    } else {
+                        EmbedBuilder em = Embed.em(joined, log);
+                        em.addField("", "I'm not too sure who used this invite, perhaps it was temporary. " + uses, false);
+                        log.sendMessageEmbeds(em.build()).queue();
+                    }
+                }
             }
-
-            if (log != null){
-
-                String tag = joined.getAsTag();
-                String avatar = joined.getAvatarUrl();
-
-                EmbedBuilder em = Embed.em(joined ,log);
-                em.setAuthor(tag, null, avatar);
-                em.addField("Invited by: ", user, true);
-                em.addField("Using url: ", url, true);
-                em.addField("", "Url uses: " + uses, false);
-                log.sendMessage(em.build()).queue();
-
-            }
-
         }
-
     }
 
     public static void IncreaseInvite(Connection con, Invite usedInvite, Guild guild, String guildID){

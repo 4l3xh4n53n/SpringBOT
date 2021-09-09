@@ -34,21 +34,21 @@ public class UnBan {
 
             EmbedBuilder em = Embed.em(user, txt);
             em.setTitle("Un banned " + mentioned.getAsTag());
-            txt.sendMessage(em.build()).queue(MessageRemover::deleteAfter);
+            txt.sendMessageEmbeds(em.build()).queue(MessageRemover::deleteAfter);
         }
 
         ModLogger.log(txt, mentioned, "BanLog", "", log, "was unbanned",user);
 
     }
 
-    public static void check(User user, TextChannel txt, Guild guild, String request){
+    public static void check(User user, TextChannel txt, Guild guild, String request, Member member){
 
         JDA jda = Main.getCurrentShard(guild);
         String[] args = request.split("\\s+");
         Member botMember = guild.getSelfMember();
         User mentioned = null;
         String[] roles = SettingGetter.ChannelFriendlySet("BanRoles", txt).split(",");
-        List<Role> userroles = guild.getMemberById(user.getId()).getRoles();
+        List<Role> userroles = member.getRoles();
         List<String> usersRoles = new ArrayList<>();
         StringBuilder req = new StringBuilder();
         int checktwo = 0;

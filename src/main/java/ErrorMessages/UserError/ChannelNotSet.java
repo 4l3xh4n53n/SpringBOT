@@ -17,7 +17,7 @@ public class ChannelNotSet {
         em.setTitle("Bruh momento!");
         em.addField("You don't have a channel setup for this:", set, false);
         em.addField("If you want to turn this off use this command: ", toggle, false);
-        txt.sendMessage(em.build()).queue(MessageRemover::deleteAfter);
+        txt.sendMessageEmbeds(em.build()).queue(MessageRemover::deleteAfter);
     }
 
     public static void GuildFriendly(String set, User user, Guild guild, String toggle){
@@ -26,7 +26,7 @@ public class ChannelNotSet {
         em.setTitle("Oh no!");
         em.addField("You don't have a channel setup for this:", set, false);
         em.addField("If you want to turn this off use this command: ", toggle, false);
-        user.openPrivateChannel().queue((channel) -> channel.sendMessage(em.build()).queue());
+        user.openPrivateChannel().queue((channel) -> channel.sendMessageEmbeds(em.build()).queue());
     }
 
 }

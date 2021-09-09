@@ -49,7 +49,7 @@ public class GuildWelcomeMessage {
 
                 } catch (Exception ignored){}
 
-                welcome.sendMessage(em.build()).queue();
+                welcome.sendMessageEmbeds(em.build()).queue();
 
             }
 

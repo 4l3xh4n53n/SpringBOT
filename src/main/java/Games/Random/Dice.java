@@ -25,7 +25,7 @@ public class Dice {
             em.setImage("https://imgur.com/asrcYJZ.gif");
             em.setAuthor(tag, null, iconurl);
             em.setTitle("Rolled a dice and got: ");
-            txt.sendMessage(em.build()).queue(msg -> {
+            txt.sendMessageEmbeds(em.build()).queue(msg -> {
 
                 String link = "";
                 Random random = new Random();
@@ -54,7 +54,7 @@ public class Dice {
 
                 em.setImage(link);
                 em.setDescription("You got: " + rng);
-                msg.editMessage(em.build()).clearFiles().queueAfter(3, TimeUnit.SECONDS);
+                msg.editMessageEmbeds(em.build()).clearFiles().queueAfter(3, TimeUnit.SECONDS);
             });
         }
 

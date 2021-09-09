@@ -63,7 +63,7 @@ public class Warn {
 
             EmbedBuilder em = Embed.em(user, txt);
             em.setTitle("Warned " + user.getAsTag());
-            txt.sendMessage(em.build()).queue();
+            txt.sendMessageEmbeds(em.build()).queue();
 
             ModLogger.log(txt, user, "WarnLog", reason, log, "was warned", executor);
 
@@ -73,7 +73,7 @@ public class Warn {
 
     }
 
-    public static void Create(String guildID, TextChannel txt, Guild guild, User user, Message msg, Connection con){
+    public static void Create(String guildID, TextChannel txt, Guild guild, User user, Message msg, Connection con, Member member){
 
         //apparently this just refuses to make one even if its already in there and this really wasn't needed
 
@@ -84,18 +84,18 @@ public class Warn {
             con.close();
             stmt.close();
 
-            checkCommand(guild, guildID, user, txt, msg, con);
+            checkCommand(guild, guildID, user, txt, msg, con, member);
 
         } catch (Exception x){
             SQLError.TextChannel(txt, x, toggle);
         }
     }
 
-    public static void checkCommand(Guild guild, String guildID, User user, TextChannel txt, Message msg, Connection con){
+    public static void checkCommand(Guild guild, String guildID, User user, TextChannel txt, Message msg, Connection con, Member member){
 
         String[] args = msg.getContentRaw().split("\\s+");
         String[] roles = SettingGetter.ChannelFriendlySet("WarnRoles", txt).split(",");
-        List<Role> userroles = guild.getMember(user).getRoles();
+        List<Role> userroles = member.getRoles();
         List<String> usersRoles = new ArrayList<>();
         StringBuilder req = new StringBuilder();
         int check = 0;
@@ -148,7 +148,7 @@ public class Warn {
 
     }
 
-    public static void check(Guild guild, User user, TextChannel txt, Message msg){
+    public static void check(Guild guild, User user, TextChannel txt, Message msg, Member member){
         String guildID = guild.getId();
         try {
             Connection con = Database.warns();
@@ -156,11 +156,11 @@ public class Warn {
             ResultSet tables = dbm.getTables(null, null, guildID, null);
             if (tables.next()) {
                 tables.close();
-                checkCommand(guild, guildID,user, txt, msg, con);
+                checkCommand(guild, guildID,user, txt, msg, con, member);
             }
             else {
                 tables.close();
-                Create(guildID, txt, guild, user, msg, con);
+                Create(guildID, txt, guild, user, msg, con, member);
             }
 
         } catch (Exception x){

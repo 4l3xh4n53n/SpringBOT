@@ -34,7 +34,7 @@ public class ModLogger {
                     EmbedBuilder em = Embed.em(mentioned, txt);
                     em.setAuthor(tag, null, pfp);
                     em.addField(tag + " " + module, "**Reason:** " + reason + "\n**Executor:** " + executor, false);
-                    log.sendMessage(em.build()).queue();
+                    log.sendMessageEmbeds(em.build()).queue();
                 }
 
             }

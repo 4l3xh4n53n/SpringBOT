@@ -7,7 +7,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
-import javax.swing.*;
 import java.awt.*;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -17,36 +16,44 @@ import java.util.List;
 
 public class SettingSetter {
 
-    public static String example = "`set module <module> 1/0` <-- (on/off)\n" +
-            "`set roles <module> <@role(s)>` \n" +
-            "`set channel <module> <channelID>` <-- also works with categories";
+    public static String example = "MODULES: `set <modules> 1/0` <-- (on/off)\n" +
+            "ROLES: `set <module> <@role(s)>` \n" +
+            "CHANNELS: `set <module> <channelID>` <-- also works with categories";
 
     public static void SettingChanged(TextChannel txt){
         EmbedBuilder em = new EmbedBuilder();
         em.setColor(Color.decode(SettingGetter.ChannelFriendlySet("GuildColour", txt)));
         em.setTitle("Your setting has been changed");
+        txt.sendMessageEmbeds(em.build()).queue(MessageRemover::deleteAfter);
+    }
 
-        txt.sendMessage(em.build()).queue(MessageRemover::deleteAfter);
+    public static void NoSuchSetting(TextChannel txt, User sender){
+        EmbedBuilder em = Embed.em(sender, txt);
+        em.setTitle("No Such Setting");
+        em.setTitle("Please run `help settings` command.");
+        txt.sendMessageEmbeds(em.build()).queue();
     }
 
     public static void check(User user, String request, Guild guild, TextChannel channel, Message msg, Member member){
         String[] args = request.split("\\s+");
 
         if (member.getPermissions().contains(Permission.ADMINISTRATOR)) {
-            if (args.length > 2) {
+            if (args.length > 1) {
 
                 String mod = args[1];
 
-                switch (mod) {
-                    case "module":
-                        modules(guild, channel, args, user);
-                        break;
-                    case "roles":
-                        roles(guild, channel, args, msg, user);
-                        break;
-                    case "channel":
-                        channels(guild, channel, args, user);
-                        break;
+                String[] modules = {"ModCommands", "LogModActions", "Coins", "SendCoins", "AutoRole", "InviteLogging", "PrivateChannel", "ServerStats", "GameCommands", "ChatFilter", "GuildWelcome"};
+                String[] channels = {"KickLog", "BanLog", "WarnLog", "GuildWelcomeChannel", "InviteLog","PrivateChannelCreator", "StatsChannel","PrivateChannelCategory"};
+                String[] roles = {"ClearRoles", "KickRoles", "BanRoles", "WarnRoles", "AutoRoleRole", "PollRole"};
+
+                if (Arrays.asList(modules).contains(mod)){
+                    modules(guild, channel, args, user);
+                } else if (Arrays.asList(channels).contains(mod)){
+                    channels(guild, channel, args, user);
+                } else if (Arrays.asList(roles).contains(mod)){
+                    roles(guild, channel, args, msg, user);
+                } else {
+                    NoSuchSetting(channel, user);
                 }
 
             } else {
@@ -61,7 +68,7 @@ public class SettingSetter {
         try {
             Connection con = Database.connect();
             Statement stmt = con.createStatement();
-            String update = "UPDATE Settings SET '" + args[2] + "'='" + setTo + "' WHERE GuildID='" + guildID + "'";
+            String update = "UPDATE Settings SET '" + args[1] + "'='" + setTo + "' WHERE GuildID='" + guildID + "'";
             SettingChanged(channel);
             ResultSet ud = stmt.executeQuery(update);
             ud.updateString(args[1], args[2]);
@@ -76,18 +83,18 @@ public class SettingSetter {
         }
     }
 
-    public static String modules = "`ModCommands, LogModActions, Coins, SendCoins, AutoRole, InviteLogger, PrivateChannel, ServerStats, GameCommands, Poll`";
+    public static String modules = "`ModCommands, LogModActions, Coins, SendCoins, AutoRole, InviteLogging, PrivateChannel, ServerStats, GameCommands, Poll, ChatFilter, GuildWelcome`";
 
     public static void modules(Guild guild, TextChannel channel, String[] args, User user){
         String guildID = guild.getId();
 
-        String[] settings = {"ModCommands", "LogModActions", "Coins", "SendCoins", "AutoRole", "InviteLogger", "PrivateChannel", "ServerStats", "GameCommands", "Poll"};
+        String[] settings = {"ModCommands", "LogModActions", "Coins", "SendCoins", "AutoRole", "InviteLogging", "PrivateChannel", "ServerStats", "GameCommands", "Poll", "ChatFilter", "GuildWelcome"};
         String[] oneOrZero = {"1", "0"};
-        String setTo = args[3];
+        String setTo = args[2];
 
-        if (args.length == 4) {
-            if (Arrays.asList(settings).contains(args[2])) {
-                if (Arrays.asList(oneOrZero).contains(args[3])) {
+        if (args.length == 3) {
+            if (Arrays.asList(settings).contains(args[1])) {
+                if (Arrays.asList(oneOrZero).contains(args[2])) {
 
                     Set(args, channel, guildID, setTo);
 
@@ -111,8 +118,8 @@ public class SettingSetter {
         List<Role> mentionedRoles = msg.getMentionedRoles();
         StringBuilder setTo = new StringBuilder();
 
-        if (args.length > 3){
-            if (Arrays.asList(modules).contains(args[2])){
+        if (args.length > 2){
+            if (Arrays.asList(modules).contains(args[1])){
                 if (!(mentionedRoles.size() == 0)){
 
                     for (Role mentionedRole : mentionedRoles) {
@@ -139,26 +146,26 @@ public class SettingSetter {
         String[] catMod = {"PrivateChannelCategory"};
         String guildID = guild.getId();
 
-        if (args.length == 4 && args[3].matches("[0-9]+")) {
+        if (args.length == 3 && args[2].matches("[0-9]+")) {
 
-            String setTo = args[3]; //This is here to stop random errors
+            String setTo = args[2]; //This is here to stop random errors
 
-            if (guild.getTextChannelById(args[3]) != null) {
-                if (Arrays.asList(textMod).contains(args[2])){
+            if (guild.getTextChannelById(args[2]) != null) {
+                if (Arrays.asList(textMod).contains(args[1])){
                     Set(args, channel, guildID, setTo);
                 } else {
                     WrongCommandUsage.send(channel, example, "The ID you gave isn't compatible with that module", user);
                 }
 
-            } else if (guild.getVoiceChannelById(args[3]) != null) {
-                if (Arrays.asList(voiceMod).contains(args[2])){
+            } else if (guild.getVoiceChannelById(args[2]) != null) {
+                if (Arrays.asList(voiceMod).contains(args[1])){
                     Set(args, channel, guildID, setTo);
                 } else {
                     WrongCommandUsage.send(channel, example, "The ID you gave isn't compatible with that module", user);
                 }
 
-            } else if (guild.getCategoryById(args[3]) != null) {
-                if (Arrays.asList(catMod).contains(args[2])){
+            } else if (guild.getCategoryById(args[2]) != null) {
+                if (Arrays.asList(catMod).contains(args[1])){
                     Set(args, channel, guildID, setTo);
                 } else {
                     WrongCommandUsage.send(channel, example, "The ID you gave isn't compatible with that module", user);

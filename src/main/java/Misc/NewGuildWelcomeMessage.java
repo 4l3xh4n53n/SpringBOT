@@ -22,10 +22,10 @@ public class NewGuildWelcomeMessage {
         EmbedBuilder em = new EmbedBuilder();
         em.setColor(Color.GREEN);
         em.setTitle("Thank you for using Spring in your server.");
-        em.addField("Thanks for using spring bot :)", "To see the what is turned on by default please use `currentSettings` command.", false);
+        em.addField("Thanks for using spring bot :)", "To see the what is turned on by default please use `currentSettings` command. Default prefix is `!`", false);
         em.setFooter("ID: " + g.getId() + " | Time: " + time);
 
-        owner.openPrivateChannel().queue((channel) -> channel.sendMessage(em.build()).queue());
+        owner.openPrivateChannel().queue((channel) -> channel.sendMessageEmbeds(em.build()).queue());
     }
 
 }

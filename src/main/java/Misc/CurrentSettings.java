@@ -27,7 +27,6 @@ public class CurrentSettings {
                     "SendCoins," +
                     "GuildWelcome," +
                     "AutoRole," +
-                    "Poll," +
                     "InviteLogging," +
                     "PrivateChannel," +
                     "ChatFilter," +
@@ -37,14 +36,14 @@ public class CurrentSettings {
             ResultSetMetaData rsMetaData = rs.getMetaData();
             int count = rsMetaData.getColumnCount();
 
-            for (int i = 1; i < count; i++){
-                String status = rs.getString(i);
-                if (status.equals("1")){
-                    em.addField(rsMetaData.getColumnName(i), ":green_square:",false);
-                } else {
-                    em.addField(rsMetaData.getColumnName(i), ":red_square:",false);
-                }
+            for (int i = 1; i < count + 1; i++){
 
+                String status = rs.getString(i);
+                if (status.equals("1")) {
+                    em.addField(rsMetaData.getColumnName(i), ":green_square:", false);
+                } else {
+                    em.addField(rsMetaData.getColumnName(i), ":red_square:", false);
+                }
 
             }
 
@@ -55,7 +54,7 @@ public class CurrentSettings {
             SQLError.TextChannel(txt, x, "Just don't use this command");
         }
 
-        txt.sendMessage(em.build()).queue();
+        txt.sendMessageEmbeds(em.build()).queue();
 
     }
 

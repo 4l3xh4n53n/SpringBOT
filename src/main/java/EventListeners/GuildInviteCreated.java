@@ -7,8 +7,6 @@ import net.dv8tion.jda.api.events.guild.invite.GuildInviteCreateEvent;
 import net.dv8tion.jda.api.events.guild.invite.GuildInviteDeleteEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
-import java.util.Objects;
-
 public class GuildInviteCreated extends ListenerAdapter {
 
     @Override
@@ -25,7 +23,10 @@ public class GuildInviteCreated extends ListenerAdapter {
         Guild guild  = e.getGuild();
         String guildID = guild.getId();
         String inviteURL = invite.getUrl();
-        String inviterID = Objects.requireNonNull(invite.getInviter()).getId();
+        String inviterID = "id";
+        try {
+            inviterID = invite.getInviter().getId();
+        } catch (Exception ignored){}
         InviteLogger.AddInviteToDatabase(inviteURL, inviterID, guild, guildID);
 
     }

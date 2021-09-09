@@ -3,6 +3,8 @@ package Auto;
 import Core.Database;
 import Core.SettingGetter;
 import ErrorMessages.BadCode.SQLError;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 
@@ -24,12 +26,12 @@ public class ChatSensor {
             String[] filter = SettingGetter.ChannelFriendlySet("Filter", txt).toLowerCase().split(",");
             String better = contentRaw.toLowerCase().replaceAll("[^\\p{IsAlphabetic}]", "");
 
-            for (String blackListedWord : filter){
-                if (better.contains(blackListedWord)){
-
-                    message.delete().queue();
-                    break;
-
+            if (filter.length >= 1 && !filter[0].equals("")){
+                for (String blackListedWord : filter) {
+                    if (better.contains(blackListedWord)) {
+                        message.delete().queue();
+                        break;
+                    }
                 }
             }
         }
@@ -54,48 +56,59 @@ public class ChatSensor {
 
     }
 
-    public static void SetFilter(TextChannel txt, String contentraw, String guildID){
+    public static void SetFilter(TextChannel txt, String contentraw, String guildID, Member member){
 
-        String[] words = contentraw.toLowerCase().replace("setfilter ", "").split(" ");
-        StringBuilder current = new StringBuilder();
+        if (member.getPermissions().contains(Permission.ADMINISTRATOR)) {
 
-        for (String word : words){
+            String[] words = contentraw.toLowerCase().replace("setfilter ", "").split(" ");
+            StringBuilder current = new StringBuilder();
 
-            current.append(word).append(",");
+            for (String word : words) {
+
+                current.append(word).append(",");
+
+            }
+
+            Insert(guildID, current.toString(), txt);
 
         }
+    }
 
-        Insert(guildID, current.toString(), txt);
+    public static void AppendFilter(TextChannel txt, String contentraw, String guildID, Member member){
+
+        if (member.getPermissions().contains(Permission.ADMINISTRATOR)) {
+
+            StringBuilder current = new StringBuilder(SettingGetter.ChannelFriendlySet("Filter", txt));
+            String[] words = contentraw.toLowerCase().replace("addfilter ", "").split(" ");
+
+            for (String word : words) {
+
+                current.append(word).append(",");
+
+            }
+
+            Insert(guildID, current.toString(), txt);
+
+        }
 
     }
 
-    public static void AppendFilter(TextChannel txt, String contentraw, String guildID){
+    public static void RemoveFilter(TextChannel txt, String contentraw, String guildID, Member member) {
 
-        StringBuilder current = new StringBuilder(SettingGetter.ChannelFriendlySet("Filter", txt));
-        String[] words = contentraw.toLowerCase().replace("addfilter ", "").split(" ");
+        if (member.getPermissions().contains(Permission.ADMINISTRATOR)){
 
-        for (String word : words){
+            String current = SettingGetter.ChannelFriendlySet("Filter", txt);
+            String[] words = contentraw.toLowerCase().replace("removefilter ", "").split(" ");
 
-            current.append(word).append(",");
+            for (String word : words) {
 
-        }
+                current = current.replace(word + ",", "");
 
-        Insert(guildID, current.toString(), txt);
+            }
 
-    }
-
-    public static void RemoveFilter(TextChannel txt, String contentraw, String guildID){
-
-        String current = SettingGetter.ChannelFriendlySet("Filter", txt);
-        String[] words = contentraw.toLowerCase().replace("removefilter ", "").split(" ");
-
-        for (String word : words){
-
-            current = current.replace(word + "," , "");
+            Insert(guildID, current, txt);
 
         }
-
-        Insert(guildID, current, txt);
 
     }
 

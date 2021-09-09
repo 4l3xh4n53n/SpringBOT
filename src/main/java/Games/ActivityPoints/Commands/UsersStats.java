@@ -100,7 +100,7 @@ public class UsersStats {
             em.addBlankField(false);
             em.addField("Bank Size:", String.valueOf(MaxCoins), true);
             em.addField("Coin Boost:", String.valueOf(CoinExtraPercent), true);
-            txt.sendMessage(em.build()).queue();
+            txt.sendMessageEmbeds(em.build()).queue();
 
         }
 

@@ -33,7 +33,7 @@ public class CoinsAmount {
         EmbedBuilder em = Embed.em(user, txt);
         em.setAuthor(tag, null, pfp);
         em.addField("Has this many coins:", String.valueOf(amount), false);
-        txt.sendMessage(em.build()).queue();
+        txt.sendMessageEmbeds(em.build()).queue();
 
     }
 

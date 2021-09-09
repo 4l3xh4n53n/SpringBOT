@@ -49,31 +49,31 @@ public class WarnsAmount {
             con.close();
             rs.close();
 
-            txt.sendMessage(em.build()).queue();
+            txt.sendMessageEmbeds(em.build()).queue();
         } catch (Exception x){
             SQLError.TextChannel(txt, x, toggle);
         }
 
     }
 
-    public static void Create(Connection con, String guildID, TextChannel txt, Message msg, Guild guild, User user, String contentRaw){
+    public static void Create(Connection con, String guildID, TextChannel txt, Message msg, Guild guild, User user, String contentRaw, Member member){
         try {
             Statement stmt = con.createStatement();
             String sql = "CREATE TABLE '" + guildID + "' (userID TEXT NOT NULL, warns INTEGER PRIMARY KEY)";
             stmt.executeUpdate(sql);
             stmt.close();
 
-            checkCommand(guildID, msg, txt, guild, user, contentRaw, con);
+            checkCommand(guildID, msg, txt, guild, user, contentRaw, con, member);
 
         } catch (Exception x){
             SQLError.TextChannel(txt, x, toggle);
         }
     }
 
-    public static void checkCommand(String GuildID, Message msg, TextChannel txt, Guild guild, User user, String contentRaw, Connection con){
+    public static void checkCommand(String GuildID, Message msg, TextChannel txt, Guild guild, User user, String contentRaw, Connection con, Member member){
 
         String[] roles = SettingGetter.ChannelFriendlySet("WarnRoles", txt).split(",");
-        List<Role> userroles = guild.getMember(user).getRoles();
+        List<Role> userroles = member.getRoles();
         List<String> usersRoles = new ArrayList<>();
         String[] args = contentRaw.split("\\s+");
         Member mentioned;
@@ -125,18 +125,18 @@ public class WarnsAmount {
 
     }
 
-    public static void check(String guildID, Message msg, TextChannel txt, Guild guild, User user, String contentRaw){
+    public static void check(String guildID, Message msg, TextChannel txt, Guild guild, User user, String contentRaw, Member member){
         try {
             Connection con = Database.warns();
             DatabaseMetaData dbm = con.getMetaData();
             ResultSet tables = dbm.getTables(null, null, guildID, null);
             if (tables.next()) {
                 tables.close();
-                checkCommand(guildID, msg, txt, guild, user, contentRaw, con);
+                checkCommand(guildID, msg, txt, guild, user, contentRaw, con, member);
             }
             else {
                 tables.close();
-                Create(con, guildID, txt, msg, guild, user, contentRaw);
+                Create(con, guildID, txt, msg, guild, user, contentRaw, member);
             }
         } catch (Exception x){
             SQLError.TextChannel(txt, x, toggle);

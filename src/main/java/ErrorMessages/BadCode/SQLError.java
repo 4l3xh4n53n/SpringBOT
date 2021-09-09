@@ -19,8 +19,8 @@ public class SQLError {
         em.setTitle("UH OH! Stinky");
         em.addField("The error:", x.getMessage(), false);
         em.addField("Feel free to temporarily turn off this module if the issue remains: ", toggle, false);
-        em.setFooter("Feel free to show this to the bots owner: " + Main.getCurrentShard(guild).getUserById("456014662199410699").getAsTag());
-        txt.sendMessage(em.build()).queue();
+        em.setFooter("Feel free to show this to the bots owner: " + Main.getCurrentShard(guild).retrieveApplicationInfo().complete().getOwner().getAsTag());
+        txt.sendMessageEmbeds(em.build()).queue();
 
     }
 
@@ -33,11 +33,9 @@ public class SQLError {
         em.setTitle("Hold up!");
         em.addField("The error:", x.getMessage(), false);
         em.addField("Feel free to temporarily turn off this module if the issue remains: ", toggle, false);
-        em.setFooter("Feel free to show this to the bots owner: " + Main.getCurrentShard(guild).getUserById("456014662199410699").getAsTag());
+        em.setFooter("Feel free to show this to the bots owner: " + Main.getCurrentShard(guild).retrieveApplicationInfo().complete().getOwner().getAsTag());
 
-        guildOwner.openPrivateChannel().queue((channel) -> {
-            channel.sendMessage(em.build()).queue();
-        });
+        guildOwner.openPrivateChannel().queue((channel) -> channel.sendMessageEmbeds(em.build()).queue());
 
     }
 

@@ -28,13 +28,13 @@ public class Ban {
 
         EmbedBuilder em = Embed.em(user, txt);
         em.setTitle("Banned " + mentioned.getAsTag());
-        txt.sendMessage(em.build()).queue(MessageRemover::deleteAfter);
+        txt.sendMessageEmbeds(em.build()).queue(MessageRemover::deleteAfter);
 
         ModLogger.log(txt, mentioned, "BanLog", reason, log, "was banned", user);
 
     }
 
-    public static void check(User user, Message msg, TextChannel channel, Guild guild, String request) {
+    public static void check(User user, Message msg, TextChannel channel, Guild guild, String request, Member member) {
 
         JDA jda = Main.getCurrentShard(guild);
         String[] args = request.split("\\s+");
@@ -42,9 +42,9 @@ public class Ban {
         Role botrole = guild.getSelfMember().getRoles().get(0);
         Member botMember = guild.getSelfMember();
         String[] roles = SettingGetter.ChannelFriendlySet("BanRoles", channel).split(",");
-        List<Role> userroles = guild.getMemberById(user.getId()).getRoles();
+        List<Role> userroles = member.getRoles();
         List<String> usersRoles = new ArrayList<>();
-        String req = "";
+        StringBuilder req = new StringBuilder();
         int check = 0;
 
         int rolecheck = RoleChecker.CheckRoles(roles, guild);
@@ -66,8 +66,8 @@ public class Ban {
 
                     if (check == 1) {
 
-                        for (int i = 0; userroles.size() > i; i++) {
-                            usersRoles.add(userroles.get(i).getId());
+                        for (Role userrole : userroles) {
+                            usersRoles.add(userrole.getId());
                         }
 
                         if (CollectionUtils.containsAny(Arrays.asList(roles), usersRoles)) {
@@ -95,11 +95,11 @@ public class Ban {
                                 NoPerms.Bot("Ban Members", channel, user);
                             }
                         } else {
-                            for (int i = 0; roles.length > i; i++) {
-                                Role role = guild.getRoleById(roles[i]);
-                                req = req + "@" + role.getName() + " ";
+                            for (String s : roles) {
+                                Role role = guild.getRoleById(s);
+                                req.append("@").append(role.getName()).append(" ");
                             }
-                            NoPerms.Send("ban", req, channel, user);
+                            NoPerms.Send("ban", req.toString(), channel, user);
                         }
                     } else {
                         WrongCommandUsage.send(channel, example, "You haven't mentioned any members", user);

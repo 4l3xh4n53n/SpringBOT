@@ -16,14 +16,14 @@ public class NoPerms {
         EmbedBuilder em = Embed.em(user, txt);
         em.setTitle("You don't have the required perms for this command");
         em.addField("Command: " + command, "Required Roles: " + req, false);
-        txt.sendMessage(em.build()).queue();
+        txt.sendMessageEmbeds(em.build()).queue();
     }
 
     public static void Bot(String req, TextChannel txt, User user){
         EmbedBuilder em = Embed.em(user, txt);
         em.setTitle("Sorry but I don't have the correct perms for this.");
         em.addField("Please give my roles this permission to use this command:", "Required Permissions: " + req, false);
-        txt.sendMessage(em.build()).queue(MessageRemover::deleteAfter);
+        txt.sendMessageEmbeds(em.build()).queue(MessageRemover::deleteAfter);
     }
 
     public static void GuildBot(String req, User owner, Guild guild){
@@ -32,7 +32,7 @@ public class NoPerms {
             em.setColor(Color.decode(SettingGetter.GuildFriendlySet("GuildColour", guild)));
             em.setTitle("Sorry but I don't have the correct perms for this.");
             em.addField("Please give my roles this permission to use this command:", "Required Permissions: " + req, false);
-            txt.sendMessage(em.build()).queue(MessageRemover::deleteAfter);
+            txt.sendMessageEmbeds(em.build()).queue(MessageRemover::deleteAfter);
         });
     }
 

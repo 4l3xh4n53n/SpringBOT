@@ -19,7 +19,8 @@ public class Help {
     public static void Default(EmbedBuilder em, TextChannel txt){
         em.setTitle("Help page!");
         em.addField("Please use a sub command:", "Settings\nModeration\nGames\nAutomation\nSpringCOIN", false);
-        txt.sendMessage(em.build()).queue();
+        em.setDescription("For more additional help join the support server: https://discord.gg/AwW5NU7A67");
+        txt.sendMessageEmbeds(em.build()).queue();
     }
 
     public static void Settings(EmbedBuilder em, TextChannel txt){
@@ -28,8 +29,8 @@ public class Help {
         em.addField("set", SettingSetter.example, false);
         em.addField("Modules: (things that can be turned on and off)", SettingSetter.modules, false);
         em.addField("Roles: (The roles that you want to have access to a specific module)", SettingSetter.roles, false);
-        em.addField("Channels: (The channels where certain things will happen", SettingSetter.channels, false);
-        txt.sendMessage(em.build()).queue();
+        em.addField("Channels: (The channels where certain things will happen)", SettingSetter.channels, false);
+        txt.sendMessageEmbeds(em.build()).queue();
     }
 
     public static void Moderation(EmbedBuilder em, TextChannel txt){
@@ -44,7 +45,7 @@ public class Help {
         em.addField("removewarns " + RemoveWarns.getExample(), RemoveWarns.getInfo() + "\nHow to set the log: " + RemoveWarns.getLog() + "\nHow to set the roles: " + RemoveWarns.getSet(), false);
         em.addField("warnsamount " + WarnsAmount.getExample(), WarnsAmount.getInfo() + "\nHow to set the roles: " + WarnsAmount.getSet(), false);
         em.addField("clear " + Clear.getExample(), Clear.getInfo() + "\nHow to set the roles" + Clear.getSet(), false);
-        txt.sendMessage(em.build()).queue();
+        txt.sendMessageEmbeds(em.build()).queue();
     }
 
     public static void Games(EmbedBuilder em, TextChannel txt){
@@ -52,7 +53,7 @@ public class Help {
         em.setDescription("Stuff in here for fun.");
         em.addField("flip", FlipACoin.getInfo(), false);
         em.addField("roll", Dice.getInfo(), false);
-        txt.sendMessage(em.build()).queue();
+        txt.sendMessageEmbeds(em.build()).queue();
     }
 
     public static void Automation(EmbedBuilder em, TextChannel txt){
@@ -64,7 +65,7 @@ public class Help {
         em.addField("Invite Logger", InviteLogger.getInfo() + " " +  InviteLogger.getSet() + " " + InviteLogger.getInfo(), false);
         em.addField("Poll", Poll.getInfo() + " " +  Poll.getSet() + " " + Poll.getInfo(), false);
         em.addField("Private Channel Creator", PrivateChannelCreator.getInfo() + " " +  PrivateChannelCreator.getSet() + " " + PrivateChannelCreator.getInfo(), false);
-        txt.sendMessage(em.build()).queue();
+        txt.sendMessageEmbeds(em.build()).queue();
     }
 
     public static void SpringCOIN(EmbedBuilder em, TextChannel txt){
@@ -75,7 +76,7 @@ public class Help {
         em.addField("user " + UsersStats.getExample(), UsersStats.getInfo(), false);
         em.addField("send " + Send.getExample(), Send.getInfo() + "\nThis can be turned on and off with: `set MODULE SendCoins 1/0`", false);
         em.addField("Coming soon:", "An option to buy specific roles with your coins and possibly a few other things (:", false);
-        txt.sendMessage(em.build()).queue();
+        txt.sendMessageEmbeds(em.build()).queue();
     }
 
     public static void checkForSubCommands(String content, TextChannel txt, User user){

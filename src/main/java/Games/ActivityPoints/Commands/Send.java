@@ -104,7 +104,7 @@ public class Send {
 
                                 EmbedBuilder em = Embed.em(user, txt);
                                 em.addField("You paid" + tag + " " + sum, "You new balance: " + (donorBal - sum), false);
-                                txt.sendMessage(em.build()).queue();
+                                txt.sendMessageEmbeds(em.build()).queue();
 
                             } catch (Exception x) {
                                 SQLError.TextChannel(txt, x, toggle);

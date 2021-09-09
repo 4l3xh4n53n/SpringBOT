@@ -17,7 +17,7 @@ public class RolesNotSet {
         em.setTitle("You haven't set up roles that can use this command");
         em.addField("You haven't set: " + notset + " Please try:",command, false);
         em.addField("If you want to turn this off use this command: ", toggle, false);
-        txt.sendMessage(em.build()).queue(MessageRemover::deleteAfter);
+        txt.sendMessageEmbeds(em.build()).queue(MessageRemover::deleteAfter);
     }
 
     public static void GuildFriendly(User guildOwner, String notset, String command, Guild guild, String toggle){

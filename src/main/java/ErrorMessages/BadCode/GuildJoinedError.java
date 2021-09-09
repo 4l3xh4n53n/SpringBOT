@@ -27,7 +27,7 @@ public class GuildJoinedError {
         em.addField("The bots owner has been notified and will fix the issue shortly.",
                 "For any questions feel free to dm my owner: " + fourLegs.getAsTag(),
                 false);
-        guildOwner.openPrivateChannel().queue((channel) -> channel.sendMessage(em.build()).queue());
+        //guildOwner.openPrivateChannel().queue((channel) -> channel.sendMessage(em.build()).queue());
 
         System.out.println(x.getMessage());
 

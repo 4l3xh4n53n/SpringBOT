@@ -16,6 +16,9 @@ public class Embed {
         int hour = cal.get(Calendar.HOUR_OF_DAY);
         int minute = cal.get(Calendar.MINUTE);
         String time = hour + ":" + minute;
+        if (String.valueOf(minute).split("").length != 2){
+            time = hour + ": 0" + minute;
+        }
 
         EmbedBuilder em = new EmbedBuilder();
         em.setColor(Color.decode(SettingGetter.ChannelFriendlySet("GuildColour", txt)));
