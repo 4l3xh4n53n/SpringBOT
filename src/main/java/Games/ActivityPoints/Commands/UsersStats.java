@@ -21,13 +21,14 @@ public class UsersStats {
     private static final String info = "Shows a users stats.";
     private static final String toggle = "`set module SendCoins 1/0`";
 
-    public static void CheckUser(String userID, String guildID, TextChannel txt){
+    private static void CheckUser(String userID, String guildID, TextChannel txt){
 
         try {
             Connection con = Database.coins();
             Statement stmt = con.createStatement();
             String SQL = "SELECT * FROM '" + guildID + "' WHERE userID='" + userID + "'";
             ResultSet rs = stmt.executeQuery(SQL);
+
             if (!rs.next()) {
 
                 String insert = "INSERT INTO '" + guildID + "'(userID, coins, CoinMultiplier, MaxCoins, CoinExtraPercent, Messages) VALUES(?,?,?,?,?,?)";
@@ -55,13 +56,16 @@ public class UsersStats {
 
     public static void Send(User user, Message message, TextChannel txt, String guildID){
         if (SettingGetter.ChannelFriendlySet("Coins", txt).equals("1")) {
+
             List<User> mentioned = message.getMentionedUsers();
             User get;
+
             if (mentioned.size() > 0) {
                 get = mentioned.get(0);
             } else {
                 get = user;
             }
+
             String tag = get.getAsTag();
             String av = get.getAvatarUrl();
             String userID = get.getId();

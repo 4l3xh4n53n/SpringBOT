@@ -85,7 +85,7 @@ public class SettingCreator{
             ps.close();
 
         } catch (Exception x){
-            GuildJoinedError.DMOwner(x, g);
+            GuildJoinedError.SendInMain(x, g);
         }
 
     }
@@ -110,7 +110,7 @@ public class SettingCreator{
             rs.close();
 
         } catch (Exception x){
-            GuildJoinedError.DMOwner(x, g);
+            GuildJoinedError.SendInMain(x, g);
         }
     }
 

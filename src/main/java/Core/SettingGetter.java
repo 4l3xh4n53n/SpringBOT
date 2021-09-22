@@ -51,7 +51,7 @@ public class SettingGetter {
             stmt.close();
 
         } catch(Exception x) {
-            GuildJoinedError.DMOwner(x, g);
+            GuildJoinedError.SendInMain(x, g);
         }
 
         return set;

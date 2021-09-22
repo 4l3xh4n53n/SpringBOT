@@ -8,7 +8,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 
-import java.awt.*;
+import java.awt.Color;
 
 public class NoPerms {
 
@@ -26,8 +26,8 @@ public class NoPerms {
         txt.sendMessageEmbeds(em.build()).queue(MessageRemover::deleteAfter);
     }
 
-    public static void GuildBot(String req, User owner, Guild guild){
-        owner.openPrivateChannel().queue(txt ->{
+    public static void GuildBot(String req, User user, Guild guild){
+        user.openPrivateChannel().queue(txt ->{
             EmbedBuilder em = new EmbedBuilder();
             em.setColor(Color.decode(SettingGetter.GuildFriendlySet("GuildColour", guild)));
             em.setTitle("Sorry but I don't have the correct perms for this.");

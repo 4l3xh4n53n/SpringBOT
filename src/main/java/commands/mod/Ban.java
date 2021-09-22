@@ -1,17 +1,29 @@
 package commands.mod;
 
-import Core.*;
+import Core.Embed;
+import Core.MessageRemover;
+import Core.ModLogger;
+import Core.SettingGetter;
 import ErrorMessages.UserError.NoPerms;
 import ErrorMessages.UserError.RoleTooHigh;
 import ErrorMessages.UserError.RolesNotSet;
 import ErrorMessages.UserError.WrongCommandUsage;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.collections4.CollectionUtils;
 
-import java.util.*;
+import Utility.GetMentioned;
+import Utility.GetRoleIDs;
+import Utility.GetRolePosition;
+import Utility.RoleChecker;
+import Utility.RoleFormatter;
+import java.util.Arrays;
 import java.util.List;
 
 public class Ban {
@@ -22,93 +34,63 @@ public class Ban {
     private static final String log = "`set channel BanLog <channelID>`";
     private static final String toggle = "`set module ModCommands 1/0`";
 
-    public static void Execute(Guild guild, User mentioned, String[] args, String request, TextChannel txt, User user){
+    private static void Execute(Guild guild, User mentioned, String[] args, String request, TextChannel textChannel, User user){
         String reason = request.replace(args[0] + " " + args[1], "");
         guild.ban(mentioned, 0, reason).queue();
 
-        EmbedBuilder em = Embed.em(user, txt);
+        EmbedBuilder em = Embed.em(user, textChannel);
         em.setTitle("Banned " + mentioned.getAsTag());
-        txt.sendMessageEmbeds(em.build()).queue(MessageRemover::deleteAfter);
+        textChannel.sendMessageEmbeds(em.build()).queue(MessageRemover::deleteAfter);
 
-        ModLogger.log(txt, mentioned, "BanLog", reason, log, "was banned", user);
+        ModLogger.log(textChannel, mentioned, "BanLog", reason, log, "was banned", user);
 
     }
 
-    public static void check(User user, Message msg, TextChannel channel, Guild guild, String request, Member member) {
+    public static void check(User user, Message msg, TextChannel textChannel, Guild guild, String request, Member member) {
 
-        JDA jda = Main.getCurrentShard(guild);
         String[] args = request.split("\\s+");
-        User MentionedUser = null;
-        Role botrole = guild.getSelfMember().getRoles().get(0);
+        User mentionedUser;
+
+        Role botRole = guild.getSelfMember().getRoles().get(0);
         Member botMember = guild.getSelfMember();
-        String[] roles = SettingGetter.ChannelFriendlySet("BanRoles", channel).split(",");
-        List<Role> userroles = member.getRoles();
-        List<String> usersRoles = new ArrayList<>();
-        StringBuilder req = new StringBuilder();
-        int check = 0;
 
-        int rolecheck = RoleChecker.CheckRoles(roles, guild);
+        String[] requiredRoles = SettingGetter.ChannelFriendlySet("BanRoles", textChannel).split(",");
+        List<Role> userRoles = member.getRoles();
+        List<String> usersRolesIDs = GetRoleIDs.get(userRoles);
 
-        if (SettingGetter.ChannelFriendlySet("ModCommands", channel).equals("1")) {
+        int botRolePos = botRole.getPosition();
+        int selfUserRolePos = guild.getSelfMember().getRoles().get(0).getPosition();
+
+        if (SettingGetter.ChannelFriendlySet("ModCommands", textChannel).equals("1")) {
             if (args.length > 1) {
-                if (rolecheck == 1) {
-                    try {
-                        MentionedUser = msg.getMentionedUsers().get(0);
-                        check = 1;
-                    } catch (Exception ignored) {
-                    }
-
-                    try {
-                        MentionedUser = jda.retrieveUserById(args[1]).complete();
-                        check = 1;
-                    } catch (Exception ignored) {
-                    }
-
-                    if (check == 1) {
-
-                        for (Role userrole : userroles) {
-                            usersRoles.add(userrole.getId());
-                        }
-
-                        if (CollectionUtils.containsAny(Arrays.asList(roles), usersRoles)) {
-
-                            // Permissions stuffs + hierarchy
-
+                if (RoleChecker.areRolesValid(requiredRoles, guild) == 1) {
+                    if ((mentionedUser = GetMentioned.get(msg, args[1], guild)) != null) {
+                        if (CollectionUtils.containsAny(Arrays.asList(requiredRoles), usersRolesIDs)) {
                             if (botMember.hasPermission(Permission.BAN_MEMBERS) || botMember.hasPermission(Permission.ADMINISTRATOR)) {
 
-                                int botRolePos = botrole.getPosition();
-                                int selfUserRolePos = guild.getSelfMember().getRoles().get(0).getPosition();
-                                int userRolePos = -1;
-
-                                try {
-                                    userRolePos = guild.retrieveMemberById(MentionedUser.getId()).complete().getRoles().get(0).getPosition();
-                                } catch (Exception ignored) {
-                                }
+                                int userRolePos = GetRolePosition.get(guild, mentionedUser);
 
                                 if (botRolePos > userRolePos || selfUserRolePos > userRolePos) {
-                                    Execute(guild, MentionedUser, args, request, channel, user);
-                                } else {
-                                    RoleTooHigh.send(channel, "ban", user);
-                                }
 
+                                    Execute(guild, mentionedUser, args, request, textChannel, user);
+
+                                } else {
+                                    RoleTooHigh.send(textChannel, "ban", user);
+                                }
                             } else {
-                                NoPerms.Bot("Ban Members", channel, user);
+                                NoPerms.Bot("Ban Members", textChannel, user);
                             }
                         } else {
-                            for (String s : roles) {
-                                Role role = guild.getRoleById(s);
-                                req.append("@").append(role.getName()).append(" ");
-                            }
-                            NoPerms.Send("ban", req.toString(), channel, user);
+                            NoPerms.Send("ban", RoleFormatter.format(requiredRoles, guild), textChannel, user);
                         }
                     } else {
-                        WrongCommandUsage.send(channel, example, "You haven't mentioned any members", user);
+                        WrongCommandUsage.send(textChannel, example, "You haven't mentioned any members", user);
                     }
                 } else {
-                    RolesNotSet.ChannelFriendly(channel, "ban", set, user, toggle);
+                    RolesNotSet.ChannelFriendly(textChannel, "ban", set, user, toggle);
                 }
             } else {
-                WrongCommandUsage.send(channel, example, "Wrong amount of args", user);
+                WrongCommandUsage.send(textChannel, example, "Wrong amount of args", user);
             }
         }
     }

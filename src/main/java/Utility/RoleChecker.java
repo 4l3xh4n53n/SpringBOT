@@ -1,4 +1,4 @@
-package commands.mod;
+package Utility;
 
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Role;
@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class RoleChecker {
 
-    public static int CheckRoles(String[] roles, Guild guild){
+    public static int areRolesValid(String[] roles, Guild guild){
 
         int check = 0;
         ArrayList<Role> Roles = new ArrayList<>();

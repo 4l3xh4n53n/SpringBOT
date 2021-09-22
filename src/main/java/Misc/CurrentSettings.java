@@ -39,6 +39,7 @@ public class CurrentSettings {
             for (int i = 1; i < count + 1; i++){
 
                 String status = rs.getString(i);
+
                 if (status.equals("1")) {
                     em.addField(rsMetaData.getColumnName(i), ":green_square:", false);
                 } else {
@@ -50,6 +51,7 @@ public class CurrentSettings {
             con.close();
             rs.close();
             stmt.close();
+
         } catch (Exception x){
             SQLError.TextChannel(txt, x, "Just don't use this command");
         }

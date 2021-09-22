@@ -8,7 +8,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class NewGuild extends ListenerAdapter {
 
-    // For when then bot joins a new server
+    // For when then bot joins a new server don't confuse with members joining
 
     @Override
     public void onGuildJoin(GuildJoinEvent e){

@@ -8,11 +8,15 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 public class PointsHandler {
 
-    public static void Create(String guildID, TextChannel txt, Connection con){
+    private static void Create(String guildID, TextChannel txt, Connection con){
 
         try {
             Statement stmt = con.createStatement();
@@ -24,17 +28,20 @@ public class PointsHandler {
         } catch (Exception x){
             SQLError.TextChannel(txt, x, Shop.getToggle());
         }
+
     }
 
-    public static void checkGuild(String guildID, TextChannel txt){
+    private static void checkGuild(String guildID, TextChannel txt){
 
         try {
             Connection con = Database.coins();
             DatabaseMetaData dbm = con.getMetaData();
             ResultSet tables = dbm.getTables(null, null, guildID, null);
+
             if (!tables.next()) {
                 Create(guildID, txt, con);
             }
+
             tables.close();
             con.close();
 
@@ -44,12 +51,13 @@ public class PointsHandler {
 
     }
 
-    public static void checkUser(String userID, String guildID, TextChannel txt){
+    private static void checkUser(String userID, String guildID, TextChannel txt){
         try {
             Connection con = Database.coins();
             Statement stmt = con.createStatement();
             String SQL = "SELECT * FROM '" + guildID + "' WHERE userID='" + userID + "'";
             ResultSet rs = stmt.executeQuery(SQL);
+
             if (!rs.next()) {
 
                 String insert = "INSERT INTO '" + guildID + "'(userID,coins, CoinMultiplier, MaxCoins, CoinExtraPercent, Messages) VALUES(?,?,?,?,?,?)";
@@ -62,6 +70,7 @@ public class PointsHandler {
                 ps.setInt(6,1);
                 ps.executeUpdate();
                 ps.close();
+
             } else {
 
                 try {
@@ -92,8 +101,10 @@ public class PointsHandler {
                 }
 
             }
+
             stmt.close();
             con.close();
+
         } catch (Exception x){
             SQLError.TextChannel(txt, x, Shop.getToggle());
         }

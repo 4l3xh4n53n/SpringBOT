@@ -8,12 +8,24 @@ import ErrorMessages.BadCode.SQLError;
 import ErrorMessages.UserError.NoPerms;
 import ErrorMessages.UserError.RolesNotSet;
 import ErrorMessages.UserError.WrongCommandUsage;
+import Utility.GetMentioned;
+import Utility.GetRoleIDs;
+import Utility.RoleChecker;
+import Utility.RoleFormatter;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.collections4.CollectionUtils;
 
-import java.sql.*;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.Arrays;
 import java.util.List;
 
 public class RemoveWarns {
@@ -24,10 +36,9 @@ public class RemoveWarns {
     private static final String log = "`set channel WarnLog <channelID>`";
     private static final String toggle = "`set module ModCommands 1/0`";
 
-    public static void Execute(String guildID, TextChannel txt, Member mentioned, Connection con, Message msg, int amount){
+    private static void Execute(String guildID, TextChannel textChannel, User mentioned, Connection con, Message msg, int amount){
 
         String userID = mentioned.getId();
-        User user = mentioned.getUser();
         User executor = msg.getMember().getUser();
 
         try {
@@ -55,125 +66,65 @@ public class RemoveWarns {
                         ud.close();
                     }
                 } else {
-                    WrongCommandUsage.send(txt, example, "The user has no warns", user);
+                    WrongCommandUsage.send(textChannel, example, "The user has no warns", mentioned);
                 }
             }
             stmt.close();
             rs.close();
             con.close();
 
-            EmbedBuilder em = Embed.em(user, txt);
-            em.setTitle("Removed " + amount + " warns from: " + user.getAsTag());
-            txt.sendMessageEmbeds(em.build()).queue();
+            EmbedBuilder em = Embed.em(mentioned, textChannel);
+            em.setTitle("Removed " + amount + " warns from: " + mentioned.getAsTag());
+            textChannel.sendMessageEmbeds(em.build()).queue();
 
-            ModLogger.log(txt, user, "WarnLog", "", log, "was unwarned " + amount + " times", executor);
+            ModLogger.log(textChannel, mentioned, "WarnLog", "", log, "was unwarned " + amount + " times", executor);
 
         } catch (Exception x){
-            SQLError.TextChannel(txt, x, toggle);
+            SQLError.TextChannel(textChannel, x, toggle);
         }
 
     }
 
-    public static void Create(String guildID, TextChannel txt, Guild guild, User user, Message msg, Connection con, Member member){
+    public static void check(Guild guild, User user, TextChannel textChannel, Message msg, Member member, String guildID){
+        Connection con = Database.warns();
+        Warn.checkDatabse(con, guildID, textChannel, guild, user, msg, member);
 
-        //apparently this just refuses to make one even if its already in there and this really wasn't needed
-
-        try {
-            Statement stmt = con.createStatement();
-            String sql = "CREATE TABLE '" + guildID + "' (userID TEXT NOT NULL, warns INTEGER PRIMARY KEY)";
-            stmt.executeUpdate(sql);
-            con.close();
-            stmt.close();
-
-            checkCommand(guild, guildID, user, txt, msg, con, member);
-
-        } catch (Exception x){
-            SQLError.TextChannel(txt, x, toggle);
-        }
-    }
-
-    public static void checkCommand(Guild guild, String guildID, User user, TextChannel txt, Message msg, Connection con, Member member){
-
-        String[] args = msg.getContentRaw().split("\\s+");
-        String[] roles = SettingGetter.ChannelFriendlySet("WarnRoles", txt).split(",");
-        java.util.List<Role> userroles = member.getRoles();
-        List<String> usersRoles = new ArrayList<>();
-        StringBuilder req = new StringBuilder();
-        int check = 0;
-        Member mentioned;
         int amount;
+        User mentionedUser;
+        String[] args = msg.getContentRaw().split("\\s+");
 
-        int rolecheck = RoleChecker.CheckRoles(roles, guild);
+        String[] requiredRoles = SettingGetter.ChannelFriendlySet("WarnRoles", textChannel).split(",");
+        List<Role> userRoles = member.getRoles();
+        List<String> usersRolesIDs = GetRoleIDs.get(userRoles);
 
-        if (SettingGetter.ChannelFriendlySet("ModCommands", txt).equals("1")) {
-            if (args.length > 2) {
-                if (rolecheck == 1) {
+        if (SettingGetter.ChannelFriendlySet("ModCommands", textChannel).equals("1")) {
+            if (args.length > 1) {
+                if (RoleChecker.areRolesValid(requiredRoles, guild) == 1) {
+                    if ((mentionedUser = GetMentioned.get(msg, args[1], guild)) != null) {
+                        if (CollectionUtils.containsAny(Arrays.asList(requiredRoles), usersRolesIDs)) {
 
-                    try {
-                        guild.retrieveMemberById(args[1]).complete();
-                        check = 1;
-                    } catch (Exception ignored) {
-                    }
-
-                    if (check == 1 || msg.getMentionedMembers().size() > 0) {
-                        if (check == 1) {
-                            mentioned = guild.retrieveMemberById(args[1]).complete();
-                        } else {
-                            mentioned = msg.getMentionedMembers().get(0);
-                        }
-
-                        for (Role userrole : userroles) {
-                            usersRoles.add(userrole.getId());
-                        }
-
-                        try {
-                            amount = Integer.parseInt(args[2].replaceAll("[^0-9]", ""));
-                        } catch (Exception x) {
-                            amount = 1;
-                        }
-
-                        if (CollectionUtils.containsAny(Arrays.asList(roles), usersRoles)) {
-                            Execute(guildID, txt, mentioned, con, msg, amount);
-                        } else {
-                            for (String s : roles) {
-                                Role role = guild.getRoleById(s);
-                                req.append("@").append(role.getName()).append(" ");
+                            try {
+                                amount = Integer.parseInt(args[2].replaceAll("[^0-9]", ""));
+                            } catch (Exception x) {
+                                amount = 1;
                             }
-                            NoPerms.Send("warn", req.toString(), txt, user);
+
+                            Execute(guildID, textChannel, mentionedUser, con, msg, amount);
+
+                        } else {
+                            NoPerms.Send("warn", RoleFormatter.format(requiredRoles, guild), textChannel, user);
                         }
-
-
                     } else {
-                        WrongCommandUsage.send(txt, example, "You haven't mentioned any members", user);
+                        WrongCommandUsage.send(textChannel, example, "You haven't mentioned any members", user);
                     }
                 } else {
-                    RolesNotSet.ChannelFriendly(txt, "warn", set, user, toggle);
+                    RolesNotSet.ChannelFriendly(textChannel, "warn", set, user, toggle);
                 }
             } else {
-                WrongCommandUsage.send(txt, example, "Wrong amount of args", user);
+                WrongCommandUsage.send(textChannel, example, "Wrong amount of args", user);
             }
         }
 
-    }
-
-    public static void check(Guild guild, User user, TextChannel txt, Message msg, Member member){
-        String guildID = guild.getId();
-        try {
-            Connection con = Database.warns();
-            DatabaseMetaData dbm = con.getMetaData();
-            ResultSet tables = dbm.getTables(null, null, guildID, null);
-            if (tables.next()) {
-                tables.close();
-                checkCommand(guild, guildID,user, txt, msg, con, member);
-            }
-            else {
-                tables.close();
-                Create(guildID, txt, guild, user, msg, con, member);
-            }
-
-        } catch (Exception x){
-            SQLError.TextChannel(txt, x, toggle);
-        }
     }
 
     public static String getExample() {

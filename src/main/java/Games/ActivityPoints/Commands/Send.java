@@ -23,7 +23,7 @@ public class Send {
     private static final String info = "Send users coins.";
     private static final String toggle = "`set module SendCoins 1/0`";
 
-    public static int CheckUser(String userID, String guildID, TextChannel txt){
+    private static int CheckUser(String userID, String guildID, TextChannel txt){
         int coins = 0;
 
         try {
@@ -61,14 +61,12 @@ public class Send {
 
     public static void Check(User user, Message message, String guildID, TextChannel txt, String content) {
 
+        List<User> mentions = message.getMentionedUsers();
+        String[] args = content.split("\\s+");
+
         if (SettingGetter.ChannelFriendlySet("Coins", txt).equals("1") && SettingGetter.ChannelFriendlySet("SendCoins", txt).equals("1")) {
-
-            List<User> mentions = message.getMentionedUsers();
-            String[] args = content.split("\\s+");
-
             if (args.length > 2) {
                 if (mentions.size() > 0) {
-
                     if (StringUtils.isNumeric(args[2]) && Integer.parseInt(args[2]) > 0) {
 
                         int sum = Integer.parseInt(args[2]);

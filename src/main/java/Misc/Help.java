@@ -1,6 +1,11 @@
 package Misc;
 
-import Auto.*;
+import Auto.AutoRole;
+import Auto.ChatSensor;
+import Auto.GuildWelcomeMessage;
+import Auto.InviteLogger;
+import Auto.Poll;
+import Auto.PrivateChannelCreator;
 import Core.Embed;
 import Core.SettingSetter;
 import Games.ActivityPoints.Commands.CoinsAmount;
@@ -9,7 +14,13 @@ import Games.ActivityPoints.Commands.Shop;
 import Games.ActivityPoints.Commands.UsersStats;
 import Games.Random.Dice;
 import Games.Random.FlipACoin;
-import commands.mod.*;
+import commands.mod.Ban;
+import commands.mod.Clear;
+import commands.mod.Kick;
+import commands.mod.RemoveWarns;
+import commands.mod.UnBan;
+import commands.mod.Warn;
+import commands.mod.WarnsAmount;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
@@ -86,7 +97,9 @@ public class Help {
         em.setThumbnail("https://cdn.discordapp.com/avatars/673654725127831562/526af14d924487c4af7aabae5fa2850a.png?size=1024");
 
         if (args.length > 1){
+
             String sub = args[1].toLowerCase();
+
             switch (sub){
                 case "settings":
                     Settings(em, txt);

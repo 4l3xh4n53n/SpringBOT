@@ -23,6 +23,7 @@ public class FlipACoin {
             em.setAuthor(tag, null, iconurl);
             em.setTitle("Flipped a coin and got: ");
             em.setImage("https://imgur.com/3F5J6IA.gif");
+
             txt.sendMessageEmbeds(em.build()).queue(msg -> {
 
                 String link = "";
@@ -39,13 +40,13 @@ public class FlipACoin {
                         link = "https://imgur.com/yA6NVZD.png";
                         hot = "tails";
                         break;
-
                 }
 
                 em.setImage(link);
                 em.setDescription("You got: " + hot);
                 msg.editMessageEmbeds(em.build()).clearFiles().queueAfter(3, TimeUnit.SECONDS);
             });
+
         }
     }
 

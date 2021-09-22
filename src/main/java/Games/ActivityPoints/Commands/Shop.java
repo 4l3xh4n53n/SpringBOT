@@ -29,7 +29,7 @@ public class Shop {
         txt.sendMessageEmbeds(em.build()).queue(MessageRemover::deleteAfter);
     }
 
-    public static void Respond(TextChannel txt, int bal, int price, User user, String got){
+    private static void Respond(TextChannel txt, int bal, int price, User user, String got){
         EmbedBuilder em = Embed.em(user, txt);
         em.setTitle("You bought: " + got);
         em.addField("Price: ", String.valueOf(price), true);
@@ -38,7 +38,7 @@ public class Shop {
 
     }
 
-    public static void CoinsPerMessage(TextChannel txt, String guildID, String userID, User user){
+    private static void CoinsPerMessage(TextChannel txt, String guildID, String userID, User user){
 
         try {
             Connection con = Database.coins();
@@ -75,13 +75,14 @@ public class Shop {
 
     }
 
-    public static void BankSize(TextChannel txt, String guildID, String userID, User user){
+    private static void BankSize(TextChannel txt, String guildID, String userID, User user){
 
         try {
             Connection con = Database.coins();
             Statement stmt = con.createStatement();
             String SQL = "SELECT * FROM '" + guildID + "' WHERE userID='" + userID + "'";
             ResultSet rs = stmt.executeQuery(SQL);
+
             int bal = rs.getInt(2);
             int old = rs.getInt("MaxCoins");
             int price = old / 2;
@@ -90,6 +91,7 @@ public class Shop {
 
                 int newbal = bal - price;
                 int newmax = old + 10000;
+
                 if (newmax >= 1000000000){
                     newmax = 1000000000;
                     EmbedBuilder em = Embed.em(user, txt);
@@ -120,7 +122,7 @@ public class Shop {
 
     }
 
-    public static void PercentageIncrease(TextChannel txt, String guildID, String userID, User user){
+    private static void PercentageIncrease(TextChannel txt, String guildID, String userID, User user){
 
         try {
             Connection con = Database.coins();

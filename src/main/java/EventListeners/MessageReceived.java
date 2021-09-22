@@ -18,8 +18,18 @@ import Misc.Set.SetPrefix;
 import Misc.Set.SetWelcomeImage;
 import Misc.Set.SetWelcomeMessage;
 import Misc.Stats;
-import commands.mod.*;
-import net.dv8tion.jda.api.entities.*;
+import commands.mod.Ban;
+import commands.mod.Clear;
+import commands.mod.Kick;
+import commands.mod.RemoveWarns;
+import commands.mod.UnBan;
+import commands.mod.Warn;
+import commands.mod.WarnsAmount;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -71,13 +81,13 @@ public class MessageReceived extends ListenerAdapter {
                         Kick.check(user, msg, channel, guild, request, member);
                         break;
                     case "warn":
-                        Warn.check(guild, user, channel, msg, member);
+                        Warn.check(guild, user, channel, msg, member, guildID);
                         break;
                     case "warns":
                         WarnsAmount.check(guildID, msg, channel, guild, user, content, member);
                         break;
                     case "removewarns":
-                        RemoveWarns.check(guild, user, channel, msg, member);
+                        RemoveWarns.check(guild, user, channel, msg, member, guildID);
                         break;
 
                     // SETTING COMMANDS AND OTHER STUFF

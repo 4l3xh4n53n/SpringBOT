@@ -6,6 +6,7 @@ import Core.Main;
 import Core.SettingGetter;
 import ErrorMessages.BadCode.SQLError;
 import Games.ActivityPoints.Core.PointsHandler;
+import Utility.GetMentioned;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
@@ -25,7 +26,7 @@ public class CoinsAmount {
     private static final String set = "`set roles CheckCoins <@role(S)>`";
     private static final String toggle = "`set module Coins 1/0`";
 
-    public static void send(TextChannel txt, User user, int amount){
+    private static void send(TextChannel txt, User user, int amount){
 
         String tag = user.getAsTag();
         String pfp = user.getAvatarUrl();
@@ -37,7 +38,7 @@ public class CoinsAmount {
 
     }
 
-    public static void checkUser(String userID, String guildID, TextChannel txt, User user){
+    private static void checkUser(String userID, String guildID, TextChannel txt, User user){
         try {
             Connection con = Database.coins();
             Statement stmt = con.createStatement();
@@ -76,38 +77,25 @@ public class CoinsAmount {
         if (SettingGetter.ChannelFriendlySet("Coins", txt).equals("1")) {
 
             String guildID = guild.getId();
-            String userID = null;
+            String userID = user.getId();
             String[] args = content.split("\\s+");
             JDA jda = Main.getCurrentShard(guild);
-            int check = 0;
             User mentioned;
+            User defaultToExecutor;
 
-            //Decides whether their mentioned or have used ID
+            mentioned = GetMentioned.get(msg, args[1], guild);
 
-            try {
-                userID = msg.getMentions().get(0).getId();
-                check = 1;
-            } catch (Exception ignored) {
-            }
+            if (mentioned != null) {
 
-            try {
-                jda.retrieveUserById(args[1]);
-                userID = args[1];
-                check = 1;
-            } catch (Exception ignored) {
-            }
-
-            if (check == 1) {
-
-                mentioned = jda.retrieveUserById(userID).complete();
+                String mentionedID = mentioned.getId();
                 PointsHandler.checkGuild(guildID, txt);
-                checkUser(userID, guildID, txt, mentioned);
+                checkUser(mentionedID, guildID, txt, mentioned);
 
             } else {
-                mentioned = user;
-                userID = user.getId();
+
+                defaultToExecutor = jda.retrieveUserById(userID).complete();
                 PointsHandler.checkGuild(guildID, txt);
-                checkUser(userID, guildID, txt, mentioned);
+                checkUser(userID, guildID, txt, defaultToExecutor);
 
             }
 

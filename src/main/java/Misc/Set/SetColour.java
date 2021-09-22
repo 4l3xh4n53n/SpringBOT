@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 
-import java.awt.*;
+import java.awt.Color;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
@@ -36,6 +36,7 @@ public class SetColour {
                 }
 
                 if (check == 1) {
+
                     try {
                         Connection con = Database.connect();
                         Statement stmt = con.createStatement();
@@ -52,6 +53,7 @@ public class SetColour {
                     } catch (Exception x) {
                         SQLError.TextChannel(txt, x, "Just don't run this command.");
                     }
+
                 }
             } else {
                 WrongCommandUsage.send(txt, example, "Wrong amount of args", user);

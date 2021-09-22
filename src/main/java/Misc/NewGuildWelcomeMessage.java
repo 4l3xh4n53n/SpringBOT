@@ -4,7 +4,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -22,7 +22,8 @@ public class NewGuildWelcomeMessage {
         EmbedBuilder em = new EmbedBuilder();
         em.setColor(Color.GREEN);
         em.setTitle("Thank you for using Spring in your server.");
-        em.addField("Thanks for using spring bot :)", "To see the what is turned on by default please use `currentSettings` command. Default prefix is `!`", false);
+        em.addField("Thanks for using spring bot :)", "To see the what is turned on by default please use `currentSettings` command. Default prefix is `!`\n" +
+                "Warning: some settings will need to be configured correctly in order to work, most important one is MOD COMMANDS", false);
         em.setFooter("ID: " + g.getId() + " | Time: " + time);
 
         owner.openPrivateChannel().queue((channel) -> channel.sendMessageEmbeds(em.build()).queue());
