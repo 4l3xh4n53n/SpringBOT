@@ -18,6 +18,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 public class SettingSetter {
 
@@ -45,11 +46,11 @@ public class SettingSetter {
         if (member.getPermissions().contains(Permission.ADMINISTRATOR)) {
             if (args.length > 1) {
 
-                String mod = args[1];
+                String mod = args[1].toLowerCase(Locale.ROOT);
 
-                String[] modules = {"ModCommands", "LogModActions", "Coins", "SendCoins", "AutoRole", "InviteLogging", "PrivateChannel", "ServerStats", "GameCommands", "ChatFilter", "GuildWelcome"};
-                String[] channels = {"KickLog", "BanLog", "WarnLog", "GuildWelcomeChannel", "InviteLog","PrivateChannelCreator", "StatsChannel","PrivateChannelCategory"};
-                String[] roles = {"ClearRoles", "KickRoles", "BanRoles", "WarnRoles", "AutoRoleRole", "PollRole"};
+                String[] modules = {"modcommands", "logmodactions", "coins", "sendcoins", "autorole", "invitelogging", "privatechannel", "serverstats", "Gamecommands", "chatfilter", "guildwelcome"};
+                String[] channels = {"kicklog", "banlog", "warnlog", "guildwelcomechannel", "invitelog","privatechannelcreator", "statschannel","privatechannelcategory"};
+                String[] roles = {"clearroles", "kickroles", "banroles", "warnroles", "autorolerole", "pollrole"};
 
                 if (Arrays.asList(modules).contains(mod)){
                     modules(guild, channel, args, user);
@@ -73,10 +74,10 @@ public class SettingSetter {
         try {
             Connection con = Database.connect();
             Statement stmt = con.createStatement();
-            String update = "UPDATE Settings SET '" + args[1] + "'='" + setTo + "' WHERE GuildID='" + guildID + "'";
+            String update = "UPDATE Settings SET '" + args[1].toLowerCase(Locale.ROOT) + "'='" + setTo + "' WHERE GuildID='" + guildID + "'";
             SettingChanged(channel);
             ResultSet ud = stmt.executeQuery(update);
-            ud.updateString(args[1], args[2]);
+            ud.updateString(args[1].toLowerCase(Locale.ROOT), args[2]);
             ud.updateRow();
             con.close();
             stmt.close();
@@ -93,12 +94,12 @@ public class SettingSetter {
     public static void modules(Guild guild, TextChannel channel, String[] args, User user){
         String guildID = guild.getId();
 
-        String[] settings = {"ModCommands", "LogModActions", "Coins", "SendCoins", "AutoRole", "InviteLogging", "PrivateChannel", "ServerStats", "GameCommands", "Poll", "ChatFilter", "GuildWelcome"};
+        String[] settings = {"modcommands", "logmodactions", "coins", "sendcoins", "autorole", "invitelogging", "privatechannel", "serverstats", "gamecommands", "poll", "chatfilter", "guildwelcome", "reactionroles"};
         String[] oneOrZero = {"1", "0"};
         String setTo = args[2];
 
         if (args.length == 3) {
-            if (Arrays.asList(settings).contains(args[1])) {
+            if (Arrays.asList(settings).contains(args[1].toLowerCase(Locale.ROOT))) {
                 if (Arrays.asList(oneOrZero).contains(args[2])) {
 
                     Set(args, channel, guildID, setTo);
@@ -118,13 +119,13 @@ public class SettingSetter {
 
     public static void roles(Guild guild, TextChannel channel, String[] args, Message msg, User user){
 
-        String[] modules = {"ClearRoles", "KickRoles", "BanRoles", "WarnRoles", "AutoRoleRole", "PollRole"};
+        String[] modules = {"clearroles", "kickroles", "banroles", "warnroles", "autorolerole", "pollrole"};
         String guildID = guild.getId();
         List<Role> mentionedRoles = msg.getMentionedRoles();
         StringBuilder setTo = new StringBuilder();
 
         if (args.length > 2){
-            if (Arrays.asList(modules).contains(args[1])){
+            if (Arrays.asList(modules).contains(args[1].toLowerCase(Locale.ROOT))){
                 if (!(mentionedRoles.size() == 0)){
 
                     for (Role mentionedRole : mentionedRoles) {
@@ -146,9 +147,9 @@ public class SettingSetter {
 
     public static void channels(Guild guild, TextChannel channel, String[] args, User user){
 
-        String[] textMod = {"KickLog", "BanLog", "WarnLog", "GuildWelcomeChannel", "InviteLog"};
-        String[] voiceMod = {"PrivateChannelCreator", "StatsChannel"};
-        String[] catMod = {"PrivateChannelCategory"};
+        String[] textMod = {"kicklog", "banlog", "warnlog", "guildwelcomechannel", "invitelog"};
+        String[] voiceMod = {"privatechannelcreator", "statschannel"};
+        String[] catMod = {"privatechannelcategory"};
         String guildID = guild.getId();
 
         if (args.length == 3 && args[2].matches("[0-9]+")) {
@@ -156,21 +157,21 @@ public class SettingSetter {
             String setTo = args[2]; //This is here to stop random errors
 
             if (guild.getTextChannelById(args[2]) != null) {
-                if (Arrays.asList(textMod).contains(args[1])){
+                if (Arrays.asList(textMod).contains(args[1].toLowerCase(Locale.ROOT))){
                     Set(args, channel, guildID, setTo);
                 } else {
                     WrongCommandUsage.send(channel, example, "The ID you gave isn't compatible with that module", user);
                 }
 
             } else if (guild.getVoiceChannelById(args[2]) != null) {
-                if (Arrays.asList(voiceMod).contains(args[1])){
+                if (Arrays.asList(voiceMod).contains(args[1].toLowerCase(Locale.ROOT))){
                     Set(args, channel, guildID, setTo);
                 } else {
                     WrongCommandUsage.send(channel, example, "The ID you gave isn't compatible with that module", user);
                 }
 
             } else if (guild.getCategoryById(args[2]) != null) {
-                if (Arrays.asList(catMod).contains(args[1])){
+                if (Arrays.asList(catMod).contains(args[1].toLowerCase(Locale.ROOT))){
                     Set(args, channel, guildID, setTo);
                 } else {
                     WrongCommandUsage.send(channel, example, "The ID you gave isn't compatible with that module", user);

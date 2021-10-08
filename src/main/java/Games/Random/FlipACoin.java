@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 public class FlipACoin {
 
     private static final String info = "Flips a coin.";
-    private static final String toggle = "`set module GameCommands 1/0`";
+    private static final String toggle = "`set GameCommands 1/0`";
 
     public static void flip(User user, TextChannel txt) {
 

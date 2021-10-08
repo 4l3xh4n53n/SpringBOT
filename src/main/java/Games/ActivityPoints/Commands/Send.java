@@ -21,7 +21,7 @@ public class Send {
 
     private static final String example = "`send <@user> <amount>`";
     private static final String info = "Send users coins.";
-    private static final String toggle = "`set module SendCoins 1/0`";
+    private static final String toggle = "`set SendCoins 1/0`";
 
     private static int CheckUser(String userID, String guildID, TextChannel txt){
         int coins = 0;

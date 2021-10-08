@@ -30,8 +30,8 @@ public class WarnsAmount {
 
     private static final String example = "`warns <@user>";
     private static final String info = "Shows you how many warns the specified user has";
-    private static final String set = "`set roles WarnRoles <@role(S)>`";
-    private static final String toggle = "`set module ModCommands 1/0`";
+    private static final String set = "`set WarnRoles <@role(S)>`";
+    private static final String toggle = "`set ModCommands 1/0`";
 
     private static void Execute(String guildID, TextChannel txt, User mentioned, Connection con){
 
@@ -68,7 +68,7 @@ public class WarnsAmount {
 
     public static void check(String guildID, Message msg, TextChannel textChannel, Guild guild, User user, String contentRaw, Member member){
         Connection con = Database.warns();
-        Warn.checkDatabse(con, guildID, textChannel, guild, user, msg, member);
+        Warn.checkDatabse(con, guildID, textChannel);
 
         String[] requiredRoles = SettingGetter.ChannelFriendlySet("WarnRoles", textChannel).split(",");
         List<Role> userRoles = member.getRoles();

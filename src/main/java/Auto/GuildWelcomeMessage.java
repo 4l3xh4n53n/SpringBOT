@@ -13,9 +13,9 @@ import java.util.Optional;
 
 public class GuildWelcomeMessage {
 
-    private static final String info = "This send a welcome message every time a user joins your discord server. It can contain a message and an image.";
+    private static final String info = "This sends a welcome message every time a user joins your discord server. It can contain a message and an image.";
     private static final String set = "`setWelcomeMessage <welcome message>`\n`setWelcomeImage <imageURL>` <-- only works with links that have file extensions.";
-    private static final String toggle = "`set module GuildWelcomeMessage 1/0`";
+    private static final String toggle = "`set GuildWelcomeMessage 1/0`";
 
     public static void Check(Guild guild, User joined){
 
@@ -26,7 +26,7 @@ public class GuildWelcomeMessage {
             String pfp = joined.getAvatarUrl();
             User guildOwner = guild.retrieveOwner().complete().getUser();
             String guildWelcomeMessage = SettingGetter.GuildFriendlySet("GuildWelcomeMessage", guild);
-            String guildWelcomeImage = SettingGetter.GuildFriendlySet("GuildWelcomeIMAGE", guild);
+            String guildWelcomeImage = SettingGetter.GuildFriendlySet("GuildWelcomeImage", guild);
 
             try {
 

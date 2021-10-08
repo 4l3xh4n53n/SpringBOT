@@ -28,9 +28,9 @@ public class UnBan {
 
     private static final String example = "`unban <USERID>`";
     private static final String info = "Un bans the specified user.";
-    private static final String set = "`set roles BanRoles <@role(S)>`";
-    private static final String log = "`set channel BanLog <channelID>`";
-    private static final String toggle = "`set module ModCommands 1/0`";
+    private static final String set = "`set BanRoles <@role(S)>`";
+    private static final String log = "`set BanLog <channelID>`";
+    private static final String toggle = "`set ModCommands 1/0`";
 
     private static void Execute(Guild guild, User mentioned, TextChannel textChannel, User user){
         int check = 0;

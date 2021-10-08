@@ -8,14 +8,16 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.Locale;
 
 public class SettingGetter {
 
-    public static String ChannelFriendlySet(String setting, TextChannel e){
+    public static String ChannelFriendlySet(String setting, TextChannel textChannel){
         String set = null;
-        String guild = e.getGuild().getId();
+        String guild = textChannel.getGuild().getId();
+        setting = setting.toLowerCase(Locale.ROOT);
 
-        SettingCreator.check(e.getGuild()); // Checks to make sure that the settings exist
+        SettingCreator.check(textChannel.getGuild());
 
         try {
             Connection con = Database.connect();
@@ -28,22 +30,24 @@ public class SettingGetter {
             stmt.close();
 
         } catch(Exception x) {
-            SQLError.TextChannel(e, x, "Can't turn this off sorry.");
+            SQLError.TextChannel(textChannel, x, "Can't turn this off sorry.");
         }
 
         return set;
     }
 
-    public static String GuildFriendlySet(String setting, Guild g){
+    public static String GuildFriendlySet(String setting, Guild guild){
         String set = null;
-        String guild = g.getId();
+        String guildID = guild.getId();
+        setting = setting.toLowerCase(Locale.ROOT);
 
-        SettingCreator.check(g); // Checks to make sure that the settings exist
+
+        SettingCreator.check(guild);
 
         try {
             Connection con = Database.connect();
             Statement stmt = con.createStatement();
-            String get = "SELECT " + setting + " FROM Settings WHERE GuildID= '" + guild + "'";
+            String get = "SELECT " + setting + " FROM Settings WHERE GuildID= '" + guildID + "'";
             ResultSet rs = stmt.executeQuery(get);
             set = rs.getString(setting);
             con.close();
@@ -51,7 +55,7 @@ public class SettingGetter {
             stmt.close();
 
         } catch(Exception x) {
-            GuildJoinedError.SendInMain(x, g);
+            GuildJoinedError.SendInMain(x, guild);
         }
 
         return set;

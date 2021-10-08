@@ -14,6 +14,8 @@ import java.io.FileReader;
 
 public class Stats {
 
+    private static final String info = "Shows information about the bot.";
+
     public static void send(Guild guild, TextChannel txt){
         MavenXpp3Reader reader = new MavenXpp3Reader();
         String version = null;
@@ -58,6 +60,10 @@ public class Stats {
         em.setFooter("Spring, Version: " + version );
         txt.sendMessageEmbeds(em.build()).queue();
 
+    }
+
+    public static String getInfo(){
+        return info;
     }
 
 }

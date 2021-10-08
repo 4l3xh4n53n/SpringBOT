@@ -20,11 +20,11 @@ import java.util.List;
 
 public class InviteLogger {
 
-    private static final String info = "This command tally's the amount of invites a user has and which one a user joined through.";
-    private static final String set = "`set channel InviteLog <channelID>`";
-    private static final String toggle = "`set module InviteLogger 1/0`";
+    private static final String info = "This module tally's the amount of invites a user has and which invite a user joined through.";
+    private static final String set = "`set InviteLog <channelID>`";
+    private static final String toggle = "`set InviteLogger 1/0`";
 
-    public static void checkGuild(String guildID, Guild guild){
+    private static void checkGuild(String guildID, Guild guild){
 
         try {
             Connection con = Database.invites();
@@ -49,7 +49,7 @@ public class InviteLogger {
 
     }
 
-    public static void update(Guild guild, String guildID){
+    private static void update(Guild guild, String guildID){
 
         List<Invite> invites = guild.retrieveInvites().complete();
 
@@ -145,7 +145,7 @@ public class InviteLogger {
         }
     }
 
-    public static void IncreaseInvite(Connection con, Invite usedInvite, Guild guild, String guildID){
+    private static void IncreaseInvite(Connection con, Invite usedInvite, Guild guild, String guildID){
 
         try {
 
@@ -161,7 +161,7 @@ public class InviteLogger {
 
     }
 
-    public static Invite GetUsedInvite(String guildID, Guild guild){
+    private static Invite GetUsedInvite(String guildID, Guild guild){
 
         Invite usedInvite = null;
         List<Invite> invites = guild.retrieveInvites().complete();

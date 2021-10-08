@@ -19,7 +19,7 @@ public class UsersStats {
 
     private static final String example = "`user <@user>` <-- just user will do yourself.";
     private static final String info = "Shows a users stats.";
-    private static final String toggle = "`set module SendCoins 1/0`";
+    private static final String toggle = "`set SendCoins 1/0`";
 
     private static void CheckUser(String userID, String guildID, TextChannel txt){
 

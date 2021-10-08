@@ -20,7 +20,7 @@ public class Shop {
 
     private static final String example = "`shop / shop <item>` <-- just shop will show you what you can buy.";
     private static final String info = "Allows you to buy upgrades to get more coins";
-    private static final String toggle = "`set module Coins 1/0`";
+    private static final String toggle = "`set Coins 1/0`";
 
     public static void NotEnoughMoney(TextChannel txt, int bal, int price, User user){
         EmbedBuilder em = Embed.em(user, txt);

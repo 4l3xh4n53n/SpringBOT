@@ -30,9 +30,9 @@ public class Kick {
 
     private static final String example = "`kick <@user/userID> <REASON> <--` (optional)";
     private static final String info = "This command kicks the specified user.";
-    private static final String set = "`set roles KickRoles <@role(S)>`";
-    private static final String log = "`set channel KickLog <channelID>`";
-    private static final String toggle = "`set module ModCommands 1/0`";
+    private static final String set = "`set KickRoles <@role(S)>`";
+    private static final String log = "`set KickLog <channelID>`";
+    private static final String toggle = "`set ModCommands 1/0`";
 
 
     private static void Execute(Guild guild, User mentioned, String[] args, String request, TextChannel textChannel, User user){

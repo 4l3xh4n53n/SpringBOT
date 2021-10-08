@@ -15,9 +15,9 @@ import static Core.SettingSetter.SettingChanged;
 
 public class ChatSensor {
 
-    private static final String info = "This command automatically gives people roles on arrival.";
-    private static final String set = "`addFilter <word/s>` \n`removeFilter <word/s>`\n`setFilter <word/s>`";
-    private static final String toggle = "`set module ChatFilter 1/0`";
+    private static final String info = "This deletes messages with specified words in";
+    private static final String set = "`addFilter <word(s)>` \n`removeFilter <word(s)>`\n`setFilter <word(s)>`";
+    private static final String toggle = "`set ChatFilter 1/0`";
 
     public static void check(String contentRaw, TextChannel txt, Message message){
 

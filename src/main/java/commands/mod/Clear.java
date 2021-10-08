@@ -1,5 +1,6 @@
 package commands.mod;
 
+import Core.Embed;
 import Core.MessageRemover;
 import Core.SettingGetter;
 import ErrorMessages.UserError.NoPerms;
@@ -18,7 +19,6 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.collections4.CollectionUtils;
 
-import java.awt.Color;
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,18 +26,16 @@ public class Clear {
 
     private static final String example = "clear <amount>";
     private static final String info = "This automatically removes a specified amount of messages from the specified channel.";
-    private static final String set = "`set roles ClearRoles <@role(s)>`";
-    private static final String toggle = "`set module ModCommands 1/0`";
+    private static final String set = "`set ClearRoles <@role(s)>`";
+    private static final String toggle = "`set ModCommands 1/0`";
 
-    private static void Execute(TextChannel textChannel, int amount){
+    private static void Execute(TextChannel textChannel, int amount, User sender){
 
         List<Message> messagesToBeRemoved = textChannel.getHistory().retrievePast(amount).complete();
         textChannel.deleteMessages(messagesToBeRemoved).complete();
 
-        EmbedBuilder em = new EmbedBuilder();
-        em.setColor(Color.decode(SettingGetter.ChannelFriendlySet("GuildColour", textChannel)));
+        EmbedBuilder em = Embed.em(sender, textChannel);
         em.setTitle("Removed " + (amount -1) + " messages");
-        em.setFooter("");
         textChannel.sendMessageEmbeds(em.build()).queue(MessageRemover::deleteAfter);
 
     }
@@ -74,7 +72,7 @@ public class Clear {
                                 amount = 99;
                             }
 
-                            Execute(textChannel, amount);
+                            Execute(textChannel, amount, user);
 
                         } else {
                             NoPerms.Bot("Manage Messages", textChannel, user);

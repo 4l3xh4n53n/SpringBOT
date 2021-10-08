@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 public class Dice {
 
     private static final String info = "Rolls a dice.";
-    private static final String toggle = "`set module GameCommands 1/0`";
+    private static final String toggle = "`set GameCommands 1/0`";
 
     public static void roll(TextChannel txt, User user) {
 

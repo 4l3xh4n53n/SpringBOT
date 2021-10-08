@@ -2,6 +2,7 @@ package EventListeners;
 
 import Auto.ChatSensor;
 import Auto.Poll;
+import Auto.ReactionRoles;
 import Core.SettingGetter;
 import Core.SettingSetter;
 import Games.ActivityPoints.Commands.CoinsAmount;
@@ -13,18 +14,13 @@ import Games.Random.Dice;
 import Games.Random.FlipACoin;
 import Misc.CurrentSettings;
 import Misc.Help;
+import Misc.Ping;
 import Misc.Set.SetColour;
 import Misc.Set.SetPrefix;
 import Misc.Set.SetWelcomeImage;
 import Misc.Set.SetWelcomeMessage;
 import Misc.Stats;
-import commands.mod.Ban;
-import commands.mod.Clear;
-import commands.mod.Kick;
-import commands.mod.RemoveWarns;
-import commands.mod.UnBan;
-import commands.mod.Warn;
-import commands.mod.WarnsAmount;
+import commands.mod.*;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -54,8 +50,11 @@ public class MessageReceived extends ListenerAdapter {
 
             String botprefix = SettingGetter.ChannelFriendlySet("Prefix", channel);
 
+            // Automatic processes
+
             UserTimeOut.check(userID, user, guild, channel);
             ChatSensor.check(content, channel, msg);
+            ReactionRoles.creator(member, msg, content, channel);
 
             if (content.startsWith(botprefix)) {
 
@@ -88,6 +87,9 @@ public class MessageReceived extends ListenerAdapter {
                         break;
                     case "removewarns":
                         RemoveWarns.check(guild, user, channel, msg, member, guildID);
+                        break;
+                    case "info":
+                        UserInfo.get(user, channel, msg, request, guild, member);
                         break;
 
                     // SETTING COMMANDS AND OTHER STUFF
@@ -123,7 +125,7 @@ public class MessageReceived extends ListenerAdapter {
                         Stats.send(guild, channel);
                         break;
                     case "currentsettings":
-                        CurrentSettings.send(guildID, channel, user);
+                        CurrentSettings.send(guildID, channel, user, member);
                         break;
 
                     // GAMES AND POINTS RELATED STUFF
@@ -147,13 +149,20 @@ public class MessageReceived extends ListenerAdapter {
                         Send.Check(user, msg, guildID, channel, content);
                         break;
 
-
                         // Automation
 
                     case "poll":
                         Poll.Check(channel, guild, member, content);
                         break;
+                    case "makereactionmessage":
+                        ReactionRoles.initializer(member, user, channel);
+                        break;
 
+
+                        // Misc
+                    case "ping":
+                        Ping.pong(channel, guild, e);
+                        break;
 
                 }
             } else if (content.equalsIgnoreCase("prefix")){

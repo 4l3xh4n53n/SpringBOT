@@ -30,9 +30,9 @@ public class Ban {
 
     private static final String example = "`ban <@user/userID> <REASON> <--` (optional)";
     private static final String info = "This command bans the specified user.";
-    private static final String set = "`set roles BanRoles <@role(S)>`";
-    private static final String log = "`set channel BanLog <channelID>`";
-    private static final String toggle = "`set module ModCommands 1/0`";
+    private static final String set = "`set BanRoles <@role(S)>`";
+    private static final String log = "`set BanLog <channelID>`";
+    private static final String toggle = "`set ModCommands 1/0`";
 
     private static void Execute(Guild guild, User mentioned, String[] args, String request, TextChannel textChannel, User user){
         String reason = request.replace(args[0] + " " + args[1], "");

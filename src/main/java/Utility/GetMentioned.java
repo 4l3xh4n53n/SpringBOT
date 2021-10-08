@@ -8,42 +8,58 @@ import net.dv8tion.jda.api.entities.User;
 public class GetMentioned {
 
     public static User get(Message message, String expectedIDPosition, Guild guild){
-        User MentionedUser = null;
+        User mentionedUser = null;
 
         User fromAt = fromAt(message);
         User fromId = fromID(expectedIDPosition, guild);
+        User fromTag = fromTag(expectedIDPosition, guild);
 
         if (fromAt != null){
-            MentionedUser = fromAt;
+            mentionedUser = fromAt;
         } else if (fromId != null){
-            MentionedUser = fromId;
+            mentionedUser = fromId;
+        } else if (fromTag != null){
+            mentionedUser = fromTag;
         }
 
-        return MentionedUser;
+        return mentionedUser;
     }
 
     private static User fromID(String expectedIDPosition, Guild guild){
-        User MentionedUser = null;
+        User mentionedUser = null;
 
         try {
-            MentionedUser = Main.getCurrentShard(guild).retrieveUserById(expectedIDPosition).complete();
+            mentionedUser = Main.getCurrentShard(guild).retrieveUserById(expectedIDPosition).complete();
         } catch (Exception ignored) {
         }
 
-        return MentionedUser;
+        return mentionedUser;
 
     }
 
     private static User fromAt(Message message){
 
-        User MentionedUser = null;
+        User mentionedUser = null;
 
         try {
-            MentionedUser = message.getMentionedUsers().get(0);
+            mentionedUser = message.getMentionedUsers().get(0);
         } catch (Exception ignored) {
         }
 
-        return MentionedUser;
+        return mentionedUser;
+
+    }
+
+    private static User fromTag(String expectedTagPosition, Guild guild){
+
+        User mentionedUser = null;
+
+        try {
+            mentionedUser = guild.getMemberByTag(expectedTagPosition).getUser();
+        } catch (Exception ignored) {
+        }
+
+        return mentionedUser;
 
     }
 

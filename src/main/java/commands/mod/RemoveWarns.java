@@ -30,11 +30,11 @@ import java.util.List;
 
 public class RemoveWarns {
 
-    private static final String example = "`removewarns <@user/userID> <amount>`";
+    private static final String example = "`removeWarns <@user/userID> <amount>`";
     private static final String info = "Removes a warn from the specified user.";
-    private static final String set = "`set roles WarnRoles <@role(S)>`";
-    private static final String log = "`set channel WarnLog <channelID>`";
-    private static final String toggle = "`set module ModCommands 1/0`";
+    private static final String set = "`set WarnRoles <@role(S)>`";
+    private static final String log = "`set WarnLog <channelID>`";
+    private static final String toggle = "`set ModCommands 1/0`";
 
     private static void Execute(String guildID, TextChannel textChannel, User mentioned, Connection con, Message msg, int amount){
 
@@ -87,7 +87,7 @@ public class RemoveWarns {
 
     public static void check(Guild guild, User user, TextChannel textChannel, Message msg, Member member, String guildID){
         Connection con = Database.warns();
-        Warn.checkDatabse(con, guildID, textChannel, guild, user, msg, member);
+        Warn.checkDatabse(con, guildID, textChannel);
 
         int amount;
         User mentionedUser;

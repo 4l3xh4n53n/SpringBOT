@@ -17,7 +17,7 @@ import java.sql.Statement;
 public class SetColour {
 
     private static final String example = "setColour <#hexcode>";
-    private static final String info = "Sets the colour that is used on the side of the embed";
+    private static final String info = "Sets the colour that is used on the side of the embed.";
 
     public static void Set(TextChannel txt, String content, String guildID, User user, Member member){
 

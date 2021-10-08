@@ -1,6 +1,7 @@
 package ErrorMessages.BadCode;
 
 import Core.Main;
+import Utility.RSJG;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -18,10 +19,11 @@ public class SQLError {
         em.setTitle("UH OH! Stinky");
         em.addField("The error:", x.getMessage(), false);
         em.addField("Feel free to temporarily turn off this module if the issue remains: ", toggle, false);
-        em.setFooter("Feel free to show this to the bots owner: " + Main.getCurrentShard(guild).retrieveApplicationInfo().complete().getOwner().getAsTag());
+        em.addField("","Feel free to show this to the bots owner: " + Main.getCurrentShard(guild).retrieveApplicationInfo().complete().getOwner().getAsTag(),false);
+        em.setFooter(RSJG.get());
         txt.sendMessageEmbeds(em.build()).queue();
 
-        System.out.println(x);
+        System.out.println(x.getMessage());
 
     }
 
@@ -33,11 +35,12 @@ public class SQLError {
         em.setTitle("Hold up!");
         em.addField("The error:", x.getMessage(), false);
         em.addField("Feel free to temporarily turn off this module if the issue remains: ", toggle, false);
-        em.setFooter("Feel free to show this to the bots owner: " + Main.getCurrentShard(guild).retrieveApplicationInfo().complete().getOwner().getAsTag());
+        em.addField("","Feel free to show this to the bots owner: " + Main.getCurrentShard(guild).retrieveApplicationInfo().complete().getOwner().getAsTag(), false);
+        em.setFooter(RSJG.get());
 
         defaultChannel.sendMessageEmbeds(em.build()).queue();
 
-        System.out.println(x);
+        System.out.println(x.getMessage());
 
     }
 

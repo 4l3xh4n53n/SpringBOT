@@ -33,9 +33,9 @@ public class Warn {
 
     private static final String example = "`warn <@user/userID> <reason>` <-- (optional)";
     private static final String info = "Warns the specified user.";
-    private static final String set = "`set roles WarnRoles <@role(S)>`";
-    private static final String log = "`set channel WarnLog <channelID>`";
-    private static final String toggle = "`set module ModCommands 1/0`";
+    private static final String set = "`set WarnRoles <@role(S)>`";
+    private static final String log = "`set WarnLog <channelID>`";
+    private static final String toggle = "`set ModCommands 1/0`";
 
     private static void Execute(String guildID, TextChannel textChannel, User mentioned, Connection con, Message msg){
 
@@ -101,7 +101,7 @@ public class Warn {
         }
     }
 
-    public static void checkDatabse(Connection con, String guildID, TextChannel textChannel, Guild guild, User user, Message msg, Member member){
+    public static void checkDatabse(Connection con, String guildID, TextChannel textChannel){
         try {
 
             DatabaseMetaData dbm = con.getMetaData();
@@ -123,7 +123,7 @@ public class Warn {
 
     public static void check(Guild guild, User user, TextChannel textChannel, Message msg, Member member, String guildID){
         Connection con = Database.warns();
-        checkDatabse(con, guildID, textChannel, guild, user, msg, member);
+        checkDatabse(con, guildID, textChannel);
 
         User mentionedUser;
         String[] args = msg.getContentRaw().split("\\s+");

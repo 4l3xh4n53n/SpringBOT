@@ -7,6 +7,7 @@ import ErrorMessages.UserError.NoPerms;
 import ErrorMessages.UserError.RolesNotSet;
 import ErrorMessages.UserError.WrongCommandUsage;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
@@ -20,9 +21,9 @@ import java.util.List;
 public class Poll {
 
     private static final String info = "This command can make you polls that look very nice.";
-    private static final String set = "`set roles PollRole <@role(s)>`";
+    private static final String set = "`set PollRole <@role(s)>`";
     private static final String example = "poll <Topic> OPTION <option1> <emote1> OPTION <option2> <emote2> etc";
-    private static final String toggle = "`set module Poll 1/0`";
+    private static final String toggle = "`set Poll 1/0`";
 
     public static void Check(TextChannel txt, Guild guild, Member member, String content){
 
@@ -56,7 +57,6 @@ public class Poll {
                 if (role != null) {
                     roles.add(role);
                 }
-
             }
         }
 
@@ -69,23 +69,27 @@ public class Poll {
                         optionsF.append("\n").append(option);
                     }
 
-                    EmbedBuilder em = Embed.em(user, txt);
-                    em.addField(topic, optionsF.toString(), false);
-                    txt.sendMessageEmbeds(em.build()).queue(msg -> {
-                        for (String option : options) {
+                    if (guild.getSelfMember().getPermissions().contains(Permission.MESSAGE_ADD_REACTION)) {
 
-                            String[] optionArg = option.split("\\s+");
+                        EmbedBuilder em = Embed.em(user, txt);
+                        em.addField(topic, optionsF.toString(), false);
+                        txt.sendMessageEmbeds(em.build()).queue(msg -> {
+                            for (String option : options) {
 
-                            String emoji = optionArg[optionArg.length - 1];
+                                String[] optionArg = option.split("\\s+");
+                                String emoji = optionArg[optionArg.length - 1];
 
-                            msg.addReaction(emoji).queue(null, error -> {
-                                MessageRemover.deleteAfter(msg);
-                                WrongCommandUsage.send(txt, example, "**" + emoji + "** is not a valid emoji", user);
-                            });
+                                msg.addReaction(emoji).queue(null, error -> {
+                                    MessageRemover.deleteAfter(msg);
+                                    WrongCommandUsage.send(txt, example, "**" + emoji + "** is not a valid emoji", user);
+                                });
 
+                            }
+                        });
 
-                        }
-                    });
+                    } else {
+                        NoPerms.Bot("AddReaction", txt, user);
+                    }
 
                 } else {
                     WrongCommandUsage.send(txt, example, "You didn't give enough options", user);

@@ -21,9 +21,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class PrivateChannelCreator {
 
-    private static final String info = "When you join a certain voice channel you get put into your own";
-    private static final String set = "`set channel PrivateChannelCreator <VoiceChannelID>` + `set channel PrivateChannelCategory <CategoryID>`";
-    private static final String toggle = "`set module PrivateChannel 1/0`";
+    private static final String info = "When you join a specified voice channel the user gets put into their own private channel";
+    private static final String set = "`set PrivateChannelCreator <VoiceChannelID>` +\n `set PrivateChannelCategory <CategoryID>`";
+    private static final String toggle = "`set PrivateChannel 1/0`";
 
     public static void CheckDB(String guildID, Guild guild){
 
@@ -46,7 +46,7 @@ public class PrivateChannelCreator {
 
     }
 
-    public static void AddToDB(String guildID, Guild guild, String channelID){
+    private static void AddToDB(String guildID, Guild guild, String channelID){
 
         try{
             Connection con = Database.CreatedChannels();
@@ -64,7 +64,7 @@ public class PrivateChannelCreator {
 
     }
 
-    public static void RemoveFromDB(String guildID, Guild guild, String channelID){
+    private static void RemoveFromDB(String guildID, Guild guild, String channelID){
 
         try{
             Connection con = Database.CreatedChannels();
@@ -79,7 +79,7 @@ public class PrivateChannelCreator {
 
     }
 
-    public static boolean CheckDatabase(String channelID, Guild guild, String guildID){
+    private static boolean CheckDatabase(String channelID, Guild guild, String guildID){
 
         boolean check = false;
 
@@ -110,7 +110,7 @@ public class PrivateChannelCreator {
 
     }
 
-    public static int Get(Guild guild, String guildID, String channelID){
+    private static int Get(Guild guild, String guildID, String channelID){
 
         int users = 0;
 
@@ -244,4 +244,5 @@ public class PrivateChannelCreator {
     public static String getToggle() {
         return toggle;
     }
+
 }

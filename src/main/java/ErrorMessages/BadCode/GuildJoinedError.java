@@ -1,6 +1,7 @@
 package ErrorMessages.BadCode;
 
 import Core.Main;
+import Utility.RSJG;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
@@ -20,10 +21,10 @@ public class GuildJoinedError {
         EmbedBuilder em = new EmbedBuilder();
         em.setColor(Color.RED);
         em.setTitle("Something has gone very wrong V ^ V");
-        assert fourLegs != null;
         em.addField("The bots owner has been notified and will fix the issue shortly.",
                 "For any questions feel free to dm my owner: " + fourLegs.getAsTag(),
                 false);
+        em.setFooter(RSJG.get());
         defaultChannel.sendMessageEmbeds(em.build()).queue();
 
         System.out.println(x.getMessage());

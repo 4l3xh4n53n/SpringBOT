@@ -14,9 +14,9 @@ import java.util.List;
 
 public class AutoRole {
 
-    private static final String info = "This command automatically gives people roles on arrival.";
-    private static final String set = "`set roles AutoRoleRole <@role(s)>`";
-    private static final String toggle = "`set module AutoRole 1/0`";
+    private static final String info = "This module automatically gives people specified role(s) on arrival.";
+    private static final String set = "`set AutoRoleRole <@role(s)>`";
+    private static final String toggle = "`set AutoRole 1/0`";
 
     public static void give(Guild guild, Member member) {
 

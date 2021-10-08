@@ -31,7 +31,7 @@ public class PointsHandler {
 
     }
 
-    private static void checkGuild(String guildID, TextChannel txt){
+    public static void checkGuild(String guildID, TextChannel txt){
 
         try {
             Connection con = Database.coins();

@@ -10,7 +10,7 @@ public class Database {
         Connection con = null;
         try {
             Class.forName("org.sqlite.JDBC");
-            con = DriverManager.getConnection("jdbc:sqlite:Databases/Settings.db"); // connecting to our database
+            con = DriverManager.getConnection("jdbc:sqlite:Databases/Settings.db");
         } catch (ClassNotFoundException | SQLException e ) {
             System.out.println(e+"");
         }
@@ -22,7 +22,7 @@ public class Database {
         Connection con = null;
         try {
             Class.forName("org.sqlite.JDBC");
-            con = DriverManager.getConnection("jdbc:sqlite:Databases/Warns.db"); // connecting to our database
+            con = DriverManager.getConnection("jdbc:sqlite:Databases/Warns.db");
         } catch (ClassNotFoundException | SQLException e ) {
             System.out.println(e+"");
         }
@@ -34,7 +34,7 @@ public class Database {
         Connection con = null;
         try {
             Class.forName("org.sqlite.JDBC");
-            con = DriverManager.getConnection("jdbc:sqlite:Databases/Coins.db"); // connecting to our database
+            con = DriverManager.getConnection("jdbc:sqlite:Databases/Coins.db");
         } catch (ClassNotFoundException | SQLException e ) {
             System.out.println(e+"");
         }
@@ -46,7 +46,7 @@ public class Database {
         Connection con = null;
         try {
             Class.forName("org.sqlite.JDBC");
-            con = DriverManager.getConnection("jdbc:sqlite:Databases/Invites.db"); // connecting to our database
+            con = DriverManager.getConnection("jdbc:sqlite:Databases/Invites.db");
         } catch (ClassNotFoundException | SQLException e ) {
             System.out.println(e+"");
         }
@@ -58,7 +58,19 @@ public class Database {
         Connection con = null;
         try {
             Class.forName("org.sqlite.JDBC");
-            con = DriverManager.getConnection("jdbc:sqlite:Databases/CreatedChannels.db"); // connecting to our database
+            con = DriverManager.getConnection("jdbc:sqlite:Databases/CreatedChannels.db");
+        } catch (ClassNotFoundException | SQLException e ) {
+            System.out.println(e+"");
+        }
+
+        return con;
+    }
+
+    public static Connection ReactionRoles(){
+        Connection con = null;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            con = DriverManager.getConnection("jdbc:sqlite:Databases/ReactionRoles.db");
         } catch (ClassNotFoundException | SQLException e ) {
             System.out.println(e+"");
         }

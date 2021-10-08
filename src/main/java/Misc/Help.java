@@ -6,6 +6,7 @@ import Auto.GuildWelcomeMessage;
 import Auto.InviteLogger;
 import Auto.Poll;
 import Auto.PrivateChannelCreator;
+import Auto.ReactionRoles;
 import Core.Embed;
 import Core.SettingSetter;
 import Games.ActivityPoints.Commands.CoinsAmount;
@@ -19,6 +20,7 @@ import commands.mod.Clear;
 import commands.mod.Kick;
 import commands.mod.RemoveWarns;
 import commands.mod.UnBan;
+import commands.mod.UserInfo;
 import commands.mod.Warn;
 import commands.mod.WarnsAmount;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -27,24 +29,32 @@ import net.dv8tion.jda.api.entities.User;
 
 public class Help {
 
-    public static void Default(EmbedBuilder em, TextChannel txt){
+    private static void Default(EmbedBuilder em, TextChannel txt){
         em.setTitle("Help page!");
-        em.addField("Please use a sub command:", "Settings\nModeration\nGames\nAutomation\nSpringCOIN", false);
+        em.addField("Please use a sub command:", "Settings\nModeration\nGames\nAutomation\nSpringCOIN\nMisc", false);
         em.setDescription("For more additional help join the support server: https://discord.gg/AwW5NU7A67");
         txt.sendMessageEmbeds(em.build()).queue();
     }
 
-    public static void Settings(EmbedBuilder em, TextChannel txt){
+    private static void Misc(EmbedBuilder em, TextChannel txt){
+        em.setTitle("Misc");
+        em.addField("Stats", Stats.getInfo(), false);
+        em.addField("CurrentSettings ", CurrentSettings.getInfo(), false);
+        em.addField("Ping", Ping.getInfo(), false);
+        txt.sendMessageEmbeds(em.build()).queue();
+    }
+
+    private static void Settings(EmbedBuilder em, TextChannel txt){ // todo add the setting commands
         em.setTitle("Settings");
         em.setDescription("Settings commands allow you to setup log channels, turn modules on and off, and give certain roles the ability to use certain features.");
-        em.addField("set", SettingSetter.example, false);
+        em.addField("Set", SettingSetter.example, false);
         em.addField("Modules: (things that can be turned on and off)", SettingSetter.modules, false);
         em.addField("Roles: (The roles that you want to have access to a specific module)", SettingSetter.roles, false);
         em.addField("Channels: (The channels where certain things will happen)", SettingSetter.channels, false);
         txt.sendMessageEmbeds(em.build()).queue();
     }
 
-    public static void Moderation(EmbedBuilder em, TextChannel txt){
+    private static void Moderation(EmbedBuilder em, TextChannel txt){
         em.setTitle("Moderation");
         em.setDescription("These commands let you do things by typing rather than the gui, even though gui is probably faster for most (whatever floats your boat I guess)");
         em.addField("How to turn them on and off: ", "`set MODULE ModCommands 1/0`", false);
@@ -55,11 +65,12 @@ public class Help {
         em.addField("warn " + Warn.getExample(), Warn.getInfo() + "\nHow to set the log: " + Warn.getLog() + "\nHow to set the roles: " + Warn.getSet(), false);
         em.addField("removewarns " + RemoveWarns.getExample(), RemoveWarns.getInfo() + "\nHow to set the log: " + RemoveWarns.getLog() + "\nHow to set the roles: " + RemoveWarns.getSet(), false);
         em.addField("warnsamount " + WarnsAmount.getExample(), WarnsAmount.getInfo() + "\nHow to set the roles: " + WarnsAmount.getSet(), false);
-        em.addField("clear " + Clear.getExample(), Clear.getInfo() + "\nHow to set the roles" + Clear.getSet(), false);
+        em.addField("clear " + Clear.getExample(), Clear.getInfo() + "\nHow to set the roles: " + Clear.getSet(), false);
+        em.addField("info" + UserInfo.getExample(), UserInfo.getInfo(), false);
         txt.sendMessageEmbeds(em.build()).queue();
     }
 
-    public static void Games(EmbedBuilder em, TextChannel txt){
+    private static void Games(EmbedBuilder em, TextChannel txt){
         em.setTitle("Games");
         em.setDescription("Stuff in here for fun.");
         em.addField("flip", FlipACoin.getInfo(), false);
@@ -67,25 +78,26 @@ public class Help {
         txt.sendMessageEmbeds(em.build()).queue();
     }
 
-    public static void Automation(EmbedBuilder em, TextChannel txt){
+    private static void Automation(EmbedBuilder em, TextChannel txt){
         em.setTitle("Automation");
         em.setDescription("Automates your server.");
-        em.addField("Auto Role", AutoRole.getInfo() + " " +  AutoRole.getSet() + " " + AutoRole.getInfo(), false);
-        em.addField("Chat Sensor", ChatSensor.getInfo() + " " +  ChatSensor.getSet() + " " + ChatSensor.getInfo(), false);
-        em.addField("Welcome Message", GuildWelcomeMessage.getInfo() + " " +  GuildWelcomeMessage.getSet() + " " + GuildWelcomeMessage.getInfo(), false);
-        em.addField("Invite Logger", InviteLogger.getInfo() + " " +  InviteLogger.getSet() + " " + InviteLogger.getInfo(), false);
-        em.addField("Poll", Poll.getInfo() + " " +  Poll.getSet() + " " + Poll.getInfo(), false);
-        em.addField("Private Channel Creator", PrivateChannelCreator.getInfo() + " " +  PrivateChannelCreator.getSet() + " " + PrivateChannelCreator.getInfo(), false);
+        em.addField("Auto Role", AutoRole.getInfo() + " How to set it up" +  AutoRole.getSet() + "\nHow to turn on or off: " + AutoRole.getToggle(), false);
+        em.addField("Chat Sensor", ChatSensor.getInfo() + " How to set it up" +  ChatSensor.getSet() + "\nHow to turn on or off: " + ChatSensor.getToggle(), false);
+        em.addField("Welcome Message", GuildWelcomeMessage.getInfo() + " How to set it up" +  GuildWelcomeMessage.getSet() + "\nHow to turn on or off" + GuildWelcomeMessage.getToggle(), false);
+        em.addField("Invite Logger", InviteLogger.getInfo() + " How to set it up" +  InviteLogger.getSet() + "\nHow to turn on or off: " + InviteLogger.getToggle(), false);
+        em.addField("Poll", Poll.getInfo() + " " +  Poll.getSet() + " How to set it up" + Poll.getInfo(), false);
+        em.addField("Private Channel Creator", PrivateChannelCreator.getInfo() + " " +  PrivateChannelCreator.getSet() + "\nHow to turn on or off: " + PrivateChannelCreator.getToggle(), false);
+        em.addField("Reaction Roles", ReactionRoles.getInfo() + " How to set it up" + ReactionRoles.getSet() + "\nHow to turn on or off: " + ReactionRoles.getToggle(), false);
         txt.sendMessageEmbeds(em.build()).queue();
     }
 
-    public static void SpringCOIN(EmbedBuilder em, TextChannel txt){
+    private static void SpringCOIN(EmbedBuilder em, TextChannel txt){
         em.setDescription("SpringCOIN is a virtual currency, everytime you send a message you get coins (limited to 1 minute). You can use springCOIN for whatever you want. Here's your options: ");
-        em.addField("How to turn it on and off: " , "`set MODULE Coins 1/0`",false);
+        em.addField("How to turn it on and off: " , "`set Coins 1/0`",false);
         em.addField("coins " + CoinsAmount.getExample(), CoinsAmount.getInfo() + "\nHow to set the roles: " + CoinsAmount.getSet(), false);
         em.addField("shop " + Shop.getExample(), Shop.getInfo(), false);
         em.addField("user " + UsersStats.getExample(), UsersStats.getInfo(), false);
-        em.addField("send " + Send.getExample(), Send.getInfo() + "\nThis can be turned on and off with: `set MODULE SendCoins 1/0`", false);
+        em.addField("send " + Send.getExample(), Send.getInfo() + "\nThis can be turned on and off with: `set SendCoins 1/0`", false);
         em.addField("Coming soon:", "An option to buy specific roles with your coins and possibly a few other things (:", false);
         txt.sendMessageEmbeds(em.build()).queue();
     }
@@ -115,6 +127,9 @@ public class Help {
                     break;
                 case "springcoin":
                     SpringCOIN(em, txt);
+                    break;
+                case "misc":
+                    Misc(em, txt);
                     break;
                 default:
                     Default(em, txt);

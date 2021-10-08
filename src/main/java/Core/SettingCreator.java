@@ -17,37 +17,38 @@ public class SettingCreator{
         try {
             PreparedStatement ps;
             String SQL = "INSERT INTO settings(" +
-                    "GuildID, " +
-                    "Prefix, " +
-                    "GuildColour," +
-                    "ClearRoles, " +
-                    "KickRoles, " +
-                    "BanRoles, " +
-                    "WarnRoles, " +
-                    "ModCommands, " +
-                    "KickLog, " +
-                    "BanLog, " +
-                    "WarnLog, " +
-                    "LogModActions, " +
-                    "Coins," +
-                    "SendCoins," +
-                    "GuildWelcome," +
-                    "GuildWelcomeMessage," +
-                    "GuildWelcomeIMAGE," +
-                    "GuildWelcomeChannel," +
-                    "AutoRole," +
-                    "AutoRoleRole," +
-                    "PollRole," +
-                    "InviteLogging," +
-                    "InviteLog," +
-                    "PrivateChannel," +
-                    "PrivateChannelCreator," +
-                    "PrivateChannelCategory," +
-                    "ServerStats," +
-                    "StatsChannel," +
-                    "ChatFilter," +
-                    "Filter," +
-                    "GameCommands" +
+                    "guildid, " +
+                    "prefix, " +
+                    "guildcolour," +
+                    "clearroles, " +
+                    "kickroles, " +
+                    "banroles, " +
+                    "warnroles, " +
+                    "modcommands, " +
+                    "kicklog, " +
+                    "banlog, " +
+                    "warnlog, " +
+                    "logmodactions, " +
+                    "coins," +
+                    "sendcoins," +
+                    "guildwelcome," +
+                    "guildwelcomemessage," +
+                    "guildwelcomeimage," +
+                    "guildwelcomechannel," +
+                    "autorole," +
+                    "autorolerole," +
+                    "pollrole," +
+                    "invitelogging," +
+                    "invitelog," +
+                    "privatechannel," +
+                    "privatechannelcreator," +
+                    "privatechannelcategory," +
+                    "serverstats," +
+                    "statschannel," +
+                    "chatfilter," +
+                    "filter," +
+                    "gamecommands," +
+                    "reactionroles" +
                     ")VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             ps = con.prepareStatement(SQL);
             ps.setString(1, guildID);

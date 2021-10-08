@@ -8,7 +8,7 @@ import net.dv8tion.jda.api.entities.User;
 
 public class ModLogger {
 
-    private static String toggle = "`set module LogModActions 1/0`";
+    private static final String toggle = "`set module LogModActions 1/0`";
 
     public static void log(TextChannel txt, User mentioned, String channel, String reason, String set, String module, User moderator){
 
@@ -35,6 +35,7 @@ public class ModLogger {
                     em.setAuthor(tag, null, pfp);
                     em.addField(tag + " " + module, "**Reason:** " + reason + "\n**Executor:** " + executor, false);
                     log.sendMessageEmbeds(em.build()).queue();
+
                 }
 
             }

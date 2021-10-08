@@ -22,9 +22,9 @@ import java.sql.Statement;
 public class CoinsAmount {
 
     private static final String example = "`coins <@user/userID> `";
-    private static final String info = "Gets the coins that a user has";
-    private static final String set = "`set roles CheckCoins <@role(S)>`";
-    private static final String toggle = "`set module Coins 1/0`";
+    private static final String info = "Gets the coins that a user has.";
+    private static final String set = "`set CheckCoins <@role(S)>`";
+    private static final String toggle = "`set Coins 1/0`";
 
     private static void send(TextChannel txt, User user, int amount){
 
@@ -80,10 +80,18 @@ public class CoinsAmount {
             String userID = user.getId();
             String[] args = content.split("\\s+");
             JDA jda = Main.getCurrentShard(guild);
-            User mentioned;
+            User mentioned = null;
             User defaultToExecutor;
 
-            mentioned = GetMentioned.get(msg, args[1], guild);
+            try {
+                mentioned = msg.getMentionedUsers().get(0);
+            } catch (Exception ignored) {
+            }
+
+            try {
+                mentioned = Main.getCurrentShard(guild).retrieveUserById(args[1]).complete();
+            } catch (Exception ignored) {
+            }
 
             if (mentioned != null) {
 
