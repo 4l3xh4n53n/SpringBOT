@@ -54,7 +54,7 @@ public class MessageReceived extends ListenerAdapter {
 
             UserTimeOut.check(userID, user, guild, channel);
             ChatSensor.check(content, channel, msg);
-            ReactionRoles.creator(member, msg, content, channel);
+            ReactionRoles.creator(member, msg, content, channel, guild);
 
             if (content.startsWith(botprefix)) {
 

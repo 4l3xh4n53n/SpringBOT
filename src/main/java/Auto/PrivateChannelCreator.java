@@ -141,7 +141,7 @@ public class PrivateChannelCreator {
                 ExecutorService threadpool = Executors.newCachedThreadPool();
                 threadpool.submit(() -> {
                     try {
-                        Thread.sleep(10000); // 60000
+                        Thread.sleep(300000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
