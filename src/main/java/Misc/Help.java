@@ -66,7 +66,7 @@ public class Help {
         em.addField("removewarns " + RemoveWarns.getExample(), RemoveWarns.getInfo() + "\nHow to set the log: " + RemoveWarns.getLog() + "\nHow to set the roles: " + RemoveWarns.getSet(), false);
         em.addField("warnsamount " + WarnsAmount.getExample(), WarnsAmount.getInfo() + "\nHow to set the roles: " + WarnsAmount.getSet(), false);
         em.addField("clear " + Clear.getExample(), Clear.getInfo() + "\nHow to set the roles: " + Clear.getSet(), false);
-        em.addField("info" + UserInfo.getExample(), UserInfo.getInfo(), false);
+        em.addField("info " + UserInfo.getExample(), UserInfo.getInfo(), false);
         txt.sendMessageEmbeds(em.build()).queue();
     }
 

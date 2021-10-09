@@ -3,6 +3,7 @@ package Auto;
 import Core.Database;
 import Core.Embed;
 import Core.MessageRemover;
+import Core.SettingGetter;
 import ErrorMessages.BadCode.SQLError;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -38,86 +39,96 @@ public class ReactionRoles {
     }
 
     public static void removeRole(String messageID, TextChannel textChannel, Guild guild, Member member, String reaction){
-        Member selfMember = guild.getSelfMember();
-        if (selfMember.hasPermission(Permission.MANAGE_ROLES)) {
-            try {
-                Connection con = Database.ReactionRoles();
-                Statement stmt = con.createStatement();
-                String SQL = "SELECT * FROM ReactionMessages WHERE MessageID='" + messageID + "'";
-                ResultSet rs = stmt.executeQuery(SQL);
 
-                if (rs.next()) {
+        if (SettingGetter.ChannelFriendlySet("ReactionRoles", textChannel).equals("1")) {
 
-                    String[] emojis = rs.getString("Emojis").split(",");
-                    String[] roles = rs.getString("RoleIDs").split(",");
-                    int itterator = -1;
+            Member selfMember = guild.getSelfMember();
+            if (selfMember.hasPermission(Permission.MANAGE_ROLES)) {
+                try {
+                    Connection con = Database.ReactionRoles();
+                    Statement stmt = con.createStatement();
+                    String SQL = "SELECT * FROM ReactionMessages WHERE MessageID='" + messageID + "'";
+                    ResultSet rs = stmt.executeQuery(SQL);
 
-                    for (String emoji : emojis) {
+                    if (rs.next()) {
 
-                        itterator++;
-                        if (reaction.equals(emoji)) {
+                        String[] emojis = rs.getString("Emojis").split(",");
+                        String[] roles = rs.getString("RoleIDs").split(",");
+                        int itterator = -1;
 
-                            try {
-                                Role role = guild.getRoleById(roles[itterator]);
-                                if (selfMember.getRoles().get(0).getPosition() > role.getPosition()){
-                                    guild.removeRoleFromMember(member, role).queue();
-                                } else {
-                                    cantChangeRole(member);
+                        for (String emoji : emojis) {
+
+                            itterator++;
+                            if (reaction.equals(emoji)) {
+
+                                try {
+                                    Role role = guild.getRoleById(roles[itterator]);
+                                    if (selfMember.getRoles().get(0).getPosition() > role.getPosition()) {
+                                        guild.removeRoleFromMember(member, role).queue();
+                                    } else {
+                                        cantChangeRole(member);
+                                    }
+                                } catch (Exception ignored) {
                                 }
-                            } catch (Exception ignored) {}
+
+                            }
 
                         }
 
                     }
-
+                } catch (Exception x) {
+                    SQLError.TextChannel(textChannel, x, toggle);
                 }
-            } catch (Exception x) {
-                SQLError.TextChannel(textChannel, x, toggle);
+            } else {
+                cantChangeRole(member);
             }
-        } else {
-            cantChangeRole(member);
         }
     }
 
     public static void addRole(String messageID, TextChannel textChannel, Guild guild, Member member, String reaction){
-        Member selfMember = guild.getSelfMember();
-        if (selfMember.hasPermission(Permission.MANAGE_ROLES)) {
-            try {
-                Connection con = Database.ReactionRoles();
-                Statement stmt = con.createStatement();
-                String SQL = "SELECT * FROM ReactionMessages WHERE MessageID='" + messageID + "'";
-                ResultSet rs = stmt.executeQuery(SQL);
 
-                if (rs.next()) {
+        if (SettingGetter.ChannelFriendlySet("ReactionRoles", textChannel).equals("1")) {
 
-                    String[] emojis = rs.getString("Emojis").split(",");
-                    String[] roles = rs.getString("RoleIDs").split(",");
-                    int itterator = -1;
+            Member selfMember = guild.getSelfMember();
+            if (selfMember.hasPermission(Permission.MANAGE_ROLES)) {
+                try {
+                    Connection con = Database.ReactionRoles();
+                    Statement stmt = con.createStatement();
+                    String SQL = "SELECT * FROM ReactionMessages WHERE MessageID='" + messageID + "'";
+                    ResultSet rs = stmt.executeQuery(SQL);
 
-                    for (String emoji : emojis) {
+                    if (rs.next()) {
 
-                        itterator++;
-                        if (reaction.equals(emoji)) {
+                        String[] emojis = rs.getString("Emojis").split(",");
+                        String[] roles = rs.getString("RoleIDs").split(",");
+                        int itterator = -1;
 
-                            try {
-                                Role role = guild.getRoleById(roles[itterator]);
-                                if (selfMember.getRoles().get(0).getPosition() > role.getPosition()){
-                                    guild.addRoleToMember(member, role).queue();
-                                } else {
-                                    cantChangeRole(member);
+                        for (String emoji : emojis) {
+
+                            itterator++;
+                            if (reaction.equals(emoji)) {
+
+                                try {
+                                    Role role = guild.getRoleById(roles[itterator]);
+                                    if (selfMember.getRoles().get(0).getPosition() > role.getPosition()) {
+                                        guild.addRoleToMember(member, role).queue();
+                                    } else {
+                                        cantChangeRole(member);
+                                    }
+                                } catch (Exception ignored) {
                                 }
-                            } catch (Exception ignored) {}
+
+                            }
 
                         }
 
                     }
-
+                } catch (Exception x) {
+                    SQLError.TextChannel(textChannel, x, toggle);
                 }
-            } catch (Exception x) {
-                SQLError.TextChannel(textChannel, x, toggle);
+            } else {
+                cantChangeRole(member);
             }
-        } else {
-            cantChangeRole(member);
         }
     }
 

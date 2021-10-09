@@ -27,7 +27,7 @@ public class RSJG {
                 RandomSkeletonJokeGenerator = "What do skeletons say as they head out to sea? Bone voyage!";
                 break;
             case 6:
-                RandomSkeletonJokeGenerator = "Why did the skeleton have to goto church to play music? They don't have any organs!";
+                RandomSkeletonJokeGenerator = "Why can't skeletons play church music? Because they don't have any organs!";
                 break;
             case 7:
                 RandomSkeletonJokeGenerator = "How did the skeleton know it was going to rain? It could feel it in it's bones.";

@@ -2,8 +2,11 @@ package Utility;
 
 import Core.Main;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
+
+import java.util.List;
 
 public class GetMentioned {
 
@@ -12,14 +15,11 @@ public class GetMentioned {
 
         User fromAt = fromAt(message);
         User fromId = fromID(expectedIDPosition, guild);
-        User fromTag = fromTag(expectedIDPosition, guild);
 
         if (fromAt != null){
             mentionedUser = fromAt;
         } else if (fromId != null){
             mentionedUser = fromId;
-        } else if (fromTag != null){
-            mentionedUser = fromTag;
         }
 
         return mentionedUser;
@@ -43,19 +43,6 @@ public class GetMentioned {
 
         try {
             mentionedUser = message.getMentionedUsers().get(0);
-        } catch (Exception ignored) {
-        }
-
-        return mentionedUser;
-
-    }
-
-    private static User fromTag(String expectedTagPosition, Guild guild){
-
-        User mentionedUser = null;
-
-        try {
-            mentionedUser = guild.getMemberByTag(expectedTagPosition).getUser();
         } catch (Exception ignored) {
         }
 

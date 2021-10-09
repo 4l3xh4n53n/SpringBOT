@@ -13,6 +13,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
+import org.apache.commons.collections4.Get;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -83,14 +84,10 @@ public class CoinsAmount {
             User mentioned = null;
             User defaultToExecutor;
 
-            try {
-                mentioned = msg.getMentionedUsers().get(0);
-            } catch (Exception ignored) {
-            }
-
-            try {
-                mentioned = Main.getCurrentShard(guild).retrieveUserById(args[1]).complete();
-            } catch (Exception ignored) {
+            if (args.length > 1){
+                mentioned = GetMentioned.get(msg, args[1], guild);
+            } else {
+                mentioned = GetMentioned.get(msg, "", guild);
             }
 
             if (mentioned != null) {

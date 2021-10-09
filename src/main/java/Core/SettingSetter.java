@@ -48,7 +48,7 @@ public class SettingSetter {
 
                 String mod = args[1].toLowerCase(Locale.ROOT);
 
-                String[] modules = {"modcommands", "logmodactions", "coins", "sendcoins", "autorole", "invitelogging", "privatechannel", "serverstats", "Gamecommands", "chatfilter", "guildwelcome"};
+                String[] modules = {"modcommands", "logmodactions", "coins", "sendcoins", "autorole", "invitelogging", "privatechannel", "serverstats", "gamecommands", "chatfilter", "guildwelcome", "reactionroles"};
                 String[] channels = {"kicklog", "banlog", "warnlog", "guildwelcomechannel", "invitelog","privatechannelcreator", "statschannel","privatechannelcategory"};
                 String[] roles = {"clearroles", "kickroles", "banroles", "warnroles", "autorolerole", "pollrole"};
 
@@ -72,16 +72,20 @@ public class SettingSetter {
 
     public static void Set(String[] args, TextChannel channel, String guildID, String setTo){
         try {
+
+            String setting = args[1].toLowerCase(Locale.ROOT);
             Connection con = Database.connect();
             Statement stmt = con.createStatement();
-            String update = "UPDATE Settings SET '" + args[1].toLowerCase(Locale.ROOT) + "'='" + setTo + "' WHERE GuildID='" + guildID + "'";
-            SettingChanged(channel);
+            String update = "UPDATE Settings SET '" + setting + "'='" + setTo + "' WHERE GuildID='" + guildID + "'";
             ResultSet ud = stmt.executeQuery(update);
             ud.updateString(args[1].toLowerCase(Locale.ROOT), args[2]);
             ud.updateRow();
             con.close();
             stmt.close();
             ud.close();
+            SettingGetter.UpdateSetting(guildID, setting, setTo);
+            SettingChanged(channel);
+
         } catch (Exception x) {
             if (!x.getMessage().equals("query does not return ResultSet")) {
                 SQLError.TextChannel(channel, x, "Can't turn this off sorry.");

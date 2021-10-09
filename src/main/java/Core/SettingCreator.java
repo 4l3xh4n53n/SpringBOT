@@ -49,7 +49,7 @@ public class SettingCreator{
                     "filter," +
                     "gamecommands," +
                     "reactionroles" +
-                    ")VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                    ")VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             ps = con.prepareStatement(SQL);
             ps.setString(1, guildID);
             ps.setString(2, "!"); //Prefix
@@ -82,6 +82,7 @@ public class SettingCreator{
             ps.setString(29, "0");//ChatFilter
             ps.setString(30, "");//Filter
             ps.setString(31, "0");//GameCommands
+            ps.setString(32, "0");//ReactionRoles
             ps.executeUpdate();
             ps.close();
 
