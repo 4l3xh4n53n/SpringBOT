@@ -37,7 +37,10 @@ public class CurrentSettings {
                         "invitelogging," +
                         "privatechannel," +
                         "chatfilter," +
-                        "gamecommands" +
+                        "gamecommands," +
+                        "reactionRoles," +
+                        "tickets," +
+                        "counting" +
                         " FROM Settings WHERE GuildID = '" + guildID + "'";
                 ResultSet rs = stmt.executeQuery(get);
                 ResultSetMetaData rsMetaData = rs.getMetaData();

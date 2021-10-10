@@ -1,5 +1,6 @@
-package Core;
+package Core.Settings;
 
+import Core.Database;
 import ErrorMessages.BadCode.SQLError;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -13,15 +14,13 @@ import java.util.Map;
 
 public class SettingGetter {
 
-    // TODO make something that changes stuff innit mate borger
-
     private static HashMap<String, Map<String,String>> settings = new HashMap<>();
 
-    public static void UpdateSetting(String guildID, String setting, String value){
-        settings.get(guildID).put(setting, value);
+    protected static void UpdateSetting(String guildID, String setting, String value){
+        settings.get(guildID).put(setting.toLowerCase(Locale.ROOT), value);
     }
 
-    public static String GuildFriendlySet(String setting, Guild guild){
+    public static String GuildFriendlyGet(String setting, Guild guild){
         String set = "";
         String guildID = guild.getId();
 
@@ -36,7 +35,7 @@ public class SettingGetter {
         return set;
     }
 
-    public static String ChannelFriendlySet(String setting, TextChannel textChannel){
+    public static String ChannelFriendlyGet(String setting, TextChannel textChannel){
         Guild guild = textChannel.getGuild();
         String guildID = guild.getId();
 
@@ -78,7 +77,7 @@ public class SettingGetter {
             Map<String, String> map = new HashMap<>();
             for (int i = 0; rs.getMetaData().getColumnCount() > i; i++) {
 
-                String key = rs.getMetaData().getColumnName(i + 1);
+                String key = rs.getMetaData().getColumnName(i + 1).toLowerCase(Locale.ROOT);
                 String value = rs.getString(i + 1);
 
                 map.put(key, value);
@@ -97,54 +96,4 @@ public class SettingGetter {
 
     }
 
-    /**
-    public static String ChannelFriendlySet(String setting, TextChannel textChannel){
-        String set = null;
-        String guild = textChannel.getGuild().getId();
-        setting = setting.toLowerCase(Locale.ROOT);
-
-        SettingCreator.check(textChannel.getGuild());
-
-        try {
-            Connection con = Database.connect();
-            Statement stmt = con.createStatement();
-            String get = "SELECT " + setting + " FROM Settings WHERE GuildID= '" + guild + "'";
-            ResultSet rs = stmt.executeQuery(get);
-            set = rs.getString(setting);
-            con.close();
-            rs.close();
-            stmt.close();
-
-        } catch(Exception x) {
-            SQLError.TextChannel(textChannel, x, "Can't turn this off sorry.");
-        }
-
-        return set;
-    }
-
-    public static String GuildFriendlySet(String setting, Guild guild){
-        String set = null;
-        String guildID = guild.getId();
-        setting = setting.toLowerCase(Locale.ROOT);
-
-
-        SettingCreator.check(guild);
-
-        try {
-            Connection con = Database.connect();
-            Statement stmt = con.createStatement();
-            String get = "SELECT " + setting + " FROM Settings WHERE GuildID= '" + guildID + "'";
-            ResultSet rs = stmt.executeQuery(get);
-            set = rs.getString(setting);
-            con.close();
-            rs.close();
-            stmt.close();
-
-        } catch(Exception x) {
-            GuildJoinedError.SendInMain(x, guild);
-        }
-
-        return set;
-    }
-     **/
 }

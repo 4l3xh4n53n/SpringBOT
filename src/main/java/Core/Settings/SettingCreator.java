@@ -1,5 +1,6 @@
-package Core;
+package Core.Settings;
 
+import Core.Database;
 import ErrorMessages.BadCode.GuildJoinedError;
 import net.dv8tion.jda.api.entities.Guild;
 
@@ -48,8 +49,13 @@ public class SettingCreator{
                     "chatfilter," +
                     "filter," +
                     "gamecommands," +
-                    "reactionroles" +
-                    ")VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                    "reactionroles," +
+                    "tickets," +
+                    "ticketcategory," +
+                    "ticketrole," +
+                    "counting," +
+                    "countingchannel" +
+                    ")VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             ps = con.prepareStatement(SQL);
             ps.setString(1, guildID);
             ps.setString(2, "!"); //Prefix
@@ -83,6 +89,11 @@ public class SettingCreator{
             ps.setString(30, "");//Filter
             ps.setString(31, "0");//GameCommands
             ps.setString(32, "0");//ReactionRoles
+            ps.setString(33, "0");//Tickets
+            ps.setString(34, "");//TicketCategory
+            ps.setString(35, "");//TicketRole
+            ps.setString(36, "0");//Counting
+            ps.setString(37, "");//CountingChannel
             ps.executeUpdate();
             ps.close();
 

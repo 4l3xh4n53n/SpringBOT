@@ -2,7 +2,7 @@ package ErrorMessages.UserError;
 
 import Core.Embed;
 import Core.MessageRemover;
-import Core.SettingGetter;
+import Core.Settings.SettingGetter;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -22,7 +22,7 @@ public class ChannelNotSet {
 
     public static void GuildFriendly(String set, User user, Guild guild, String toggle){
         EmbedBuilder em = new EmbedBuilder();
-        em.setColor(Color.decode(SettingGetter.GuildFriendlySet("GuildColour", guild)));
+        em.setColor(Color.decode(SettingGetter.GuildFriendlyGet("GuildColour", guild)));
         em.setTitle("Oh no!");
         em.addField("You don't have a channel setup for this:", set, false);
         em.addField("If you want to turn this off use this command: ", toggle, false);

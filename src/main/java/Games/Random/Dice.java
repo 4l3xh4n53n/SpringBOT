@@ -1,7 +1,7 @@
 package Games.Random;
 
 import Core.Embed;
-import Core.SettingGetter;
+import Core.Settings.SettingGetter;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
@@ -16,7 +16,7 @@ public class Dice {
 
     public static void roll(TextChannel txt, User user) {
 
-        if (SettingGetter.ChannelFriendlySet("GameCommands", txt).equals("1")) {
+        if (SettingGetter.ChannelFriendlyGet("GameCommands", txt).equals("1")) {
 
             String tag = user.getAsTag();
             String iconurl = user.getAvatarUrl();

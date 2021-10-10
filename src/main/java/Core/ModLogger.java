@@ -1,5 +1,6 @@
 package Core;
 
+import Core.Settings.SettingGetter;
 import ErrorMessages.UserError.ChannelNotSet;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -12,7 +13,7 @@ public class ModLogger {
 
     public static void log(TextChannel txt, User mentioned, String channel, String reason, String set, String module, User moderator){
 
-        if (SettingGetter.ChannelFriendlySet("LogModActions", txt).equals("1")) {
+        if (SettingGetter.ChannelFriendlyGet("LogModActions", txt).equals("1")) {
 
             TextChannel log = null;
             Guild guild = txt.getGuild();
@@ -20,7 +21,7 @@ public class ModLogger {
 
 
             try {
-                log = guild.getTextChannelById(SettingGetter.ChannelFriendlySet(channel, txt));
+                log = guild.getTextChannelById(SettingGetter.ChannelFriendlyGet(channel, txt));
             } catch (Exception x) {
                 ChannelNotSet.Send(txt, set, moderator, toggle);
             }

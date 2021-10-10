@@ -1,7 +1,7 @@
 package Auto;
 
 import Core.Database;
-import Core.SettingGetter;
+import Core.Settings.SettingGetter;
 import ErrorMessages.BadCode.SQLError;
 import ErrorMessages.UserError.ChannelNotSet;
 import net.dv8tion.jda.api.entities.Category;
@@ -206,8 +206,8 @@ public class PrivateChannelCreator {
 
         User guildOwner = guild.retrieveOwner().complete().getUser();
 
-        String PrivateChannelCreator = SettingGetter.GuildFriendlySet("PrivateChannelCreator", guild);
-        String PrivateChannelCategory = SettingGetter.GuildFriendlySet("PrivateChannelCategory", guild);
+        String PrivateChannelCreator = SettingGetter.GuildFriendlyGet("PrivateChannelCreator", guild);
+        String PrivateChannelCategory = SettingGetter.GuildFriendlyGet("PrivateChannelCategory", guild);
         VoiceChannel creator = null;
         Category category = null;
         try {

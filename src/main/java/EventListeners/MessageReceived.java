@@ -3,8 +3,9 @@ package EventListeners;
 import Auto.ChatSensor;
 import Auto.Poll;
 import Auto.ReactionRoles;
-import Core.SettingGetter;
-import Core.SettingSetter;
+import Auto.Tickets;
+import Core.Settings.SettingGetter;
+import Core.Settings.SettingSetter;
 import Games.ActivityPoints.Commands.CoinsAmount;
 import Games.ActivityPoints.Commands.Send;
 import Games.ActivityPoints.Commands.Shop;
@@ -12,13 +13,14 @@ import Games.ActivityPoints.Commands.UsersStats;
 import Games.ActivityPoints.Core.UserTimeOut;
 import Games.Random.Dice;
 import Games.Random.FlipACoin;
+import Games.Server.Counting;
 import Misc.CurrentSettings;
 import Misc.Help;
 import Misc.Ping;
-import Misc.Set.SetColour;
-import Misc.Set.SetPrefix;
-import Misc.Set.SetWelcomeImage;
-import Misc.Set.SetWelcomeMessage;
+import Core.Settings.SetColour;
+import Core.Settings.SetPrefix;
+import Core.Settings.SetWelcomeImage;
+import Core.Settings.SetWelcomeMessage;
 import Misc.Stats;
 import commands.mod.*;
 import net.dv8tion.jda.api.entities.Guild;
@@ -48,13 +50,14 @@ public class MessageReceived extends ListenerAdapter {
             String guildID = guild.getId();
             String userID = user.getId();
 
-            String botprefix = SettingGetter.ChannelFriendlySet("Prefix", channel);
+            String botprefix = SettingGetter.ChannelFriendlyGet("Prefix", channel);
 
             // Automatic processes
 
             UserTimeOut.check(userID, user, guild, channel);
             ChatSensor.check(content, channel, msg);
             ReactionRoles.creator(member, msg, content, channel, guild);
+            Counting.check(channel,msg, content, guild);
 
             if (content.startsWith(botprefix)) {
 
@@ -157,16 +160,22 @@ public class MessageReceived extends ListenerAdapter {
                     case "makereactionmessage":
                         ReactionRoles.initializer(member, user, channel);
                         break;
-
+                    case "ticket":
+                        Tickets.create(channel, request, user, guild, member);
+                        break;
+                    case "closeticket":
+                        Tickets.delete(channel);
+                        break;
 
                         // Misc
+
                     case "ping":
                         Ping.pong(channel, guild, e);
                         break;
 
                 }
             } else if (content.equalsIgnoreCase("prefix")){
-                channel.sendMessage(SettingGetter.ChannelFriendlySet("Prefix", channel)).queue();
+                channel.sendMessage(SettingGetter.ChannelFriendlyGet("Prefix", channel)).queue();
             }
 
         }

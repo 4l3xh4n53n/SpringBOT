@@ -1,7 +1,8 @@
-package Misc.Set;
+package Core.Settings;
 
 import Core.Database;
-import Core.SettingSetter;
+import Core.Settings.SettingGetter;
+import Core.Settings.SettingSetter;
 import ErrorMessages.BadCode.SQLError;
 import ErrorMessages.UserError.NoPerms;
 import ErrorMessages.UserError.WrongCommandUsage;
@@ -16,6 +17,7 @@ import java.sql.PreparedStatement;
 public class SetWelcomeMessage {
 
     private static final String example = "`setWelcomeMessage <Message>`";
+    private static final String info = "The message that is shown when a member joins your server.";
 
     public static void Check(Member member, String content, TextChannel txt, String guildID){
 
@@ -30,6 +32,7 @@ public class SetWelcomeMessage {
                     Connection con = Database.connect();
                     String update = "UPDATE Settings SET GuildWelcomeMessage = ? WHERE GuildID = '" + guildID + "'";
                     SettingSetter.SettingChanged(txt);
+                    SettingGetter.UpdateSetting(guildID, "GuildWelcomeMessage", args[1]);
                     PreparedStatement ud = con.prepareStatement(update);
                     ud.setString(1, message);
                     ud.executeUpdate();
@@ -50,4 +53,9 @@ public class SetWelcomeMessage {
     public static String getExample() {
         return example;
     }
+
+    public static String getInfo(){
+        return info;
+    }
+
 }

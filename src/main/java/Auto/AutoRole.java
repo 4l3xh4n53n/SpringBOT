@@ -1,6 +1,6 @@
 package Auto;
 
-import Core.SettingGetter;
+import Core.Settings.SettingGetter;
 import ErrorMessages.UserError.NoPerms;
 import ErrorMessages.UserError.RolesNotSet;
 import net.dv8tion.jda.api.Permission;
@@ -20,7 +20,7 @@ public class AutoRole {
 
     public static void give(Guild guild, Member member) {
 
-        if (SettingGetter.GuildFriendlySet("AutoRole", guild).equals("1")) {
+        if (SettingGetter.GuildFriendlyGet("AutoRole", guild).equals("1")) {
 
             User guildOwner = guild.retrieveOwner().complete().getUser();
             Member botMember = guild.getSelfMember();
@@ -28,7 +28,7 @@ public class AutoRole {
 
             try {
 
-                roleID = SettingGetter.GuildFriendlySet("AutoRoleRole", guild).split(",");
+                roleID = SettingGetter.GuildFriendlyGet("AutoRoleRole", guild).split(",");
 
             } catch (Exception ignored) {}
 

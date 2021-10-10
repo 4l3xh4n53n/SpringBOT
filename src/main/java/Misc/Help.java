@@ -1,20 +1,18 @@
 package Misc;
 
-import Auto.AutoRole;
-import Auto.ChatSensor;
-import Auto.GuildWelcomeMessage;
-import Auto.InviteLogger;
-import Auto.Poll;
-import Auto.PrivateChannelCreator;
-import Auto.ReactionRoles;
+import Auto.*;
 import Core.Embed;
-import Core.SettingSetter;
+import Core.Settings.SettingSetter;
 import Games.ActivityPoints.Commands.CoinsAmount;
 import Games.ActivityPoints.Commands.Send;
 import Games.ActivityPoints.Commands.Shop;
 import Games.ActivityPoints.Commands.UsersStats;
 import Games.Random.Dice;
 import Games.Random.FlipACoin;
+import Core.Settings.SetColour;
+import Core.Settings.SetPrefix;
+import Core.Settings.SetWelcomeImage;
+import Core.Settings.SetWelcomeMessage;
 import commands.mod.Ban;
 import commands.mod.Clear;
 import commands.mod.Kick;
@@ -44,21 +42,25 @@ public class Help {
         txt.sendMessageEmbeds(em.build()).queue();
     }
 
-    private static void Settings(EmbedBuilder em, TextChannel txt){ // todo add the setting commands
+    private static void Settings(EmbedBuilder em, TextChannel txt){
         em.setTitle("Settings");
         em.setDescription("Settings commands allow you to setup log channels, turn modules on and off, and give certain roles the ability to use certain features.");
         em.addField("Set", SettingSetter.example, false);
         em.addField("Modules: (things that can be turned on and off)", SettingSetter.modules, false);
         em.addField("Roles: (The roles that you want to have access to a specific module)", SettingSetter.roles, false);
         em.addField("Channels: (The channels where certain things will happen)", SettingSetter.channels, false);
+        em.addField("SetColour " + SetColour.getExample(), SetColour.getInfo(), false);
+        em.addField("SetPrefix " + SetPrefix.getExample(), SetPrefix.getInfo(), false);
+        em.addField("SetWelcomeImage " + SetWelcomeImage.getExample(), SetWelcomeImage.getInfo(), false);
+        em.addField("SetWelcomeMessage " + SetWelcomeMessage.getExample(), SetWelcomeMessage.getInfo(), false);
         txt.sendMessageEmbeds(em.build()).queue();
     }
 
     private static void Moderation(EmbedBuilder em, TextChannel txt){
         em.setTitle("Moderation");
         em.setDescription("These commands let you do things by typing rather than the gui, even though gui is probably faster for most (whatever floats your boat I guess)");
-        em.addField("How to turn them on and off: ", "`set MODULE ModCommands 1/0`", false);
-        em.addField("You can also log mod actions with this command: ", "`set MODULE LogModActions 1/0`", false);
+        em.addField("How to turn them on and off: ", "`set ModCommands 1/0`", false);
+        em.addField("You can also log mod actions with this command: ", "`set LogModActions 1/0`", false);
         em.addField("ban " + Ban.getExample(), Ban.getInfo() + "\nHow to set the log: " + Ban.getLog() + "\nHow to set the roles: " + Ban.getSet(), false);
         em.addField("unban " + UnBan.getExample(), UnBan.getInfo() + "\nHow to set the log: " + UnBan.getLog() + "\nHow to set the roles: " + Ban.getSet(), false);
         em.addField("kick " + Kick.getExample(), Kick.getInfo() + "\nHow to set the log: " + Kick.getLog() + "\nHow to set the roles: " + Kick.getSet(), false);
@@ -88,6 +90,7 @@ public class Help {
         em.addField("Poll", Poll.getInfo() + " " +  Poll.getSet() + " How to set it up" + Poll.getInfo(), false);
         em.addField("Private Channel Creator", PrivateChannelCreator.getInfo() + " " +  PrivateChannelCreator.getSet() + "\nHow to turn on or off: " + PrivateChannelCreator.getToggle(), false);
         em.addField("Reaction Roles", ReactionRoles.getInfo() + " How to set it up" + ReactionRoles.getSet() + "\nHow to turn on or off: " + ReactionRoles.getToggle(), false);
+        em.addField("Tickets " + Tickets.getExample(), Tickets.getInfo() + " How to set it up" + Tickets.getSet() + "\nHow to turn on or off: " + Tickets.getToggle(), false);
         txt.sendMessageEmbeds(em.build()).queue();
     }
 

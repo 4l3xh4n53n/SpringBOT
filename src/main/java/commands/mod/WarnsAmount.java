@@ -2,7 +2,7 @@ package commands.mod;
 
 import Core.Database;
 import Core.Embed;
-import Core.SettingGetter;
+import Core.Settings.SettingGetter;
 import ErrorMessages.BadCode.SQLError;
 import ErrorMessages.UserError.NoPerms;
 import ErrorMessages.UserError.RolesNotSet;
@@ -28,7 +28,7 @@ import java.util.List;
 
 public class WarnsAmount {
 
-    private static final String example = "`warns <@user>";
+    private static final String example = "`warns <@user>`";
     private static final String info = "Shows you how many warns the specified user has";
     private static final String set = "`set WarnRoles <@role(S)>`";
     private static final String toggle = "`set ModCommands 1/0`";
@@ -70,13 +70,13 @@ public class WarnsAmount {
         Connection con = Database.warns();
         Warn.checkDatabse(con, guildID, textChannel);
 
-        String[] requiredRoles = SettingGetter.ChannelFriendlySet("WarnRoles", textChannel).split(",");
+        String[] requiredRoles = SettingGetter.ChannelFriendlyGet("WarnRoles", textChannel).split(",");
         List<Role> userRoles = member.getRoles();
         List<String> usersRoles = GetRoleIDs.get(userRoles);
         String[] args = contentRaw.split("\\s+");
         User mentioned;
 
-        if (SettingGetter.ChannelFriendlySet("ModCommands", textChannel).equals("1")) {
+        if (SettingGetter.ChannelFriendlyGet("ModCommands", textChannel).equals("1")) {
             if (args.length > 1) {
                 if (RoleChecker.areRolesValid(requiredRoles, guild) == 1) {
                     if ((mentioned = GetMentioned.get(msg, args[1], guild)) != null) {

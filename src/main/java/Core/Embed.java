@@ -1,5 +1,6 @@
 package Core;
 
+import Core.Settings.SettingGetter;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
@@ -21,7 +22,7 @@ public class Embed {
         }
 
         EmbedBuilder em = new EmbedBuilder();
-        em.setColor(Color.decode(SettingGetter.ChannelFriendlySet("GuildColour", txt)));
+        em.setColor(Color.decode(SettingGetter.ChannelFriendlyGet("GuildColour", txt)));
         em.setFooter("ID: " + sender.getId() + " | Time: " + time);
 
         return em;

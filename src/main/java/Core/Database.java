@@ -77,5 +77,17 @@ public class Database {
 
         return con;
     }
+
+    public static Connection Tickets(){
+        Connection con = null;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            con = DriverManager.getConnection("jdbc:sqlite:Databases/Tickets.db");
+        } catch (ClassNotFoundException | SQLException e ) {
+            System.out.println(e+"");
+        }
+
+        return con;
+    }
     
 }

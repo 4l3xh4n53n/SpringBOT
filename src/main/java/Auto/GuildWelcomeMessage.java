@@ -1,7 +1,7 @@
 package Auto;
 
 import Core.Embed;
-import Core.SettingGetter;
+import Core.Settings.SettingGetter;
 import ErrorMessages.UserError.ChannelNotSet;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -19,18 +19,18 @@ public class GuildWelcomeMessage {
 
     public static void Check(Guild guild, User joined){
 
-        if (SettingGetter.GuildFriendlySet("GuildWelcome", guild).equals("1")){
+        if (SettingGetter.GuildFriendlyGet("GuildWelcome", guild).equals("1")){
 
             TextChannel welcome = null;
             String tag = joined.getAsTag();
             String pfp = joined.getAvatarUrl();
             User guildOwner = guild.retrieveOwner().complete().getUser();
-            String guildWelcomeMessage = SettingGetter.GuildFriendlySet("GuildWelcomeMessage", guild);
-            String guildWelcomeImage = SettingGetter.GuildFriendlySet("GuildWelcomeImage", guild);
+            String guildWelcomeMessage = SettingGetter.GuildFriendlyGet("GuildWelcomeMessage", guild);
+            String guildWelcomeImage = SettingGetter.GuildFriendlyGet("GuildWelcomeImage", guild);
 
             try {
 
-                welcome = guild.getTextChannelById(SettingGetter.GuildFriendlySet("GuildWelcomeChannel", guild));
+                welcome = guild.getTextChannelById(SettingGetter.GuildFriendlyGet("GuildWelcomeChannel", guild));
 
             } catch (Exception x) {
                 ChannelNotSet.GuildFriendly("GuildWelcomeMessage", guildOwner, guild, toggle);
@@ -39,7 +39,7 @@ public class GuildWelcomeMessage {
             if (welcome != null){
 
                 EmbedBuilder em  = Embed.em(joined, welcome);
-                em.setColor(Color.decode(SettingGetter.GuildFriendlySet("GuildColour", guild)));
+                em.setColor(Color.decode(SettingGetter.GuildFriendlyGet("GuildColour", guild)));
                 em.setAuthor(tag, null, pfp);
                 em.addField("", Optional.ofNullable(guildWelcomeMessage).orElse("Welcome Message has not been set up lol"), false);
 

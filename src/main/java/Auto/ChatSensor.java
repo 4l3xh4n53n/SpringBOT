@@ -1,7 +1,7 @@
 package Auto;
 
 import Core.Database;
-import Core.SettingGetter;
+import Core.Settings.SettingGetter;
 import ErrorMessages.BadCode.SQLError;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
@@ -11,7 +11,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
-import static Core.SettingSetter.SettingChanged;
+import static Core.Settings.SettingSetter.SettingChanged;
 
 public class ChatSensor {
 
@@ -21,9 +21,9 @@ public class ChatSensor {
 
     public static void check(String contentRaw, TextChannel txt, Message message){
 
-        if (SettingGetter.ChannelFriendlySet("ChatFilter", txt).equals("1")){
+        if (SettingGetter.ChannelFriendlyGet("ChatFilter", txt).equals("1")){
 
-            String[] filter = SettingGetter.ChannelFriendlySet("Filter", txt).toLowerCase().split(",");
+            String[] filter = SettingGetter.ChannelFriendlyGet("Filter", txt).toLowerCase().split(",");
             String better = contentRaw.toLowerCase().replaceAll("[^\\p{IsAlphabetic}]", "");
 
             if (filter.length >= 1 && !filter[0].equals("")){
@@ -78,7 +78,7 @@ public class ChatSensor {
 
         if (member.getPermissions().contains(Permission.ADMINISTRATOR)) {
 
-            StringBuilder current = new StringBuilder(SettingGetter.ChannelFriendlySet("Filter", txt));
+            StringBuilder current = new StringBuilder(SettingGetter.ChannelFriendlyGet("Filter", txt));
             String[] words = contentraw.toLowerCase().replace("addfilter ", "").split(" ");
 
             for (String word : words) {
@@ -97,7 +97,7 @@ public class ChatSensor {
 
         if (member.getPermissions().contains(Permission.ADMINISTRATOR)){
 
-            String current = SettingGetter.ChannelFriendlySet("Filter", txt);
+            String current = SettingGetter.ChannelFriendlyGet("Filter", txt);
             String[] words = contentraw.toLowerCase().replace("removefilter ", "").split(" ");
 
             for (String word : words) {

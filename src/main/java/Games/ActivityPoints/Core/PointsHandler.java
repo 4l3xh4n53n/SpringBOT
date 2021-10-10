@@ -1,7 +1,7 @@
 package Games.ActivityPoints.Core;
 
 import Core.Database;
-import Core.SettingGetter;
+import Core.Settings.SettingGetter;
 import ErrorMessages.BadCode.SQLError;
 import Games.ActivityPoints.Commands.Shop;
 import net.dv8tion.jda.api.entities.Guild;
@@ -111,7 +111,7 @@ public class PointsHandler {
     }
 
     public static void add(User user, Guild guild, TextChannel txt){
-        if (SettingGetter.ChannelFriendlySet("Coins", txt).equals("1")) {
+        if (SettingGetter.ChannelFriendlyGet("Coins", txt).equals("1")) {
             String guildID = guild.getId();
             String userID = user.getId();
 

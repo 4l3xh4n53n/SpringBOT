@@ -1,7 +1,7 @@
 package EventListeners;
 
 import Auto.PrivateChannelCreator;
-import Core.SettingGetter;
+import Core.Settings.SettingGetter;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
@@ -22,7 +22,7 @@ public class EntersVoiceChannel extends ListenerAdapter {
         channel = e.getChannelLeft();
         guildID = guild.getId();
 
-        if (SettingGetter.GuildFriendlySet("PrivateChannel", guild).equals("1")) {
+        if (SettingGetter.GuildFriendlyGet("PrivateChannel", guild).equals("1")) {
             PrivateChannelCreator.CheckDB(guildID, guild);
             PrivateChannelCreator.Decrease(channel, guild);
             PrivateChannelCreator.Delete(channel, guild, guildID);
@@ -38,7 +38,7 @@ public class EntersVoiceChannel extends ListenerAdapter {
         VoiceChannel channel = e.getChannelJoined();
         String guildID = guild.getId();
 
-        if (SettingGetter.GuildFriendlySet("PrivateChannel", guild).equals("1")) {
+        if (SettingGetter.GuildFriendlyGet("PrivateChannel", guild).equals("1")) {
             PrivateChannelCreator.CheckDB(guildID, guild);
             PrivateChannelCreator.Increase(channel, guild);
             PrivateChannelCreator.Create(guild, user, channel, member, guildID);

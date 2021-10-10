@@ -2,7 +2,7 @@ package Games.ActivityPoints.Commands;
 
 import Core.Database;
 import Core.Embed;
-import Core.SettingGetter;
+import Core.Settings.SettingGetter;
 import ErrorMessages.BadCode.SQLError;
 import ErrorMessages.UserError.WrongCommandUsage;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -64,7 +64,7 @@ public class Send {
         List<User> mentions = message.getMentionedUsers();
         String[] args = content.split("\\s+");
 
-        if (SettingGetter.ChannelFriendlySet("Coins", txt).equals("1") && SettingGetter.ChannelFriendlySet("SendCoins", txt).equals("1")) {
+        if (SettingGetter.ChannelFriendlyGet("Coins", txt).equals("1") && SettingGetter.ChannelFriendlyGet("SendCoins", txt).equals("1")) {
             if (args.length > 2) {
                 if (mentions.size() > 0) {
                     if (StringUtils.isNumeric(args[2]) && Integer.parseInt(args[2]) > 0) {

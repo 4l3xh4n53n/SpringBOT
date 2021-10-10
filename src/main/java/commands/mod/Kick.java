@@ -3,7 +3,7 @@ package commands.mod;
 import Core.Embed;
 import Core.MessageRemover;
 import Core.ModLogger;
-import Core.SettingGetter;
+import Core.Settings.SettingGetter;
 import ErrorMessages.UserError.NoPerms;
 import ErrorMessages.UserError.RoleTooHigh;
 import ErrorMessages.UserError.RolesNotSet;
@@ -28,7 +28,7 @@ import java.util.List;
 
 public class Kick {
 
-    private static final String example = "`kick <@user/userID> <REASON> <--` (optional)";
+    private static final String example = "`kick <@user/userID> <REASON>`<-- (optional)";
     private static final String info = "This command kicks the specified user.";
     private static final String set = "`set KickRoles <@role(S)>`";
     private static final String log = "`set KickLog <channelID>`";
@@ -55,7 +55,7 @@ public class Kick {
         Role botRole = guild.getSelfMember().getRoles().get(0);
         Member botMember = guild.getSelfMember();
 
-        String[] requiredRoles = SettingGetter.ChannelFriendlySet("KickRoles", textChannel).split(",");
+        String[] requiredRoles = SettingGetter.ChannelFriendlyGet("KickRoles", textChannel).split(",");
         List<Role> userRoles = member.getRoles();
         List<String> usersRolesIDs = GetRoleIDs.get(userRoles);
 
@@ -63,7 +63,7 @@ public class Kick {
         int botRolePos = botRole.getPosition();
         int selfUserRolePos = guild.getSelfMember().getRoles().get(0).getPosition();
 
-        if (SettingGetter.ChannelFriendlySet("ModCommands", textChannel).equals("1")) {
+        if (SettingGetter.ChannelFriendlyGet("ModCommands", textChannel).equals("1")) {
             if (args.length > 1) {
                 if (RoleChecker.areRolesValid(requiredRoles, guild) == 1) {
                     if ((mentionedUser = GetMentioned.get(msg, args[1], guild)) != null) {

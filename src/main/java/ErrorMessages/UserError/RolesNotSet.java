@@ -2,7 +2,7 @@ package ErrorMessages.UserError;
 
 import Core.Embed;
 import Core.MessageRemover;
-import Core.SettingGetter;
+import Core.Settings.SettingGetter;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -22,7 +22,7 @@ public class RolesNotSet {
 
     public static void GuildFriendly(User user, String notset, String command, Guild guild, String toggle){
         EmbedBuilder em = new EmbedBuilder();
-        em.setColor(Color.decode(SettingGetter.GuildFriendlySet("GuildColour", guild)));
+        em.setColor(Color.decode(SettingGetter.GuildFriendlyGet("GuildColour", guild)));
         em.setTitle("You haven't set up roles that can use this command");
         em.addField("You haven't set: " + notset + " Please try:",command, false);
         em.addField("If you want to turn this off use this command: ", toggle, false);

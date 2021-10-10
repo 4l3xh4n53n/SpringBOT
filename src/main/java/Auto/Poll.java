@@ -2,7 +2,7 @@ package Auto;
 
 import Core.Embed;
 import Core.MessageRemover;
-import Core.SettingGetter;
+import Core.Settings.SettingGetter;
 import ErrorMessages.UserError.NoPerms;
 import ErrorMessages.UserError.RolesNotSet;
 import ErrorMessages.UserError.WrongCommandUsage;
@@ -29,7 +29,7 @@ public class Poll {
 
         String[] roleID = null;
         String[] args = content.split("OPTION");
-        String topic = args[0].toLowerCase().replace(SettingGetter.ChannelFriendlySet("Prefix", txt) + "poll", "");
+        String topic = args[0].toLowerCase().replace(SettingGetter.ChannelFriendlyGet("Prefix", txt) + "poll", "");
         String[] options = content.replace(topic + "OPTION", "").split("OPTION");
         StringBuilder optionsF = new StringBuilder();
         List<Role> roles = new java.util.ArrayList<>(Collections.emptyList());
@@ -40,7 +40,7 @@ public class Poll {
         int check = 0;
 
         try {
-            roleID = SettingGetter.ChannelFriendlySet("PollRole", txt).split("\\s+");
+            roleID = SettingGetter.ChannelFriendlyGet("PollRole", txt).split("\\s+");
             check = 1;
         } catch (Exception ignored) {
             RolesNotSet.ChannelFriendly(txt, "PollRole", set, user, toggle);

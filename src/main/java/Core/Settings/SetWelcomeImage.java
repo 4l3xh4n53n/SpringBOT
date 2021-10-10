@@ -1,7 +1,8 @@
-package Misc.Set;
+package Core.Settings;
 
 import Core.Database;
-import Core.SettingSetter;
+import Core.Settings.SettingGetter;
+import Core.Settings.SettingSetter;
 import ErrorMessages.BadCode.SQLError;
 import ErrorMessages.UserError.NoPerms;
 import net.dv8tion.jda.api.Permission;
@@ -15,6 +16,7 @@ import java.sql.PreparedStatement;
 public class SetWelcomeImage {
 
     private static final String example = "`setWelcomeImage <link>` <-- (not adding a link removes the image)";
+    private static final String info = "The image displayed when a member joins.";
 
     public static void Check(Member member, String content, TextChannel txt, String guildID){
 
@@ -27,12 +29,14 @@ public class SetWelcomeImage {
 
             try {
                 Connection con = Database.connect();
-                String update = "UPDATE Settings SET GuildWelcomeIMAGE = ? WHERE GuildID = '" + guildID + "'";
+                String update = "UPDATE Settings SET GuildWelcomeImage = ? WHERE GuildID = '" + guildID + "'";
                 SettingSetter.SettingChanged(txt);
+                SettingGetter.UpdateSetting(guildID, "GuildWelcomeImage", args[1]);
                 PreparedStatement ud = con.prepareStatement(update);
                 ud.setString(1, url);
                 ud.executeUpdate();
                 ud.close();
+
             } catch (Exception x) {
                 SQLError.TextChannel(txt, x, "Just don't run this command.");
             }
@@ -45,4 +49,9 @@ public class SetWelcomeImage {
     public static String getExample() {
         return example;
     }
+
+    public static String getInfo(){
+        return info;
+    }
+
 }

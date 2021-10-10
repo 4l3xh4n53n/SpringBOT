@@ -3,7 +3,7 @@ package Games.ActivityPoints.Commands;
 import Core.Database;
 import Core.Embed;
 import Core.Main;
-import Core.SettingGetter;
+import Core.Settings.SettingGetter;
 import ErrorMessages.BadCode.SQLError;
 import Games.ActivityPoints.Core.PointsHandler;
 import Utility.GetMentioned;
@@ -13,7 +13,6 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
-import org.apache.commons.collections4.Get;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -75,7 +74,7 @@ public class CoinsAmount {
 
     public static void get(User user, Guild guild, TextChannel txt, Message msg, String content){
 
-        if (SettingGetter.ChannelFriendlySet("Coins", txt).equals("1")) {
+        if (SettingGetter.ChannelFriendlyGet("Coins", txt).equals("1")) {
 
             String guildID = guild.getId();
             String userID = user.getId();

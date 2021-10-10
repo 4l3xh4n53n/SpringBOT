@@ -14,7 +14,7 @@ import java.time.format.DateTimeFormatter;
 
 public class UserInfo {
 
-    private static final String example = "information <user>";
+    private static final String example = "`information <user>`";
     private static final String info = "Shows information about a user.";
     private static final String toggle = "`set ModCommands 1/0`";
 

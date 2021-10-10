@@ -3,7 +3,7 @@ package Auto;
 import Core.Database;
 import Core.Embed;
 import Core.MessageRemover;
-import Core.SettingGetter;
+import Core.Settings.SettingGetter;
 import ErrorMessages.BadCode.SQLError;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -40,7 +40,7 @@ public class ReactionRoles {
 
     public static void removeRole(String messageID, TextChannel textChannel, Guild guild, Member member, String reaction){
 
-        if (SettingGetter.ChannelFriendlySet("ReactionRoles", textChannel).equals("1")) {
+        if (SettingGetter.ChannelFriendlyGet("ReactionRoles", textChannel).equals("1")) {
 
             Member selfMember = guild.getSelfMember();
             if (selfMember.hasPermission(Permission.MANAGE_ROLES)) {
@@ -87,7 +87,7 @@ public class ReactionRoles {
 
     public static void addRole(String messageID, TextChannel textChannel, Guild guild, Member member, String reaction){
 
-        if (SettingGetter.ChannelFriendlySet("ReactionRoles", textChannel).equals("1")) {
+        if (SettingGetter.ChannelFriendlyGet("ReactionRoles", textChannel).equals("1")) {
 
             Member selfMember = guild.getSelfMember();
             if (selfMember.hasPermission(Permission.MANAGE_ROLES)) {

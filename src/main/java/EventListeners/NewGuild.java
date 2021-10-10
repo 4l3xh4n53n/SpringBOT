@@ -1,6 +1,6 @@
 package EventListeners;
 
-import Core.SettingCreator;
+import Core.Settings.SettingCreator;
 import Misc.NewGuildWelcomeMessage;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;

@@ -3,7 +3,7 @@ package commands.mod;
 import Core.Database;
 import Core.Embed;
 import Core.ModLogger;
-import Core.SettingGetter;
+import Core.Settings.SettingGetter;
 import ErrorMessages.BadCode.SQLError;
 import ErrorMessages.UserError.NoPerms;
 import ErrorMessages.UserError.RolesNotSet;
@@ -128,11 +128,11 @@ public class Warn {
         User mentionedUser;
         String[] args = msg.getContentRaw().split("\\s+");
 
-        String[] requiredRoles = SettingGetter.ChannelFriendlySet("WarnRoles", textChannel).split(",");
+        String[] requiredRoles = SettingGetter.ChannelFriendlyGet("WarnRoles", textChannel).split(",");
         List<Role> userRoles = member.getRoles();
         List<String> usersRolesIDs = GetRoleIDs.get(userRoles);
 
-        if (SettingGetter.ChannelFriendlySet("ModCommands", textChannel).equals("1")) {
+        if (SettingGetter.ChannelFriendlyGet("ModCommands", textChannel).equals("1")) {
             if (args.length > 1) {
                 if (RoleChecker.areRolesValid(requiredRoles, guild) == 1) {
                     if ((mentionedUser = GetMentioned.get(msg, args[1], guild)) != null) {

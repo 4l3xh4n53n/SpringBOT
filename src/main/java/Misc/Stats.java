@@ -1,7 +1,7 @@
 package Misc;
 
 import Core.Main;
-import Core.SettingGetter;
+import Core.Settings.SettingGetter;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
@@ -47,7 +47,7 @@ public class Stats {
         String osbit = System.getProperty("os.arch");
 
         EmbedBuilder em = new EmbedBuilder();
-        em.setColor(Color.decode(SettingGetter.GuildFriendlySet("GuildColour", guild)));
+        em.setColor(Color.decode(SettingGetter.GuildFriendlyGet("GuildColour", guild)));
         em.setThumbnail("https://cdn.discordapp.com/avatars/673654725127831562/526af14d924487c4af7aabae5fa2850a.png?size=1024");
         em.setTitle("Stats:");
         em.setDescription("GitHub: https://github.com/4l3xh4n53n/SpringBOT");

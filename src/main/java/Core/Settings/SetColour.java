@@ -1,7 +1,8 @@
-package Misc.Set;
+package Core.Settings;
 
 import Core.Database;
-import Core.SettingSetter;
+import Core.Settings.SettingGetter;
+import Core.Settings.SettingSetter;
 import ErrorMessages.BadCode.SQLError;
 import ErrorMessages.UserError.WrongCommandUsage;
 import net.dv8tion.jda.api.Permission;
@@ -49,6 +50,7 @@ public class SetColour {
                         ud.close();
 
                         SettingSetter.SettingChanged(txt);
+                        SettingGetter.UpdateSetting(guildID, "GuildColour", args[1]);
 
                     } catch (Exception x) {
                         SQLError.TextChannel(txt, x, "Just don't run this command.");

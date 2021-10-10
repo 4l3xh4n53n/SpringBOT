@@ -1,7 +1,8 @@
-package Misc.Set;
+package Core.Settings;
 
 import Core.Database;
-import Core.SettingSetter;
+import Core.Settings.SettingGetter;
+import Core.Settings.SettingSetter;
 import ErrorMessages.BadCode.SQLError;
 import ErrorMessages.UserError.WrongCommandUsage;
 import net.dv8tion.jda.api.Permission;
@@ -29,6 +30,8 @@ public class SetPrefix {
                     Connection con = Database.connect();
                     Statement stmt = con.createStatement();
                     String update = "UPDATE Settings SET Prefix = ? WHERE GuildID='" + guildID + "'";
+                    SettingGetter.UpdateSetting(guildID, "Prefix", args[1]);
+                    SettingSetter.SettingChanged(txt);
                     PreparedStatement ud = con.prepareStatement(update);
                     ud.setString(1, args[1]);
                     ud.executeUpdate();
@@ -36,7 +39,7 @@ public class SetPrefix {
                     stmt.close();
                     ud.close();
 
-                    SettingSetter.SettingChanged(txt);
+
 
                 } catch (Exception x) {
                     SQLError.TextChannel(txt, x, "Just don't run this command.");

@@ -2,7 +2,7 @@ package Games.ActivityPoints.Commands;
 
 import Core.Database;
 import Core.Embed;
-import Core.SettingGetter;
+import Core.Settings.SettingGetter;
 import ErrorMessages.BadCode.SQLError;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
@@ -55,7 +55,7 @@ public class UsersStats {
     }
 
     public static void Send(User user, Message message, TextChannel txt, String guildID){
-        if (SettingGetter.ChannelFriendlySet("Coins", txt).equals("1")) {
+        if (SettingGetter.ChannelFriendlyGet("Coins", txt).equals("1")) {
 
             List<User> mentioned = message.getMentionedUsers();
             User get;

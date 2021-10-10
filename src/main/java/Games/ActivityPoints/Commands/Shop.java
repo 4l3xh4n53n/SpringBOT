@@ -3,7 +3,7 @@ package Games.ActivityPoints.Commands;
 import Core.Database;
 import Core.Embed;
 import Core.MessageRemover;
-import Core.SettingGetter;
+import Core.Settings.SettingGetter;
 import ErrorMessages.BadCode.SQLError;
 import ErrorMessages.UserError.WrongCommandUsage;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -162,7 +162,7 @@ public class Shop {
 
     public static void check(TextChannel txt, String content, String guildID, String userID, User user){
 
-        if (SettingGetter.ChannelFriendlySet("Coins", txt).equals("1")) {
+        if (SettingGetter.ChannelFriendlyGet("Coins", txt).equals("1")) {
 
             String[] args = content.split("\\s+");
 

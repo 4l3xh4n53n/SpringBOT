@@ -2,7 +2,7 @@ package Auto;
 
 import Core.Database;
 import Core.Embed;
-import Core.SettingGetter;
+import Core.Settings.SettingGetter;
 import ErrorMessages.BadCode.SQLError;
 import ErrorMessages.UserError.ChannelNotSet;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -90,7 +90,7 @@ public class InviteLogger {
 
     public static void Send(Guild guild, User joined){
 
-        if (SettingGetter.GuildFriendlySet("InviteLogging", guild).equals("1")) {
+        if (SettingGetter.GuildFriendlyGet("InviteLogging", guild).equals("1")) {
 
             String guildID = guild.getId();
             User guildOwner = guild.retrieveOwner().complete().getUser();
@@ -115,7 +115,7 @@ public class InviteLogger {
 
                 try {
 
-                    log = guild.getTextChannelById(SettingGetter.GuildFriendlySet("InviteLog", guild));
+                    log = guild.getTextChannelById(SettingGetter.GuildFriendlyGet("InviteLog", guild));
 
                 } catch (Exception x) {
                     ChannelNotSet.GuildFriendly(set, guildOwner, guild, toggle);

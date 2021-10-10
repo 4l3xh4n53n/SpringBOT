@@ -2,7 +2,7 @@ package commands.mod;
 
 import Core.Embed;
 import Core.MessageRemover;
-import Core.SettingGetter;
+import Core.Settings.SettingGetter;
 import ErrorMessages.UserError.NoPerms;
 import ErrorMessages.UserError.RolesNotSet;
 import ErrorMessages.UserError.WrongCommandUsage;
@@ -24,7 +24,7 @@ import java.util.List;
 
 public class Clear {
 
-    private static final String example = "clear <amount>";
+    private static final String example = "`clear <amount>`";
     private static final String info = "This automatically removes a specified amount of messages from the specified channel.";
     private static final String set = "`set ClearRoles <@role(s)>`";
     private static final String toggle = "`set ModCommands 1/0`";
@@ -45,14 +45,14 @@ public class Clear {
         String[] args = request.split("\\s+");
 
         Member botMember = guild.getSelfMember();
-        String[] requiredRoles = SettingGetter.ChannelFriendlySet("ClearRoles", textChannel).split(",");
+        String[] requiredRoles = SettingGetter.ChannelFriendlyGet("ClearRoles", textChannel).split(",");
 
         List<Role> userRoles = member.getRoles();
         List<String> usersRoles = GetRoleIDs.get(userRoles);
 
         int amount;
 
-        if (SettingGetter.ChannelFriendlySet("ModCommands", textChannel).equals("1")) {
+        if (SettingGetter.ChannelFriendlyGet("ModCommands", textChannel).equals("1")) {
             if (args.length == 2) {
 
                 // Makes sure specified amount is a number if not defaults to 1 message
