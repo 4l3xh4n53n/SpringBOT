@@ -13,6 +13,7 @@ import Core.Settings.SetColour;
 import Core.Settings.SetPrefix;
 import Core.Settings.SetWelcomeImage;
 import Core.Settings.SetWelcomeMessage;
+import Games.Server.Counting;
 import commands.mod.Ban;
 import commands.mod.Clear;
 import commands.mod.Kick;
@@ -77,6 +78,7 @@ public class Help {
         em.setDescription("Stuff in here for fun.");
         em.addField("flip", FlipACoin.getInfo(), false);
         em.addField("roll", Dice.getInfo(), false);
+        em.addField("counting", Counting.getInfo() + " To set a channel: " + Counting.getSet() + " To turn on or off: " + Counting.getToggle(), false);
         txt.sendMessageEmbeds(em.build()).queue();
     }
 

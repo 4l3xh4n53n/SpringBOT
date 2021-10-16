@@ -11,6 +11,7 @@ public class Counting {
 
     private static final String info = "Rolls a dice.";
     private static final String toggle = "`set GameCommands 1/0`";
+    private static final String set = "`set countingchannel <channelID>`";
 
     private static void deleteMessage(Guild guild, Message message, TextChannel textChannel){
         if (guild.getSelfMember().hasPermission(Permission.MESSAGE_MANAGE)) {
@@ -60,6 +61,10 @@ public class Counting {
 
     public static String getToggle(){
         return toggle;
+    }
+
+    public static String getSet(){
+        return set;
     }
 
 }
