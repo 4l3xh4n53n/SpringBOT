@@ -1,6 +1,7 @@
 package Core.Settings;
 
 import Core.Database;
+import Core.Main;
 import ErrorMessages.BadCode.SQLError;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -14,25 +15,20 @@ import java.util.Map;
 
 public class SettingGetter {
 
-    private static HashMap<String, Map<String,String>> settings = new HashMap<>();
+    private static final HashMap<String, Map<String,String>> settings = new HashMap<>();
 
     protected static void UpdateSetting(String guildID, String setting, String value){
         settings.get(guildID).put(setting.toLowerCase(Locale.ROOT), value);
     }
 
     public static String GuildFriendlyGet(String setting, Guild guild){
-        String set = "";
         String guildID = guild.getId();
 
-        if (settings.containsKey(guildID)){
-
-            set = settings.get(guildID).get(setting.toLowerCase(Locale.ROOT));
-
-        } else {
+        if (!settings.containsKey(guildID)){
             cacheInMap(guildID, null, guild);
         }
 
-        return set;
+        return settings.get(guildID).get(setting.toLowerCase(Locale.ROOT));
     }
 
     public static String ChannelFriendlyGet(String setting, TextChannel textChannel){
@@ -68,7 +64,10 @@ public class SettingGetter {
 
     private static Map<String, String> getFromDatabase(String guildID){
 
+        SettingCreator.check(Main.getShards().get(0).getGuildById(guildID));
+
         try {
+
             Connection con = Database.connect();
             Statement stmt = con.createStatement();
             String get = "SELECT * FROM Settings WHERE GuildID= '" + guildID + "'";

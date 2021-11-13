@@ -45,6 +45,9 @@ public class SettingCreator{
                     "privatechannelcreator," +
                     "privatechannelcategory," +
                     "serverstats," +
+                    "statsTotal," +
+                    "statsBot," +
+                    "statsMember," +
                     "statschannel," +
                     "chatfilter," +
                     "filter," +
@@ -55,7 +58,7 @@ public class SettingCreator{
                     "ticketrole," +
                     "counting," +
                     "countingchannel" +
-                    ")VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                    ")VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             ps = con.prepareStatement(SQL);
             ps.setString(1, guildID);
             ps.setString(2, "!"); //Prefix
@@ -84,16 +87,19 @@ public class SettingCreator{
             ps.setString(25, "");//PrivateChannelCreator
             ps.setString(26, "");//PrivateChannelCategory
             ps.setString(27, "0");//ServerStats
-            ps.setString(28, "");//StatsChannel
-            ps.setString(29, "0");//ChatFilter
-            ps.setString(30, "");//Filter
-            ps.setString(31, "0");//GameCommands
-            ps.setString(32, "0");//ReactionRoles
-            ps.setString(33, "0");//Tickets
-            ps.setString(34, "");//TicketCategory
-            ps.setString(35, "");//TicketRole
-            ps.setString(36, "0");//Counting
-            ps.setString(37, "");//CountingChannel
+            ps.setString(28, "1");//StatsTotal
+            ps.setString(29, "1");//StatsBot
+            ps.setString(30, "1");//StatsMember
+            ps.setString(31, "");//StatsChannel
+            ps.setString(32, "0");//ChatFilter
+            ps.setString(33, "");//Filter
+            ps.setString(34, "0");//GameCommands
+            ps.setString(35, "0");//ReactionRoles
+            ps.setString(36, "0");//Tickets
+            ps.setString(37, "");//TicketCategory
+            ps.setString(38, "");//TicketRole
+            ps.setString(39, "0");//Counting
+            ps.setString(40, "");//CountingChannel
             ps.executeUpdate();
             ps.close();
 

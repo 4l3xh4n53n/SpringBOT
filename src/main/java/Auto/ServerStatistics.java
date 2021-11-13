@@ -1,19 +1,18 @@
 package Auto;
 
 import Core.Main;
-import Core.Settings.SettingGetter;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.VoiceChannel;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 public class ServerStatistics {
 
-    private static void timer(){
+    private static final String info = "This module creates a counter for how many users are in your guild";
+    private static final String set = "`set StatsTotal 1/0 \nset StatsBot 1/0\nset StatsMember 1/0`";
+    private static final String toggle = "`set ServerStats 1/0`";
+
+    public static void timer(){
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
@@ -23,32 +22,19 @@ public class ServerStatistics {
         }, 0, 600000);
     }
 
-    private static HashMap<JDA, List<Guild>> guilds= new HashMap<>();
+    private static final HashMap<JDA, List<Guild>> guilds= new HashMap<>();
 
     private static void updateCounters(){
+
+        String[] channelTypes = {"statsTotal", "statsBot", "statsMember"};
 
         for (JDA shard : Main.getShards()){
             if (!guilds.containsKey(shard)){
                 guilds.put(shard, shard.getGuilds());
             }
 
-            // UPDATE
 
-            for (Guild guild : guilds.get(shard)){
-
-                if (SettingGetter.GuildFriendlyGet("ServerStats", guild).equals("1")){
-
-                    String guildID = guild.getId();
-                    VoiceChannel statsChannel = guild.getVoiceChannelById(SettingGetter.GuildFriendlyGet("StatsChannel", guild));
-
-
-
-                }
-
-            }
 
         }
-
     }
-
 }

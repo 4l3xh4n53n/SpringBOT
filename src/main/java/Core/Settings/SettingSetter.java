@@ -51,7 +51,7 @@ public class SettingSetter {
 
                 String mod = args[1].toLowerCase(Locale.ROOT);
 
-                String[] modules = {"modcommands", "logmodactions", "coins", "sendcoins", "autorole", "invitelogging", "privatechannel", "serverstats", "gamecommands", "chatfilter", "guildwelcome", "reactionroles", "tickets", "counting"};
+                String[] modules = {"modcommands", "logmodactions", "coins", "sendcoins", "autorole", "invitelogging", "privatechannel", "serverstats", "statsTotal", "statsBot", "statsMember", "gamecommands", "chatfilter", "guildwelcome", "reactionroles", "tickets", "counting"};
                 String[] channels = {"kicklog", "banlog", "warnlog", "guildwelcomechannel", "invitelog","privatechannelcreator", "statschannel","privatechannelcategory", "countingchannel"};
                 String[] roles = {"clearroles", "kickroles", "banroles", "warnroles", "autorolerole", "pollrole"};
 
@@ -99,7 +99,7 @@ public class SettingSetter {
         }
     }
 
-    public static String modules = "`ModCommands, LogModActions, Coins, SendCoins, AutoRole, InviteLogging, PrivateChannel, ServerStats, GameCommands, Poll, ChatFilter, GuildWelcome, ReactionRoles, Tickets, Counting`";
+    public static String modules = "`ModCommands, LogModActions, Coins, SendCoins, AutoRole, InviteLogging, PrivateChannel, ServerStats, statsTotal, statsBot, statsMember, GameCommands, Poll, ChatFilter, GuildWelcome, ReactionRoles, Tickets, Counting`";
 
     public static void modules(Guild guild, TextChannel channel, String[] args, User user){
         String guildID = guild.getId();
@@ -147,12 +147,12 @@ public class SettingSetter {
         }
     }
 
-    public static String channels = "`KickLog, BanLog, WarnLog, GuildWelcomeChannel, InviteLog. PrivateChannelCreator, PrivateChannelCategory, StatsChannel, TicketCategory, CountingChannel`";
+    public static String channels = "`KickLog, BanLog, WarnLog, GuildWelcomeChannel, InviteLog. PrivateChannelCreator, PrivateChannelCategory, TicketCategory, CountingChannel`";
 
     public static void channels(Guild guild, TextChannel channel, String[] args, User user){
 
         String[] textMod = {"kicklog", "banlog", "warnlog", "guildwelcomechannel", "invitelog", "countingchannel"};
-        String[] voiceMod = {"privatechannelcreator", "statschannel"};
+        String[] voiceMod = {"privatechannelcreator"};
         String[] catMod = {"privatechannelcategory", "ticketcategory"};
         String guildID = guild.getId();
 
