@@ -45,10 +45,12 @@ public class SettingCreator{
                     "privatechannelcreator," +
                     "privatechannelcategory," +
                     "serverstats," +
+                    "statsTotalChannel," +
+                    "statsBotChannel," +
+                    "statsMemberChannel," +
                     "statsTotal," +
                     "statsBot," +
                     "statsMember," +
-                    "statschannel," +
                     "chatfilter," +
                     "filter," +
                     "gamecommands," +
@@ -58,7 +60,7 @@ public class SettingCreator{
                     "ticketrole," +
                     "counting," +
                     "countingchannel" +
-                    ")VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                    ")VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             ps = con.prepareStatement(SQL);
             ps.setString(1, guildID);
             ps.setString(2, "!"); //Prefix

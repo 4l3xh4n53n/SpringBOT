@@ -17,8 +17,7 @@ import net.dv8tion.jda.api.entities.User;
 
 import java.awt.Color;
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.PreparedStatement;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -73,29 +72,42 @@ public class SettingSetter {
         }
     }
 
+    public static void ExternalSet(Guild guild, String guildID, String setting, String setTo, String toggle){
+        try {
+            Connection con = Database.connect();
+            String update = "UPDATE Settings SET '" + setting + "'= ? WHERE GuildID='" + guildID + "'";
+
+            SettingGetter.UpdateSetting(guildID, setting, setTo);
+
+            PreparedStatement ud = con.prepareStatement(update);
+            ud.setString(1, setTo);
+            ud.executeUpdate();
+            con.close();
+            ud.close();
+        } catch (Exception x){
+            SQLError.GuildFriendly(guild, x, toggle);
+        }
+    }
+
     public static void Set(String[] args, TextChannel channel, String guildID, String setTo){
         try {
 
             String setting = args[1];
             Connection con = Database.connect();
-            Statement stmt = con.createStatement();
-            String update = "UPDATE Settings SET '" + setting + "'='" + setTo + "' WHERE GuildID='" + guildID + "'";
+            String update = "UPDATE Settings SET '" + setting + "'= ? WHERE GuildID='" + guildID + "'";
 
             SettingGetter.UpdateSetting(guildID, setting, setTo);
             SettingChanged(channel);
 
-            ResultSet ud = stmt.executeQuery(update);
-            ud.updateString(args[1], args[2]);
-            ud.updateRow();
+            PreparedStatement ud = con.prepareStatement(update);
+            ud.setString(1, args[2]);
+            ud.executeUpdate();
             con.close();
-            stmt.close();
             ud.close();
 
 
         } catch (Exception x) {
-            if (!x.getMessage().equals("query does not return ResultSet")) {
-                SQLError.TextChannel(channel, x, "Can't turn this off sorry.");
-            }
+            SQLError.TextChannel(channel, x, "Can't turn this off sorry.");
         }
     }
 

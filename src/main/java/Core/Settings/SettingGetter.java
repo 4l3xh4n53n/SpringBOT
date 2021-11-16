@@ -64,7 +64,7 @@ public class SettingGetter {
 
     private static Map<String, String> getFromDatabase(String guildID){
 
-        SettingCreator.check(Main.getShards().get(0).getGuildById(guildID));
+        SettingCreator.check(Main.getLightestShard().getGuildById(guildID));
 
         try {
 
