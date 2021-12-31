@@ -34,7 +34,7 @@ Development - What I am working on
 
 # Creating a runnable jar
 
-First you have to change the token in [TOKEN](https://github.com/4l3xh4n53n/SpringBOT/blob/master/TOKEN) file to your discord bots token.
+First you have to create a file called `TOKEN` in the source folder and put your discord bots token in it.
 
 THEN
 
