@@ -52,7 +52,7 @@ public class SettingSetter {
 
                 String[] modules = {"modcommands", "logmodactions", "coins", "sendcoins", "autorole", "invitelogging", "privatechannel", "serverstats", "statsTotal", "statsBot", "statsMember", "gamecommands", "chatfilter", "guildwelcome", "reactionroles", "tickets", "counting"};
                 String[] channels = {"kicklog", "banlog", "warnlog", "guildwelcomechannel", "invitelog","privatechannelcreator", "statschannel","privatechannelcategory", "countingchannel"};
-                String[] roles = {"clearroles", "kickroles", "banroles", "warnroles", "autorolerole", "pollrole"};
+                String[] roles = {"clearroles", "kickroles", "banroles", "warnroles", "muteroles", "autorolerole", "pollrole", "mutedrole"};
 
                 if (Arrays.asList(modules).contains(mod)){
                     modules(guild, channel, args, user);
@@ -131,11 +131,11 @@ public class SettingSetter {
         }
     }
 
-    public static String roles = "`ClearRoles, KickRoles, BanRoles, WarnRoles, AutoRoleRole, PollRole, TicketRole`";
+    public static String roles = "`ClearRoles, KickRoles, BanRoles, WarnRoles, MuteRole, AutoRoleRole, PollRole, TicketRole, MutedRole`";
 
     public static void roles(Guild guild, TextChannel channel, String[] args, Message msg, User user){
 
-        String[] modules = {"clearroles", "kickroles", "banroles", "warnroles", "autorolerole", "pollrole", "ticketrole"};
+        String[] modules = {"clearroles", "kickroles", "banroles", "warnroles", "muterole", "autorolerole", "pollrole", "ticketrole", "muterole"};
         String guildID = guild.getId();
         List<Role> mentionedRoles = msg.getMentionedRoles();
         StringBuilder setTo = new StringBuilder();
