@@ -2,26 +2,15 @@ package Misc;
 
 import Auto.*;
 import Core.Embed;
-import Core.Settings.SettingSetter;
+import Core.Settings.*;
 import Games.ActivityPoints.Commands.CoinsAmount;
 import Games.ActivityPoints.Commands.Send;
 import Games.ActivityPoints.Commands.Shop;
 import Games.ActivityPoints.Commands.UsersStats;
 import Games.Random.Dice;
 import Games.Random.FlipACoin;
-import Core.Settings.SetColour;
-import Core.Settings.SetPrefix;
-import Core.Settings.SetWelcomeImage;
-import Core.Settings.SetWelcomeMessage;
 import Games.Server.Counting;
-import commands.mod.Ban;
-import commands.mod.Clear;
-import commands.mod.Kick;
-import commands.mod.RemoveWarns;
-import commands.mod.UnBan;
-import commands.mod.UserInfo;
-import commands.mod.Warn;
-import commands.mod.WarnsAmount;
+import commands.mod.*;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
@@ -54,6 +43,7 @@ public class Help {
         em.addField("SetPrefix " + SetPrefix.getExample(), SetPrefix.getInfo(), false);
         em.addField("SetWelcomeImage " + SetWelcomeImage.getExample(), SetWelcomeImage.getInfo(), false);
         em.addField("SetWelcomeMessage " + SetWelcomeMessage.getExample(), SetWelcomeMessage.getInfo(), false);
+        em.addField("SetMutedRole" + SetMutedRole.getExample(), SetMutedRole.getInfo(), false);
         txt.sendMessageEmbeds(em.build()).queue();
     }
 
@@ -69,6 +59,7 @@ public class Help {
         em.addField("removewarns " + RemoveWarns.getExample(), RemoveWarns.getInfo() + "\nHow to set the log: " + RemoveWarns.getLog() + "\nHow to set the roles: " + RemoveWarns.getSet(), false);
         em.addField("warnsamount " + WarnsAmount.getExample(), WarnsAmount.getInfo() + "\nHow to set the roles: " + WarnsAmount.getSet(), false);
         em.addField("clear " + Clear.getExample(), Clear.getInfo() + "\nHow to set the roles: " + Clear.getSet(), false);
+        em.addField("mute" + Mute.getExample(), Mute.getInfo() + "\nHow to set the roles: " + Mute.getSet(), false);
         em.addField("info " + UserInfo.getExample(), UserInfo.getInfo(), false);
         txt.sendMessageEmbeds(em.build()).queue();
     }

@@ -100,7 +100,7 @@ public class SettingSetter {
             SettingChanged(channel);
 
             PreparedStatement ud = con.prepareStatement(update);
-            ud.setString(1, args[2]);
+            ud.setString(1, setTo);
             ud.executeUpdate();
             con.close();
             ud.close();
@@ -131,11 +131,11 @@ public class SettingSetter {
         }
     }
 
-    public static String roles = "`ClearRoles, KickRoles, BanRoles, WarnRoles, MuteRole, AutoRoleRole, PollRole, TicketRole, MutedRole`";
+    public static String roles = "`ClearRoles, KickRoles, BanRoles, WarnRoles, MuteRoles, AutoRoleRole, PollRole, TicketRole, MutedRole`";
 
     public static void roles(Guild guild, TextChannel channel, String[] args, Message msg, User user){
 
-        String[] modules = {"clearroles", "kickroles", "banroles", "warnroles", "muterole", "autorolerole", "pollrole", "ticketrole", "muterole"};
+        String[] modules = {"clearroles", "kickroles", "banroles", "warnroles", "muteroles", "autorolerole", "pollrole", "ticketrole", "mutedrole"};
         String guildID = guild.getId();
         List<Role> mentionedRoles = msg.getMentionedRoles();
         StringBuilder setTo = new StringBuilder();
@@ -143,9 +143,10 @@ public class SettingSetter {
         if (args.length > 2){
             if (Arrays.asList(modules).contains(args[1].toLowerCase(Locale.ROOT))){
                 if (!(mentionedRoles.size() == 0)){
-
                     for (Role mentionedRole : mentionedRoles) {
+                        System.out.println("ok");
                         setTo.append(mentionedRole.getId()).append(",");
+                        System.out.println(mentionedRole.getId());
                     }
                     Set(args, channel, guildID, setTo.toString());
                 } else {

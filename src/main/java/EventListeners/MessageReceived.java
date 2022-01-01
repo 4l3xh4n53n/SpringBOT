@@ -4,8 +4,7 @@ import Auto.ChatSensor;
 import Auto.Poll;
 import Auto.ReactionRoles;
 import Auto.Tickets;
-import Core.Settings.SettingGetter;
-import Core.Settings.SettingSetter;
+import Core.Settings.*;
 import Games.ActivityPoints.Commands.CoinsAmount;
 import Games.ActivityPoints.Commands.Send;
 import Games.ActivityPoints.Commands.Shop;
@@ -17,10 +16,6 @@ import Games.Server.Counting;
 import Misc.CurrentSettings;
 import Misc.Help;
 import Misc.Ping;
-import Core.Settings.SetColour;
-import Core.Settings.SetPrefix;
-import Core.Settings.SetWelcomeImage;
-import Core.Settings.SetWelcomeMessage;
 import Misc.Stats;
 import commands.mod.*;
 import net.dv8tion.jda.api.entities.Guild;
@@ -91,6 +86,9 @@ public class MessageReceived extends ListenerAdapter {
                     case "removewarns":
                         RemoveWarns.check(guild, user, channel, msg, member, guildID);
                         break;
+                    case "mute":
+                        Mute.mute(user, msg, channel, guild, request, member);
+                        break;
                     case "info":
                         UserInfo.get(user, channel, msg, request, guild, member);
                         break;
@@ -111,6 +109,9 @@ public class MessageReceived extends ListenerAdapter {
                         break;
                     case "setwelcomeimage":
                         SetWelcomeImage.Check(member, content, channel, guildID);
+                        break;
+                    case "setmutedrole":
+                        SetMutedRole.Set(channel, content, msg, user, member, guild);
                         break;
                     case "setfilter":
                         ChatSensor.SetFilter(channel, request, guildID, member);
