@@ -55,12 +55,12 @@ public class PointsHandler {
         try {
             Connection con = Database.coins();
             Statement stmt = con.createStatement();
-            String SQL = "SELECT * FROM '" + guildID + "' WHERE userID='" + userID + "'";
+            String SQL = "SELECT * FROM `" + guildID + "` WHERE userID='" + userID + "'";
             ResultSet rs = stmt.executeQuery(SQL);
 
             if (!rs.next()) {
 
-                String insert = "INSERT INTO '" + guildID + "'(userID,coins, CoinMultiplier, MaxCoins, CoinExtraPercent, Messages) VALUES(?,?,?,?,?,?)";
+                String insert = "INSERT INTO `" + guildID + "`(userID,coins, CoinMultiplier, MaxCoins, CoinExtraPercent, Messages) VALUES(?,?,?,?,?,?)";
                 PreparedStatement ps = con.prepareStatement(insert);
                 ps.setString(1, userID);
                 ps.setInt(2, 100);
@@ -88,7 +88,7 @@ public class PointsHandler {
                     int oldmessages = rs.getInt("Messages");
                     int newmessages = oldmessages + 1;
 
-                    String update = "UPDATE '" + guildID + "' SET coins = ?, Messages = ? WHERE userID ='" + userID + "'";
+                    String update = "UPDATE `" + guildID + "` SET coins = ?, Messages = ? WHERE userID ='" + userID + "'";
                     PreparedStatement ud = con.prepareStatement(update);
                     ud.setInt(1, newcoins);
                     ud.setInt(2, newmessages);
@@ -106,6 +106,7 @@ public class PointsHandler {
             con.close();
 
         } catch (Exception x){
+            x.printStackTrace();
             SQLError.TextChannel(txt, x, Shop.getToggle());
         }
     }

@@ -18,20 +18,27 @@ import Misc.Help;
 import Misc.Ping;
 import Misc.Stats;
 import commands.mod.*;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import java.util.Locale;
 
+/**
+ * Listens to messages sent in text channels and threads
+ */
 public class MessageReceived extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent e) {
+
+        ChannelType channelType = e.getChannel().getType();
+
+        // Stops the bot from trying to run commands in thread
+
+        if (channelType == ChannelType.GUILD_PUBLIC_THREAD || channelType ==ChannelType.GUILD_PRIVATE_THREAD){
+            return; // I will try adding in support for Threads soon ...
+        }
 
         if (e.isFromGuild() && !e.getAuthor().isBot() && e.getTextChannel().canTalk()) {
 
@@ -171,7 +178,7 @@ public class MessageReceived extends ListenerAdapter {
                         // Misc
 
                     case "ping":
-                        Ping.pong(channel, guild, e);
+                        Ping.pong(channel, e);
                         break;
 
                 }

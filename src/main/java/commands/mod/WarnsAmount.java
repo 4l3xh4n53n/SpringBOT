@@ -45,7 +45,7 @@ public class WarnsAmount {
         try {
 
             Statement stmt = con.createStatement();
-            String SQL = "SELECT * FROM '" + guildID + "' WHERE userID='" + userID + "'";
+            String SQL = "SELECT * FROM `" + guildID + "` WHERE userID='" + userID + "'";
             ResultSet rs = stmt.executeQuery(SQL);
 
             if (rs.next()) {

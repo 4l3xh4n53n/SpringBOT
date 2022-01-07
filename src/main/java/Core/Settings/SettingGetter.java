@@ -64,7 +64,7 @@ public class SettingGetter {
 
     private static Map<String, String> getFromDatabase(String guildID){
 
-        SettingCreator.check(Main.getLightestShard().getGuildById(guildID));
+        SettingCreator.check(Main.getShard().getGuildById(guildID));
 
         try {
 
@@ -74,6 +74,7 @@ public class SettingGetter {
             ResultSet rs = stmt.executeQuery(get);
 
             Map<String, String> map = new HashMap<>();
+            rs.next();
             for (int i = 0; rs.getMetaData().getColumnCount() > i; i++) {
 
                 String key = rs.getMetaData().getColumnName(i + 1).toLowerCase(Locale.ROOT);

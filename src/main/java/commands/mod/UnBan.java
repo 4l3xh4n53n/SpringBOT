@@ -54,8 +54,8 @@ public class UnBan {
 
     }
 
-    private static User getMentioned(Guild guild, String expectedPosition){
-        JDA jda = Main.getCurrentShard(guild);
+    private static User getMentioned(String expectedPosition){
+        JDA jda = Main.getShard();
         User mentioned = null;
 
         try {
@@ -79,7 +79,7 @@ public class UnBan {
         if (SettingGetter.ChannelFriendlyGet("ModCommands", textChannel).equals("1")) {
             if (args.length == 2) {
                 if (RoleChecker.areRolesValid(requiredRoles, guild) == 1) {
-                    if ((mentioned = getMentioned(guild, args[1])) != null) {
+                    if ((mentioned = getMentioned(args[1])) != null) {
                         if (CollectionUtils.containsAny(Arrays.asList(requiredRoles), usersRoles)) {
                             if (botMember.hasPermission(Permission.BAN_MEMBERS) || botMember.hasPermission(Permission.ADMINISTRATOR)) {
 

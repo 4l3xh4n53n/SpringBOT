@@ -11,7 +11,7 @@ public class GetMentioned {
         User mentionedUser = null;
 
         User fromAt = fromAt(message);
-        User fromId = fromID(expectedIDPosition, guild);
+        User fromId = fromID(expectedIDPosition);
 
         if (fromAt != null){
             mentionedUser = fromAt;
@@ -22,11 +22,11 @@ public class GetMentioned {
         return mentionedUser;
     }
 
-    private static User fromID(String expectedIDPosition, Guild guild){
+    private static User fromID(String expectedIDPosition){
         User mentionedUser = null;
 
         try {
-            mentionedUser = Main.getCurrentShard(guild).retrieveUserById(expectedIDPosition).complete();
+            mentionedUser = Main.getShard().retrieveUserById(expectedIDPosition).complete();
         } catch (Exception ignored) {
         }
 

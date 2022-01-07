@@ -6,6 +6,79 @@ import java.sql.SQLException;
 
 public class Database {
 
+    private static String mariaDBpass = "";
+
+    public static void setMariaDBpass(String pass){
+        mariaDBpass = pass;
+    }
+
+    // MariaDB Databases
+
+    public static Connection connect() {
+        try {
+            return DriverManager.getConnection("jdbc:mariadb://192.168.1.124:3306/Settings", "alex", mariaDBpass);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static Connection warns() {
+        try {
+            return DriverManager.getConnection("jdbc:mariadb://192.168.1.124:3306/Warns", "alex", mariaDBpass);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static Connection coins() {
+        try {
+            return DriverManager.getConnection("jdbc:mariadb://192.168.1.124:3306/Coins", "alex", mariaDBpass);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static Connection invites() {
+        try {
+            return DriverManager.getConnection("jdbc:mariadb://192.168.1.124:3306/Invites", "alex", mariaDBpass);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static Connection CreatedChannels() {
+        try {
+            return DriverManager.getConnection("jdbc:mariadb://192.168.1.124:3306/CreatedChannels", "alex", mariaDBpass);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static Connection ReactionRoles(){
+        try {
+            return DriverManager.getConnection("jdbc:mariadb://192.168.1.124:3306/ReactionRoles", "alex", mariaDBpass);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static Connection Tickets(){
+        try {
+            return DriverManager.getConnection("jdbc:mariadb://192.168.1.124:3306/Tickets", "alex", mariaDBpass);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /* SQLITE Databases
+
     public static Connection connect() {
         Connection con = null;
         try {
@@ -88,6 +161,6 @@ public class Database {
         }
 
         return con;
-    }
+    } */
     
 }

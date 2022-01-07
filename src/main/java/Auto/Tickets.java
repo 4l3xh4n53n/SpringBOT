@@ -93,11 +93,11 @@ public class Tickets {
         } catch (Exception ignored){}
 
         if (ticketRole != null){
-            channel.createPermissionOverride(ticketRole).setAllow(Permission.VIEW_CHANNEL, Permission.MESSAGE_WRITE, Permission.MESSAGE_ATTACH_FILES, Permission.MESSAGE_MANAGE).queue();
+            channel.createPermissionOverride(ticketRole).setAllow(Permission.VIEW_CHANNEL, Permission.MESSAGE_SEND, Permission.MESSAGE_ATTACH_FILES, Permission.MESSAGE_MANAGE).queue();
         }
 
         channel.createPermissionOverride(guild.getPublicRole()).setDeny(Permission.VIEW_CHANNEL).queue();
-        channel.createPermissionOverride(member).setAllow(Permission.VIEW_CHANNEL, Permission.MESSAGE_WRITE, Permission.MESSAGE_ATTACH_FILES).queue();
+        channel.createPermissionOverride(member).setAllow(Permission.VIEW_CHANNEL, Permission.MESSAGE_SEND, Permission.MESSAGE_ATTACH_FILES).queue();
 
         addToDatabase(channel.getId(), textChannel);
 

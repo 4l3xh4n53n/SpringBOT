@@ -34,7 +34,7 @@ public class InviteLogger {
             if (!tables.next()) {
 
                 Statement stmt = con.createStatement();
-                String sql = "CREATE TABLE '" + guildID + "' (inviteURL TEXT, inviterID TEXT, uses INTEGER)";
+                String sql = "CREATE TABLE `" + guildID + "` (inviteURL TEXT, inviterID TEXT, uses INTEGER)";
                 stmt.executeUpdate(sql);
                 stmt.close();
 
@@ -60,7 +60,7 @@ public class InviteLogger {
 
             for (Invite invite : invites) {
 
-                String get = "SELECT uses FROM '" + guildID + "' WHERE inviteURL = '" + invite.getUrl() + "'";
+                String get = "SELECT uses FROM `" + guildID + "` WHERE inviteURL = '" + invite.getUrl() + "'";
                 ResultSet rs = stmt.executeQuery(get);
                 String id;
 
@@ -71,10 +71,7 @@ public class InviteLogger {
                         id = invite.getInviter().getId();
                     }
 
-                    AddInviteToDatabase(invite.getUrl(),
-                            id,
-                            guild,
-                            guildID);
+                    AddInviteToDatabase(invite.getUrl(), id, guild, guildID);
 
                 }
 
@@ -149,7 +146,7 @@ public class InviteLogger {
 
         try {
 
-            String update = "UPDATE '" + guildID + "' SET uses = ? WHERE inviteURL ='" + usedInvite.getUrl() + "'";
+            String update = "UPDATE `" + guildID + "` SET uses = ? WHERE inviteURL ='" + usedInvite.getUrl() + "'";
             PreparedStatement ud = con.prepareStatement(update);
             ud.setInt(1, usedInvite.getUses());
             ud.executeUpdate();
@@ -180,13 +177,14 @@ public class InviteLogger {
 
         for (Invite invite : invites){
 
-            String get = "SELECT uses FROM '" + guildID + "' WHERE inviteURL = '" + invite.getUrl() + "'";
+            String get = "SELECT uses FROM `" + guildID + "` WHERE inviteURL = '" + invite.getUrl() + "'";
 
             try {
 
                 assert stmt != null;
                 ResultSet rs = stmt.executeQuery(get);
                 if (!rs.isClosed()) {
+                    rs.next();
                     uses = rs.getInt(1);
                     rs.close();
                 }
@@ -218,7 +216,7 @@ public class InviteLogger {
         try{
 
             Connection con = Database.invites();
-            String sql = "INSERT INTO '" + guildID + "' (inviteURL, inviterID, uses) VALUES (?,?,?)";
+            String sql = "INSERT INTO `" + guildID + "` (inviteURL, inviterID, uses) VALUES (?,?,?)";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, inviteURL);
             ps.setString(2, inviterID);
@@ -236,7 +234,7 @@ public class InviteLogger {
         checkGuild(guildID, guild);
         try{
             Connection con = Database.invites();
-            String sql = "DELETE FROM '" + guildID + "' WHERE inviteURL = ?";
+            String sql = "DELETE FROM `" + guildID + "` WHERE inviteURL = ?";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, inviteURL);
             ps.executeUpdate();

@@ -8,6 +8,9 @@ import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
+/**
+ * Listens for Members reacting to messages ( this is for reaction roles )
+ */
 public class MessageReaction extends ListenerAdapter {
 
     @Override

@@ -42,6 +42,16 @@ public class SettingSetter {
         txt.sendMessageEmbeds(em.build()).queue();
     }
 
+    /**
+     * Checks the settings to make sure that everything is correct. <br>
+     * This should be used from the settings commands
+     * @param user User executing the command
+     * @param request The commands content ( the raw string excluding the command itself )
+     * @param guild The guild the command was sent in
+     * @param channel The text channel the command was sent in
+     * @param msg The message object
+     * @param member The member executing the command
+     */
     public static void check(User user, String request, Guild guild, TextChannel channel, Message msg, Member member){
         String[] args = request.split("\\s+");
 
@@ -52,7 +62,7 @@ public class SettingSetter {
 
                 String[] modules = {"modcommands", "logmodactions", "coins", "sendcoins", "autorole", "invitelogging", "privatechannel", "serverstats", "statsTotal", "statsBot", "statsMember", "gamecommands", "chatfilter", "guildwelcome", "reactionroles", "tickets", "counting"};
                 String[] channels = {"kicklog", "banlog", "warnlog", "guildwelcomechannel", "invitelog","privatechannelcreator", "statschannel","privatechannelcategory", "countingchannel"};
-                String[] roles = {"clearroles", "kickroles", "banroles", "warnroles", "muteroles", "autorolerole", "pollrole", "mutedrole"};
+                String[] roles = {"clearroles", "kickroles", "banroles", "warnroles", "muteroles", "autorolerole", "pollrole"};
 
                 if (Arrays.asList(modules).contains(mod)){
                     modules(guild, channel, args, user);
@@ -72,6 +82,15 @@ public class SettingSetter {
         }
     }
 
+    /**
+     * This is for changing settings outside this class. <br>
+     * Input sanitization should be done before sending settings here.
+     * @param guild The guild that the setting is going to be changed for
+     * @param guildID The id of that guild
+     * @param setting The setting that is going to be changed
+     * @param setTo What the setting is going to be changed to
+     * @param toggle How to turn the module off ( in case of a bug or the server admins not wanting to set it up )
+     */
     public static void ExternalSet(Guild guild, String guildID, String setting, String setTo, String toggle){
         try {
             Connection con = Database.connect();
@@ -131,11 +150,11 @@ public class SettingSetter {
         }
     }
 
-    public static String roles = "`ClearRoles, KickRoles, BanRoles, WarnRoles, MuteRoles, AutoRoleRole, PollRole, TicketRole, MutedRole`";
+    public static String roles = "`ClearRoles, KickRoles, BanRoles, WarnRoles, MuteRoles, AutoRoleRole, PollRole, TicketRole`";
 
     public static void roles(Guild guild, TextChannel channel, String[] args, Message msg, User user){
 
-        String[] modules = {"clearroles", "kickroles", "banroles", "warnroles", "muteroles", "autorolerole", "pollrole", "ticketrole", "mutedrole"};
+        String[] modules = {"clearroles", "kickroles", "banroles", "warnroles", "muteroles", "autorolerole", "pollrole", "ticketrole"};
         String guildID = guild.getId();
         List<Role> mentionedRoles = msg.getMentionedRoles();
         StringBuilder setTo = new StringBuilder();

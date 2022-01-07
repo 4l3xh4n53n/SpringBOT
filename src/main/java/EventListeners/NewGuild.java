@@ -6,6 +6,9 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
+/**
+ * Listens for the bot joining a new guild ( to send the welcome mesage )
+ */
 public class NewGuild extends ListenerAdapter {
 
     // For when then bot joins a new server don't confuse with members joining

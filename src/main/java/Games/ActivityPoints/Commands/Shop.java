@@ -43,8 +43,10 @@ public class Shop {
         try {
             Connection con = Database.coins();
             Statement stmt = con.createStatement();
-            String SQL = "SELECT * FROM '" + guildID + "' WHERE userID='" + userID + "'";
+            String SQL = "SELECT * FROM `" + guildID + "` WHERE userID='" + userID + "'";
             ResultSet rs = stmt.executeQuery(SQL);
+            rs.next();
+
             int bal = rs.getInt(2);
             int old = rs.getInt("CoinMultiplier");
             int price = old * 2;
@@ -52,7 +54,7 @@ public class Shop {
 
                 int newbal = bal - price;
 
-                String update = "UPDATE '" + guildID + "' SET coins = ?, CoinMultiplier = ? WHERE userID ='" + userID + "'";
+                String update = "UPDATE `" + guildID + "` SET coins = ?, CoinMultiplier = ? WHERE userID ='" + userID + "'";
                 PreparedStatement ud = con.prepareStatement(update);
                 ud.setInt(2, old + 100);
                 ud.setInt(1, newbal);
@@ -80,8 +82,9 @@ public class Shop {
         try {
             Connection con = Database.coins();
             Statement stmt = con.createStatement();
-            String SQL = "SELECT * FROM '" + guildID + "' WHERE userID='" + userID + "'";
+            String SQL = "SELECT * FROM `" + guildID + "` WHERE userID='" + userID + "'";
             ResultSet rs = stmt.executeQuery(SQL);
+            rs.next();
 
             int bal = rs.getInt(2);
             int old = rs.getInt("MaxCoins");
@@ -99,14 +102,14 @@ public class Shop {
                     txt.sendMessageEmbeds(em.build()).queue();
                 }
 
-                String update = "UPDATE '" + guildID + "' SET coins = ? , MaxCoins = ? WHERE userID ='" + userID + "'";
+                String update = "UPDATE `" + guildID + "` SET coins = ? , MaxCoins = ? WHERE userID ='" + userID + "'";
                 PreparedStatement ud = con.prepareStatement(update);
                 ud.setInt(1, newbal);
                 ud.setInt(2, newmax);
                 ud.executeUpdate();
                 ud.close();
 
-                Respond(txt, newbal, price, user, "CoinMultiplier");
+                Respond(txt, newbal, price, user, "IncreasedBankSize");
 
             } else {
                 NotEnoughMoney(txt, bal, price, user);
@@ -127,8 +130,10 @@ public class Shop {
         try {
             Connection con = Database.coins();
             Statement stmt = con.createStatement();
-            String SQL = "SELECT * FROM '" + guildID + "' WHERE userID='" + userID + "'";
+            String SQL = "SELECT * FROM `" + guildID + "` WHERE userID='" + userID + "'";
             ResultSet rs = stmt.executeQuery(SQL);
+            rs.next();
+
             int bal = rs.getInt(2);
             int old = rs.getInt("CoinExtraPercent");
             int price = old * 10;
@@ -137,7 +142,7 @@ public class Shop {
 
                 int newbal = bal - price;
 
-                String update = "UPDATE '" + guildID + "' SET coins = ? , CoinExtraPercent = ? WHERE userID ='" + userID + "'";
+                String update = "UPDATE `" + guildID + "` SET coins = ? , CoinExtraPercent = ? WHERE userID ='" + userID + "'";
                 PreparedStatement ud = con.prepareStatement(update);
                 ud.setDouble(2, old + 0.5);
                 ud.setInt(1, newbal);

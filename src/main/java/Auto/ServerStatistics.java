@@ -27,7 +27,7 @@ public class ServerStatistics {
         }, 0, 600000);
     }
 
-    private static final HashMap<JDA, List<Guild>> guilds= new HashMap<>();
+    //private static final HashMap<JDA, List<Guild>> guilds= new HashMap<>(); I am commenting this out for now because I have no idea why it is here ????
 
     private static int getCount(String type, Guild guild){
         int count = 0;
@@ -57,62 +57,64 @@ public class ServerStatistics {
 
     private static void updateCounters(){
         String[] channelTypes = {"statsTotal", "statsBot", "statsMember"};
+        JDA shard = Main.getShard();
 
-        for (JDA shard : Main.getShards()){
-            if (!guilds.containsKey(shard)){
-                guilds.put(shard, shard.getGuilds());
-            }
+        /*if (!guilds.containsKey(shard)){
+            guilds.put(shard, shard.getGuilds()); I am commenting this out for now because I have no idea why it is here ????
 
-                // Make a thing in here yeah innit
+            I am lead to believe I originally intended this to be used by the for loop below to iterate through each guild. ( leaving it here just in case )
 
-            for (Guild guild : shard.getGuilds()){
-                if (SettingGetter.GuildFriendlyGet("serverStats", guild).equals("1")){
-                    for (String type : channelTypes){
-                        if (SettingGetter.GuildFriendlyGet(type, guild).equals("1")){
+        } */
 
-                            // now check if it exists
+        for (Guild guild : shard.getGuilds()) {
+            if (SettingGetter.GuildFriendlyGet("serverStats", guild).equals("1")) {
+                for (String type : channelTypes) {
+                    if (SettingGetter.GuildFriendlyGet(type, guild).equals("1")) {
 
-                            String channelID = SettingGetter.GuildFriendlyGet(type + "Channel", guild);
-                            VoiceChannel voiceChannel = null;
-                            String guildID = guild.getId();
-                            String newName = "";
+                        // now check if it exists
 
-                            try {
-                                voiceChannel = guild.getVoiceChannelById(channelID);
-                            } catch (Exception ignored){}
+                        String channelID = SettingGetter.GuildFriendlyGet(type + "Channel", guild);
+                        VoiceChannel voiceChannel = null;
+                        String guildID = guild.getId();
+                        String newName = "";
 
-                            if (voiceChannel != null){
+                        try {
+                            voiceChannel = guild.getVoiceChannelById(channelID);
+                        } catch (Exception ignored) {
+                        }
 
-                                // change name
+                        if (voiceChannel != null) {
 
-                                String voiceChannelName = voiceChannel.getName();
+                            // change name
 
-                                String[] nameArgs = voiceChannelName.split("\\s+");
-                                for (String arg : nameArgs){
-                                    if (IsNumeric.check(arg)){
-                                        newName = voiceChannelName.replace(arg, String.valueOf(getCount(type, guild)));
-                                        break;
-                                    }
+                            String voiceChannelName = voiceChannel.getName();
+
+                            String[] nameArgs = voiceChannelName.split("\\s+");
+                            for (String arg : nameArgs) {
+                                if (IsNumeric.check(arg)) {
+                                    newName = voiceChannelName.replace(arg, String.valueOf(getCount(type, guild)));
+                                    break;
                                 }
-
-                                if (!newName.equals("") && !newName.equals(voiceChannelName)){
-                                    voiceChannel.getManager().setName(newName).queue();
-                                }
-
-                            } else {
-
-                                // make new channel
-
-                                guild.createVoiceChannel(type + ": " + getCount(type, guild)).queue(chan ->{
-                                    SettingSetter.ExternalSet(guild, guildID, type + "channel", chan.getId(), toggle);
-                                    chan.getManager().setPosition(0).queue();
-                                });
                             }
+
+                            if (!newName.equals("") && !newName.equals(voiceChannelName)) {
+                                voiceChannel.getManager().setName(newName).queue();
+                            }
+
+                        } else {
+
+                            // make new channel
+
+                            guild.createVoiceChannel(type + ": " + getCount(type, guild)).queue(chan -> {
+                                SettingSetter.ExternalSet(guild, guildID, type + "channel", chan.getId(), toggle);
+                                chan.getManager().setPosition(0).queue();
+                            });
                         }
                     }
                 }
             }
         }
+        
     }
 
     public static String getInfo(){

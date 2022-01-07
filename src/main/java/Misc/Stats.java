@@ -26,13 +26,8 @@ public class Stats {
         } catch (Exception ignored){}
 
         Runtime runtime = Runtime.getRuntime();
-        JDA jda = Main.getCurrentShard(guild);
-        int guildcount = 0;
-
-        for (JDA shard : Main.getShards()){
-            guildcount = guildcount + shard.getGuilds().size();
-        }
-        
+        JDA jda = Main.getShard();
+        int guildcount = Main.getShard().getGuilds().size();
         int guildsOnShard = jda.getGuilds().size();
         int shardcount = Main.getShardsCount();
         int shardnumber = jda.getShardInfo().getShardId();

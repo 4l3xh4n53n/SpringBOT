@@ -10,6 +10,9 @@ import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
+/**
+ * Listens for Members joining and leaving voice channels
+ */
 public class EntersVoiceChannel extends ListenerAdapter {
 
     public static Guild guild;
@@ -19,7 +22,7 @@ public class EntersVoiceChannel extends ListenerAdapter {
     @Override
     public void onGuildVoiceLeave(GuildVoiceLeaveEvent e){
         guild = e.getGuild();
-        channel = e.getChannelLeft();
+        channel = (VoiceChannel) e.getChannelLeft();
         guildID = guild.getId();
 
         if (SettingGetter.GuildFriendlyGet("PrivateChannel", guild).equals("1")) {
@@ -35,7 +38,7 @@ public class EntersVoiceChannel extends ListenerAdapter {
         Guild guild = e.getGuild();
         Member member = e.getMember();
         User user = member.getUser();
-        VoiceChannel channel = e.getChannelJoined();
+        VoiceChannel channel = (VoiceChannel) e.getChannelJoined();
         String guildID = guild.getId();
 
         if (SettingGetter.GuildFriendlyGet("PrivateChannel", guild).equals("1")) {

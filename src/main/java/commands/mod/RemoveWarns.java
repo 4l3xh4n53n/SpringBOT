@@ -43,7 +43,7 @@ public class RemoveWarns {
 
         try {
             Statement stmt = con.createStatement();
-            String SQL = "SELECT * FROM '" + guildID + "' WHERE userID='" + userID + "'";
+            String SQL = "SELECT * FROM `" + guildID + "` WHERE userID='" + userID + "'";
             ResultSet rs = stmt.executeQuery(SQL);
             if (rs.next()) {
 
@@ -52,14 +52,14 @@ public class RemoveWarns {
                     int newwarns = oldwarns - amount;
 
                     if (newwarns < 0){
-                        String update = "UPDATE '" + guildID + "' SET warns = ? WHERE userID ='" + userID + "'";
+                        String update = "UPDATE `" + guildID + "` SET warns = ? WHERE userID ='" + userID + "'";
                         PreparedStatement ud = con.prepareStatement(update);
                         ud.setInt(1, 0);
                         ud.executeUpdate();
                         ud.close();
                     } else {
 
-                        String update = "UPDATE '" + guildID + "' SET warns = ? WHERE userID ='" + userID + "'";
+                        String update = "UPDATE `" + guildID + "` SET warns = ? WHERE userID ='" + userID + "'";
                         PreparedStatement ud = con.prepareStatement(update);
                         ud.setInt(1, newwarns);
                         ud.executeUpdate();

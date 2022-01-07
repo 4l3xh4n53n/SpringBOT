@@ -29,11 +29,11 @@ public class Send {
         try {
             Connection con = Database.coins();
             Statement stmt = con.createStatement();
-            String SQL = "SELECT * FROM '" + guildID + "' WHERE userID='" + userID + "'";
+            String SQL = "SELECT * FROM `" + guildID + "` WHERE userID='" + userID + "'";
             ResultSet rs = stmt.executeQuery(SQL);
             if (!rs.next()) {
 
-                String insert = "INSERT INTO '" + guildID + "'(userID, coins, CoinMultiplier, MaxCoins, CoinExtraPercent) VALUES(?,?,?,?,?)";
+                String insert = "INSERT INTO `" + guildID + "`(userID, coins, CoinMultiplier, MaxCoins, CoinExtraPercent) VALUES(?,?,?,?,?)";
                 PreparedStatement ps = con.prepareStatement(insert);
                 ps.setString(1, userID);
                 ps.setInt(2, 0);
@@ -86,7 +86,7 @@ public class Send {
                                 // DONOR
 
                                 Connection con = Database.coins();
-                                String update = "UPDATE '" + guildID + "' SET coins = ? WHERE userID ='" + donorID + "'";
+                                String update = "UPDATE `" + guildID + "` SET coins = ? WHERE userID ='" + donorID + "'";
                                 PreparedStatement ud = con.prepareStatement(update);
                                 ud.setInt(1, donorBal - sum);
                                 ud.executeUpdate();
@@ -94,14 +94,14 @@ public class Send {
 
                                 // RECIPIENT
 
-                                String update1 = "UPDATE '" + guildID + "' SET coins = ? WHERE userID ='" + recipientID + "'";
+                                String update1 = "UPDATE `" + guildID + "` SET coins = ? WHERE userID ='" + recipientID + "'";
                                 PreparedStatement ud1 = con.prepareStatement(update1);
                                 ud1.setInt(1, recipientBal + sum);
                                 ud1.executeUpdate();
                                 ud1.close();
 
                                 EmbedBuilder em = Embed.em(user, txt);
-                                em.addField("You paid" + tag + " " + sum, "You new balance: " + (donorBal - sum), false);
+                                em.addField("You paid " + tag + " " + sum, "You new balance: " + (donorBal - sum), false);
                                 txt.sendMessageEmbeds(em.build()).queue();
 
                             } catch (Exception x) {

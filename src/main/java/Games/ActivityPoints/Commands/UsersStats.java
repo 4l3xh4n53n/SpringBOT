@@ -26,12 +26,12 @@ public class UsersStats {
         try {
             Connection con = Database.coins();
             Statement stmt = con.createStatement();
-            String SQL = "SELECT * FROM '" + guildID + "' WHERE userID='" + userID + "'";
+            String SQL = "SELECT * FROM `" + guildID + "` WHERE userID='" + userID + "'";
             ResultSet rs = stmt.executeQuery(SQL);
 
             if (!rs.next()) {
 
-                String insert = "INSERT INTO '" + guildID + "'(userID, coins, CoinMultiplier, MaxCoins, CoinExtraPercent, Messages) VALUES(?,?,?,?,?,?)";
+                String insert = "INSERT INTO `" + guildID + "`(userID, coins, CoinMultiplier, MaxCoins, CoinExtraPercent, Messages) VALUES(?,?,?,?,?,?)";
                 PreparedStatement ps = con.prepareStatement(insert);
                 ps.setString(1, userID);
                 ps.setInt(2, 0);
@@ -81,8 +81,9 @@ public class UsersStats {
             try {
                 Connection con = Database.coins();
                 Statement stmt = con.createStatement();
-                String SQL = "SELECT * FROM '" + guildID + "' WHERE userID='" + userID + "'";
+                String SQL = "SELECT * FROM `" + guildID + "` WHERE userID='" + userID + "'";
                 ResultSet rs = stmt.executeQuery(SQL);
+                rs.next();
 
                 coins = rs.getInt("coins");
                 CoinMultiplier = rs.getInt("CoinMultiplier");

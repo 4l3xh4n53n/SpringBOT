@@ -12,9 +12,9 @@ public class Ping {
 
     private static final String info = "Shows the bots ping.";
 
-    public static void pong(TextChannel textChannel, Guild guild, MessageReceivedEvent e){
+    public static void pong(TextChannel textChannel, MessageReceivedEvent e){
 
-        JDA currentShard = Main.getCurrentShard(guild);
+        JDA currentShard = Main.getShard();
 
         long gateWayPing = currentShard.getGatewayPing();
         long restPing = currentShard.getRestPing().complete();

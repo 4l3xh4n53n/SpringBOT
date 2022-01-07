@@ -7,6 +7,9 @@ import net.dv8tion.jda.api.events.guild.invite.GuildInviteCreateEvent;
 import net.dv8tion.jda.api.events.guild.invite.GuildInviteDeleteEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
+/**
+ * Listens for Invites being created or destroyed ( this is used for invite logging )
+ */
 public class GuildInviteCreated extends ListenerAdapter {
 
     @Override

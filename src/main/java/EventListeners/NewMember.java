@@ -9,6 +9,9 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
+/**
+ * Listens for new members joining the guild ( for invite logging )
+ */
 public class NewMember extends ListenerAdapter {
 
     @Override

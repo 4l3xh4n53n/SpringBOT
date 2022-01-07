@@ -47,7 +47,7 @@ public class Warn {
 
         try {
             Statement stmt = con.createStatement();
-            String SQL = "SELECT * FROM '" + guildID + "' WHERE userID='" + userID + "'";
+            String SQL = "SELECT * FROM `" + guildID + "` WHERE userID='" + userID + "'";
             ResultSet rs = stmt.executeQuery(SQL);
 
             if (rs.next()) {
@@ -55,7 +55,7 @@ public class Warn {
                 int oldwarns = rs.getInt("warns");
                 int newwarns = oldwarns + 1;
 
-                String update = "UPDATE '" + guildID + "' SET warns = ? WHERE userID ='" + userID + "'";
+                String update = "UPDATE `" + guildID + "` SET warns = ? WHERE userID ='" + userID + "'";
                 PreparedStatement ud = con.prepareStatement(update);
                 ud.setInt(1, newwarns);
                 ud.executeUpdate();
@@ -63,7 +63,7 @@ public class Warn {
 
             } else {
 
-                String insert = "INSERT INTO '" + guildID + "'(userID,warns) VALUES(?,?)";
+                String insert = "INSERT INTO `" + guildID + "`(userID,warns) VALUES(?,?)";
                 PreparedStatement ps = con.prepareStatement(insert);
                 ps.setString(1, userID);
                 ps.setInt(2, 1);
@@ -91,7 +91,7 @@ public class Warn {
     private static void Create(String guildID, TextChannel textChannel, Connection con){
         try {
             Statement stmt = con.createStatement();
-            String sql = "CREATE TABLE '" + guildID + "' (userID TEXT NOT NULL, warns INTEGER PRIMARY KEY)";
+            String sql = "CREATE TABLE " + guildID + " (userID TEXT NOT NULL, warns INTEGER PRIMARY KEY)";
             stmt.executeUpdate(sql);
             con.close();
             stmt.close();

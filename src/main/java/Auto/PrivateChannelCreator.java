@@ -33,7 +33,7 @@ public class PrivateChannelCreator {
             ResultSet tables = dbm.getTables(null, null, guildID, null);
             if (!tables.next()) {
                 Statement stmt = con.createStatement();
-                String sql = "CREATE TABLE '" + guildID + "' (channelID TEXT, users INTEGER)";
+                String sql = "CREATE TABLE " + guildID + "(channelID TEXT, users INTEGER)";
                 stmt.executeUpdate(sql);
                 stmt.close();
             }
@@ -50,7 +50,7 @@ public class PrivateChannelCreator {
 
         try{
             Connection con = Database.CreatedChannels();
-            String sql = "INSERT INTO '" + guildID + "' (channelID, users) VALUES (?,?)";
+            String sql = "INSERT INTO `" + guildID + "` (channelID, users) VALUES (?,?)";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, channelID);
             ps.setInt(2, 1);
@@ -68,7 +68,7 @@ public class PrivateChannelCreator {
 
         try{
             Connection con = Database.CreatedChannels();
-            String sql = "DELETE FROM '" + guildID + "' WHERE channelID = '" + channelID + "'";
+            String sql = "DELETE FROM `" + guildID + "` WHERE channelID = '" + channelID + "'";
             Statement ps = con.createStatement();
             ps.executeUpdate(sql);
             con.close();
@@ -87,7 +87,7 @@ public class PrivateChannelCreator {
 
             Connection con = Database.CreatedChannels();
             Statement stmt = con.createStatement();
-            String SQL = "SELECT * FROM '" + guildID + "' WHERE channelID='" + channelID + "'";
+            String SQL = "SELECT * FROM `" + guildID + "` WHERE channelID='" + channelID + "'";
             ResultSet rs = stmt.executeQuery(SQL);
 
             if (rs.next()){
@@ -117,7 +117,7 @@ public class PrivateChannelCreator {
         try{
             Connection con = Database.CreatedChannels();
             Statement stmt = con.createStatement();
-            String SQL = "SELECT * FROM '" + guildID + "' WHERE channelID ='" + channelID + "'";
+            String SQL = "SELECT * FROM `" + guildID + "` WHERE channelID ='" + channelID + "'";
             ResultSet rs = stmt.executeQuery(SQL);
             users = rs.getInt("users");
             con.close();
@@ -169,7 +169,7 @@ public class PrivateChannelCreator {
         if (CheckDatabase(channelID, guild, guildID)){
             try {
                 Connection con = Database.CreatedChannels();
-                String update = "UPDATE '" + guildID + "' SET users = ? WHERE channelID ='" + channelID + "'";
+                String update = "UPDATE '`" + guildID + "`' SET users = ? WHERE channelID ='" + channelID + "'";
                 PreparedStatement ud = con.prepareStatement(update);
                 ud.setInt(1, size);
                 ud.executeUpdate();
@@ -189,7 +189,7 @@ public class PrivateChannelCreator {
         if (CheckDatabase(channelID, guild, guildID)){
             try {
                 Connection con = Database.CreatedChannels();
-                String update = "UPDATE '" + guildID + "' SET users = ? WHERE channelID ='" + channelID + "'";
+                String update = "UPDATE `" + guildID + "` SET users = ? WHERE channelID ='" + channelID + "'";
                 PreparedStatement ud = con.prepareStatement(update);
                 ud.setInt(1, size);
                 ud.executeUpdate();

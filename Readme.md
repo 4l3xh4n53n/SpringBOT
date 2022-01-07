@@ -38,6 +38,11 @@ First you have to create a file called `TOKEN` in the source folder and put your
 
 THEN
 
+Go into `src/main/java/Core/Main.java` and follow the instructions in there to make the code not try to scale the bot,
+also go into `src/main/java/Core/Databases.java` and comment the mariaDB methods and uncomment the sqlite methods ( unless of course you want to migrate the sqlite to mariaDB)
+
+THEN
+
 Run the sh shell script
 ```
 ./compile.sh

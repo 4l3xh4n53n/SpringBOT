@@ -42,11 +42,11 @@ public class CoinsAmount {
         try {
             Connection con = Database.coins();
             Statement stmt = con.createStatement();
-            String SQL = "SELECT * FROM '" + guildID + "' WHERE userID='" + userID + "'";
+            String SQL = "SELECT * FROM `" + guildID + "` WHERE userID='" + userID + "'";
             ResultSet rs = stmt.executeQuery(SQL);
             if (!rs.next()) {
 
-                String insert = "INSERT INTO '" + guildID + "'(userID, coins, CoinMultiplier, MaxCoins, CoinExtraPercent) VALUES(?,?,?,?,?)";
+                String insert = "INSERT INTO `" + guildID + "`(userID, coins, CoinMultiplier, MaxCoins, CoinExtraPercent) VALUES(?,?,?,?,?)";
                 PreparedStatement ps = con.prepareStatement(insert);
                 ps.setString(1, userID);
                 ps.setInt(2, 0);
@@ -79,8 +79,8 @@ public class CoinsAmount {
             String guildID = guild.getId();
             String userID = user.getId();
             String[] args = content.split("\\s+");
-            JDA jda = Main.getCurrentShard(guild);
-            User mentioned = null;
+            JDA jda = Main.getShard();
+            User mentioned;
             User defaultToExecutor;
 
             if (args.length > 1){
