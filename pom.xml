@@ -6,7 +6,7 @@
 
     <groupId>org.fourLegs.Spring</groupId>
     <artifactId>Spring</artifactId>
-    <version>1.2.0</version>
+    <version>1.0.3</version>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
