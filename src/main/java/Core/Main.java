@@ -3,7 +3,6 @@ package Core;
 import Auto.ServerStatistics;
 import EventListeners.*;
 import Games.ActivityPoints.Core.UserTimeOut;
-import Utility.IsNumeric;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -21,7 +20,7 @@ import java.util.Scanner;
 
 public class Main {
 
-    private static final int shardCount = 1;
+    private static final int shardCount = 3;
     private static JDA shard = null;
 
     /**

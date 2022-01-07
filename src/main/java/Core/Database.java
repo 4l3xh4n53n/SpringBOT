@@ -16,8 +16,9 @@ public class Database {
 
     public static Connection connect() {
         try {
+            Class.forName ("org.mariadb.jdbc.Driver");
             return DriverManager.getConnection("jdbc:mariadb://192.168.1.124:3306/Settings", "alex", mariaDBpass);
-        } catch (SQLException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
         return null;
@@ -25,8 +26,9 @@ public class Database {
 
     public static Connection warns() {
         try {
+            Class.forName ("org.mariadb.jdbc.Driver");
             return DriverManager.getConnection("jdbc:mariadb://192.168.1.124:3306/Warns", "alex", mariaDBpass);
-        } catch (SQLException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
         return null;
@@ -34,8 +36,9 @@ public class Database {
 
     public static Connection coins() {
         try {
+            Class.forName ("org.mariadb.jdbc.Driver");
             return DriverManager.getConnection("jdbc:mariadb://192.168.1.124:3306/Coins", "alex", mariaDBpass);
-        } catch (SQLException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
         return null;
@@ -43,8 +46,9 @@ public class Database {
 
     public static Connection invites() {
         try {
+            Class.forName ("org.mariadb.jdbc.Driver");
             return DriverManager.getConnection("jdbc:mariadb://192.168.1.124:3306/Invites", "alex", mariaDBpass);
-        } catch (SQLException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
         return null;
@@ -52,8 +56,9 @@ public class Database {
 
     public static Connection CreatedChannels() {
         try {
+            Class.forName ("org.mariadb.jdbc.Driver");
             return DriverManager.getConnection("jdbc:mariadb://192.168.1.124:3306/CreatedChannels", "alex", mariaDBpass);
-        } catch (SQLException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
         return null;
@@ -61,8 +66,9 @@ public class Database {
 
     public static Connection ReactionRoles(){
         try {
+            Class.forName ("org.mariadb.jdbc.Driver");
             return DriverManager.getConnection("jdbc:mariadb://192.168.1.124:3306/ReactionRoles", "alex", mariaDBpass);
-        } catch (SQLException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
         return null;
@@ -70,8 +76,9 @@ public class Database {
 
     public static Connection Tickets(){
         try {
+            Class.forName ("org.mariadb.jdbc.Driver");
             return DriverManager.getConnection("jdbc:mariadb://192.168.1.124:3306/Tickets", "alex", mariaDBpass);
-        } catch (SQLException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
         return null;
