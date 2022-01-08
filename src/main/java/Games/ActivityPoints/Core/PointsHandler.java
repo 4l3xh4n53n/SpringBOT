@@ -20,7 +20,7 @@ public class PointsHandler {
 
         try {
             Statement stmt = con.createStatement();
-            String sql = "CREATE TABLE '" + guildID + "' (userID TEXT, coins INTEGER, CoinMultiplier INTEGER , MaxCoins INTEGER, CoinExtraPercent INTEGER, Messages INTEGER)";
+            String sql = "CREATE TABLE `" + guildID + "` (userID TEXT, coins INTEGER, CoinMultiplier INTEGER , MaxCoins INTEGER, CoinExtraPercent INTEGER, Messages INTEGER)";
             stmt.executeUpdate(sql);
             con.close();
             stmt.close();

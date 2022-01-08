@@ -17,7 +17,7 @@ public class SettingCreator{
 
         try {
             PreparedStatement ps;
-            String SQL = "INSERT INTO settings(" +
+            String SQL = "INSERT INTO Settings(" +
                     "guildid, " +
                     "prefix, " +
                     "guildcolour," +
@@ -53,6 +53,7 @@ public class SettingCreator{
                     "statsBot," +
                     "statsMember," +
                     "chatfilter," +
+                    "statsChannel," +
                     "filter," +
                     "gamecommands," +
                     "reactionroles," +
@@ -62,7 +63,7 @@ public class SettingCreator{
                     "counting," +
                     "countingchannel," +
                     "mutedrole" +
-                    ")VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                    ")VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             ps = con.prepareStatement(SQL);
             ps.setString(1, guildID);
             ps.setString(2, "!"); //Prefix
@@ -92,20 +93,23 @@ public class SettingCreator{
             ps.setString(26, "");//PrivateChannelCreator
             ps.setString(27, "");//PrivateChannelCategory
             ps.setString(28, "0");//ServerStats
-            ps.setString(29, "1");//StatsTotal
-            ps.setString(30, "1");//StatsBot
-            ps.setString(31, "1");//StatsMember
-            ps.setString(32, "");//StatsChannel
-            ps.setString(33, "0");//ChatFilter
-            ps.setString(34, "");//Filter
-            ps.setString(35, "0");//GameCommands
-            ps.setString(36, "0");//ReactionRoles
-            ps.setString(37, "0");//Tickets
-            ps.setString(38, "");//TicketCategory
-            ps.setString(39, "");//TicketRole
-            ps.setString(40, "0");//Counting
-            ps.setString(41, "");//CountingChannel
-            ps.setString(42, ""); //MutedRole
+            ps.setString(29, "");//statsTotalChannel
+            ps.setString(30, "");//statsBotChannel
+            ps.setString(31, "");//statsMemberChannel
+            ps.setString(32, "1");//StatsTotal
+            ps.setString(33, "1");//StatsBot
+            ps.setString(34, "1");//StatsMember
+            ps.setString(35, "");//StatsChannel
+            ps.setString(36, "0");//ChatFilter
+            ps.setString(37, "");//Filter
+            ps.setString(38, "0");//GameCommands
+            ps.setString(39, "0");//ReactionRoles
+            ps.setString(40, "0");//Tickets
+            ps.setString(41, "");//TicketCategory
+            ps.setString(42, "");//TicketRole
+            ps.setString(43, "0");//Counting
+            ps.setString(44, "");//CountingChannel
+            ps.setString(45, ""); //MutedRole
             ps.executeUpdate();
             ps.close();
 

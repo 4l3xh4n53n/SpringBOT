@@ -61,7 +61,7 @@ public class SettingSetter {
                 String mod = args[1].toLowerCase(Locale.ROOT);
 
                 String[] modules = {"modcommands", "logmodactions", "coins", "sendcoins", "autorole", "invitelogging", "privatechannel", "serverstats", "statsTotal", "statsBot", "statsMember", "gamecommands", "chatfilter", "guildwelcome", "reactionroles", "tickets", "counting"};
-                String[] channels = {"kicklog", "banlog", "warnlog", "guildwelcomechannel", "invitelog","privatechannelcreator", "statschannel","privatechannelcategory", "countingchannel"};
+                String[] channels = {"kicklog", "banlog", "warnlog", "guildwelcomechannel", "invitelog","privatechannelcreator", "privatechannelcategory", "countingchannel"};
                 String[] roles = {"clearroles", "kickroles", "banroles", "warnroles", "muteroles", "autorolerole", "pollrole"};
 
                 if (Arrays.asList(modules).contains(mod)){

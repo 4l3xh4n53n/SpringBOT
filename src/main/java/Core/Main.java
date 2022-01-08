@@ -20,7 +20,7 @@ import java.util.Scanner;
 
 public class Main {
 
-    private static final int shardCount = 3;
+    private static final int shardCount = 1;
     private static JDA shard = null;
 
     /**
@@ -37,6 +37,8 @@ public class Main {
         Scanner scc = new Scanner(tokenFile);
         String token = scc.nextLine();
         scc.close();
+
+        // Makes sure the database is active
 
         Connection con = Database.connect();
         while (con == null){
@@ -57,7 +59,7 @@ public class Main {
         // API that sends a shard to the instance
 
         /* Remove this if you want to run without scaling and replace the for loop
-         * remove for no scaling start */
+         * remove for no scaling start
 
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
@@ -66,17 +68,17 @@ public class Main {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         int i = Integer.parseInt(response.body());
 
-         /* remove for no scaling end */
+          remove for no scaling end */
 
         JDABuilder shardBuilder = JDABuilder.createDefault(token);
         ListenerAdapter[] listeners = new ListenerAdapter[]{new NewGuild(), new MessageReceived(), new NewMember(), new GuildInviteCreated(), new EntersVoiceChannel(), new MessageReaction()};
         shardBuilder.addEventListeners((Object[]) listeners);
         shardBuilder.enableIntents(GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_INVITES);
 
-        //for (int i = 0; i < shardCount; i++) {
+        for (int i = 0; i < shardCount; i++) {
             shard = shardBuilder.useSharding(i, shardCount)
                     .build();
-        //}
+        }
 
         shard.getPresence().setPresence(OnlineStatus.ONLINE, Activity.watching("Your DISCORD server to keep you safe :)"));
         shard.awaitReady();
